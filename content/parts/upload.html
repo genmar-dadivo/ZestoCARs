@@ -1,0 +1,68 @@
+<div class="container">
+	<div class="row">
+	   	<div class="col mx-auto">
+			<div style="height: 100px;"></div>
+		  	<form method="POST" id="formrawprocessor">
+			 	<div class="row">
+					<div class="col">
+				   		<div class="form-floating">
+					  		<textarea class="form-control custom-no-resize" style="height: 250px;" autocomplete="off" placeholder="Raw Data" id="rawdata" name="rawdata"></textarea>
+					  		<label for="rawdata">Raw Data</label>
+				   		</div>
+				   		<br>
+				   		<button type="submit" class="btn btn-primary btn-block rounded-pill" id="btnSubmit"> Submit </button>
+					</div>
+			 	</div>
+		  	</form>
+	   	</div>
+	</div>
+</div>
+<script>
+	$('#formrawprocessor').on('submit', function (e) {
+		$('#btnSubmit').prop("disabled", true);
+	 	$("#btnSubmit").html('Loading ...');
+	 	$('#rawdata').prop('readonly', true);
+	 	var raw = $('#rawdata').val();
+	 	var countme = '';
+	 	var d = new Date();
+	 	var gettime = d.getHours() + ':' + d.getMinutes() + ':' + d.getSeconds();
+	 	console.log('%c Starts @ ' + gettime, 'background: #222; color: #bada55');
+	 	if (raw.includes('oelinhst')) { countme = 'oelinhst'; }
+	 	else if (raw.includes('oehdrhst')) { countme = 'oehdrhst'; }
+	 	else if (raw.includes('product')) { countme = 'product'; }
+	 	else if (raw.includes('customerz')) { countme = 'customerz'; }
+	 	var checker = new RegExp(countme, 'g');
+	 	var count = (raw.match(checker));
+	 	e.preventDefault();
+	 	$.ajax({
+	   		type: 'POST',
+	   		url: '../../content/action/formrawprocessor.php',
+	   		data: $('#formrawprocessor').serialize(),
+	   		success: function (data) {
+		 		var rawdata = data.split(',');
+		 		console.log(data);
+		 		$('#btnSubmit').prop("disabled", false);
+		 		$("select[name='choice']").prop('disabled', false);
+		 		$("#btnSubmit").html('Submit');
+		 		$('#rawdata').prop('readonly', false);
+		 		$('#rawdata').val('');
+		 		var nd = new Date();
+		 		var ngettime = nd.getHours() + ':' + nd.getMinutes() + ':' + nd.getSeconds();
+		 		console.log('Finish @ ' + ngettime);
+		 		var diff = Math.abs(d - nd),
+		 		min = Math.floor((diff/1000/60) << 0),
+		 		sec = Math.floor((diff/1000) % 60);
+		 		console.log('Duration ' + min + ':' + sec);
+		 		Push.create("Executed.", {
+		   			body: "Finish @ " + ngettime,
+		   			icon: 'https://img.favpng.com/22/25/10/zest-o-philippines-logo-corporation-business-png-favpng-Brbj4NqJYBXtHd0E28th7r3dQ.jpg',
+		   			timeout: 4000,
+		   			onClick: function () {
+			 			window.focus();
+			 			this.close();
+		   			}
+		 		});
+	   		}
+	 	});
+	});
+</script>

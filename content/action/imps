@@ -1,0 +1,42 @@
+// FOR FILE DETAIL
+="UPDATE OR INSERT INTO OELINHST VALUES ("&DBNO&",'"&A2&"',"&B2&","&C2&",'"&D2&"','"&E2&"',"&F2&","&G2&","&H2&","&I2&","&J2&","&K2&",'"&L2&"',"&M2&","&N2&","&O2&","&P2&","&Q2&",'"&R2&"','"&S2&"','"&T2&"','"&U2&"','"&V2&"','"&W2&"','"&Y2&"',"&X2&","&Z2&") MATCHING (DATABASE_NO,ORDER_NO,SEQUENCE_NO);"
+// FOR FILE NOAH
+="INSERT INTO noahs "&A16&","&B16&","&C16&","&D16&","&E16&","&F16&","&G16&","&H16&","&I16&","&J16&","&K16&","&L16&","&M16&","&O16&","&P16&","&Q16&","&R16&","&S16&","&T16&","&U16&","&V16&","&W16&","&X16&","&Y16&","&Z16&","
+
+
+// FOR DB
+="INSERT INTO oehdrhst" &A2&","&B2&","&C2& "," &D2& "," &E2& "," &F2& "," &G2& "," &H2& "," &I2& "," &J2& "," &K2& "," &L2& "," &M2& "," &N2& "," &O2& "," &P2& "," &Q2& "," &R2& "," &S2& "," &T2& "," &U2& "," &V2& "," &W2& "," &X2& "," &Y2& "," &Z2& "," &AA2& "," &AB2& "," &AC2& "," &AD2& "," &AE2& "," &AF2& ","
+// FOR DB
+="UPDATE OR INSERT INTO OELINHST VALUES ('"&A2&"',"&B2&","&C2&",'"&D2&"','"&E2&"',"&F2&","&G2&","&H2&","&I2&","&J2&","&K2&",'"&L2&"',"&M2&","&N2&","&O2&","&P2&","&Q2&",'"&R2&"','"&S2&"','"&T2&"','"&U2&"','"&V2&"','"&W2&"','"&X2&"','"&Y2&"','"&Z2&"','"&AA2&"') MATCHING (DATABASE_NO,ORDER_NO,SEQUENCE_NO);"
+="customerz "&A1&","&B1&","&C1&","&D1&","&E1&","&F1&","&G1
+SELECT L.*, (SELECT H.INVOICE_DATE FROM OEHDRHST H WHERE H.DATABASE_NO = L.DATABASE_NO AND H.OE_NO = L.ORDER_NO) FROM OELINHST L
+
+// cleaners
+UPDATE oelinhst SET DATABASE_NO = REPLACE(DATABASE_NO, ' ', '')
+UPDATE oehdrhst SET DATABASE_NO = REPLACE(DATABASE_NO, ' ', '')
+UPDATE v_customer_info SET DBNO = REPLACE(DBNO, ' ', '')
+UPDATE v_customer_info SET CUSTOMER = REPLACE(CUSTOMER, ' ', '')
+UPDATE v_customer_type SET DBNO = REPLACE(DBNO, ' ', '')
+UPDATE product SET CATEGORY = REPLACE(CATEGORY, ' ', '')
+// CSI
+// HEADER
+SELECT * FROM OEORDHDR a WHERE a.ORDER_DATE BETWEEN 20210100 AND 20210199
+SELECT * FROM OEORDLIN a WHERE a.BILL_DATE BETWEEN 20210100 AND 20210105
+// Line
+="insert into oeordlin " &Table2[@[DB_NO]]& "," &Table2[@[ORDER_TYPE]]& "," &Table2[@[ORDER_NO]]& "," &Table2[@[SEQUENCE_NO]]& "," &Table2[@[GEN_INV_NO]]& "," &Table2[@[ITEM_NO]]& "," &Table2[@LOCATION]& "," &Table2[@[QTY_ORDERED]]& "," &Table2[@[QTY_TO_SHIP]]& "," &Table2[@[UNIT_PRICE]]& "," &Table2[@[REQUEST_DATE]]& "," &Table2[@[UNIT_OF_MEASURE]]& "," &Table2[@[UNIT_COST]]& "," &Table2[@[TOTAL_QTY_ORDERED]]& "," &Table2[@[TOTAL_QTY_SHIPPED]]& "," &Table2[@[PRICE_ORG]]& "," &Table2[@[ITEM_PROD_CAT]]& "," &Table2[@[USER_FIELD_3]]& "," &Table2[@[USER_FIELD_5]]& "," &Table2[@[BILL_DATE]]& "," &Table2[@[ITEM_CUSTOMER]]& ","
+// Head
+="insert into oeorhdr " &Table1[@DBNO]&  "," &Table1[@[ORDER_TYPE]]&  "," &Table1[@[ORDER_NO]]&  ","  &Table1[@[ORDER_STATUS]]&  ","  &Table1[@[ORDER_DATE_ENTERED]]&  ","  &Table1[@[ORDER_DATE]]&  ","  &Table1[@[ORDER_APPLY_TO_NO]]&  ","  &Table1[@[ORDER_PUR_ORDER_NO]]&  ","  &Table1[@[ORDER_CUSTOMER_NO]]&  ","  &Table1[@[CUSTOMER_BAL_METHOD]]&  "," &Table1[@[SHIPPING_DATE]]&  "," &Table1[@[SHIPPING_DATE2]]&  "," &Table1[@[TERMS_CODE]]&  "," &Table1[@[SALESMAN_NO_1]]&  "," &Table1[@[MFGING_LOCATION]]&  "," &Table1[@[TOTAL_SALE_AMOUNT]]&  "," &Table1[@[TOTAL_COST]]&  "," &Table1[@[INVOICE_NO]]&  "," &Table1[@[INVOICE_DATE]]&  "," &Table1[@[OE_CASH_KEY]]&  "," &Table1[@[USER_FIELD_1]]&  "," &Table1[@[USER_FIELD_2]]&  "," &Table1[@[USER_FIELD_3]]&  "," &Table1[@[USER_FIELD_4]]&  "," &Table1[@[USER_FIELD_5]]&  "," &Table1[@[ENCODED_BY]]&  ","
+SET GLOBAL max_allowed_packet=1073741824;
+
+=MID([@INVOICEDATE],5,2)&"/"&RIGHT([@INVOICEDATE],2)&"/"&LEFT([@INVOICEDATE],4)
+
+MONTH-IN-NUMBER + YEAR + DEPARTMENT + UNIQUE
+M+Y
+MIS - 1
+ACCOUNTING1 - **
+ACCOUNTING2 - *
+BILLING - 3
+Marketing - 7
+SALES - 25
+ADMIN - 5
+38970
