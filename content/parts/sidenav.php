@@ -110,6 +110,12 @@
                <span>Announcement</span>
             </a>
          </li>
+         <li>
+            <a href="#" onclick="contentloader(8)">
+               <i class="fas fa-terminal"></i>
+               <span>Command</span>
+            </a>
+         </li>
       </ul>
    </div>
 </div>

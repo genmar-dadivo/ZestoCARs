@@ -201,6 +201,19 @@
                     .find("input[type=checkbox], input[type=radio]")
                     .prop("checked", "")
                     .end();
+                    document.onkeydown = fkey;
+                    document.onkeypress = fkey
+                    document.onkeyup = fkey;
+                    var wasPressed = false;
+                    function fkey(e){
+                        e = e || window.event;
+                        if( wasPressed ) return; 
+                        if (e.keyCode == 116) {
+                        var appid = Cookies.get('appid');
+                        wasPressed = true;
+                        if (appid == 4) { confirm('Are you sure you want to leave this page?') }
+                        }
+                    }
             });
             $('#traw tfoot th').each( function () {
                 var title = $(this).text();

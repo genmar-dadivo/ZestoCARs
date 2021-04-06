@@ -33,8 +33,9 @@
                     placeholder="2x2 Picture">
                 </div>
                 <div class="col">
-                    <i class="fas fa-qrcode fa-3x pointer qrid" data-bs-container="body" data-bs-toggle="popover" data-bs-placement="left" data-bs-content="Top popover"></i>
+                    <i class="fas fa-qrcode fa-3x pointer qrid popper" data-bs-container="body" data-bs-toggle="popover"></i>
                 </div>
+                <div class="popper-content hidden">My first popover content goes here.</div>
             </div>
             <div class="mt-3 row namearea">
                 <div class="col">
@@ -386,6 +387,14 @@
         var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'))
         var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
             return new bootstrap.Popover(popoverTriggerEl);
+        });
+        $('.popper').popover({
+            placement: 'bottom',
+            container: 'body',
+            html: true,
+            content: function () {
+                return $(this).next('.popper-content').html();
+            }
         });
         $('#sss').inputmask("99-9999999-9");
         $('#pagibigrtn').inputmask("9999-9999-9999");

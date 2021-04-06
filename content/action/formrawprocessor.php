@@ -11,7 +11,7 @@
 	require '../dbase/dbconfig.php';
 	if (isset($_POST['rawdata'])) {
 		$rawdata = $_POST['rawdata'];
-		if (strpos($rawdata, 'PACKETZXC') !== false) {
+		if (strpos($rawdata, 'maxpacket') !== false) {
 			$sqlsetglobal = "SET GLOBAL max_allowed_packet=1073741824";
 			$stmsetglobal = $con->prepare($sqlsetglobal);
 			$stmsetglobal->execute();

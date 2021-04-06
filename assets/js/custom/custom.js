@@ -55,6 +55,7 @@ $('#formSignup').on('submit', function(e) {
       }
   });
 });
+if ($("#enumber")[0]){ $('#enumber').inputmask("99-999999"); }
 $(document).ready(function () {
   if (window.location.href.indexOf("pages") > -1) {
     var appid = Cookies.get('appid');
@@ -98,9 +99,6 @@ $(document).ready(function () {
 });
 // Add Pointer Mecha
 $("a").addClass("pointer");
-
-
-
 // Scrollbar Mecha
 $(function() {
   $('body').overlayScrollbars({
@@ -152,6 +150,11 @@ function contentloader(loadid) {
     $("#page-content").load("../../content/parts/alreadygenerated.php");
     $('.section_name').text('AG Data');
   }
+  else if (loadid == 8) {
+    if (window.location.href.indexOf("calendar") > -1) { $(location).attr('href', '../../content/pages/'); }
+    $("#page-content").load("../../content/parts/terminal.php");
+    $('.section_name').text('Command');
+  }
 }
 // Email Automation
 $('#email').blur(function() {
@@ -165,7 +168,6 @@ $('#email').blur(function() {
   }
   else { $(this).removeClass('text-lowercase').addClass('text-capitalize'); }
 });
-$('#enumber').inputmask("99-999999");
 $('.numberonly').keyup(function(event) { this.value = this.value.replace(/[^0-9.\.]/g,''); });
 $('.letteronly').keyup(function(event) { this.value = this.value.replace(/[^A-Za-z \.]/g,''); });
 $('.code').keyup(function(event) { this.value = this.value.replace(/[^A-Za-z0-9/\ \.]/g,''); });

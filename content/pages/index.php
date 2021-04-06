@@ -37,6 +37,8 @@
 		<!-- Quill CSS -->
 		<link href="../../assets/js/quill/css/quill.bubble.css" rel="stylesheet">
 		<link href="../../assets/js/quill/css/quill.snow.css" rel="stylesheet">
+		<!-- CMD CSS -->
+		<link href="../../assets/js/cmd/cmd.min.css" rel="stylesheet">
 		<!-- Custom CSS -->
 		<link href="../../assets/css/custom/custom.css" rel="stylesheet">
 		<link rel="icon" href="../../assets/img/logo.png" type="image/gif" sizes="30x30">
@@ -107,6 +109,8 @@
 		<script src="../../assets/js/webcam/webcam.min.js"></script>
 		<!-- BS Notify JS -->
 		<script src="../../assets/js/notify/bootstrap-notify.min.js"></script>
+		<!-- CMD JS -->
+		<script src="../../assets/js/cmd/cmd.min.js"></script>
 		<!-- Custom JS -->
 		<script src="../../assets/js/custom/custom.js"></script>
 	</body>

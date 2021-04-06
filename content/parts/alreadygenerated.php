@@ -40,7 +40,7 @@
 ?>
 <div class="row">
 	<div class="col-lg-12">
-		<div class="mb-2 float-start">
+		<div class="mb-2 mt-5 float-start">
 			<input type="text" placeholder="Search" class="search border-0 form-control" autocomplete="off">
 		</div>
 	</div>

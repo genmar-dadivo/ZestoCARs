@@ -6,7 +6,7 @@
 			 	<div class="row">
 					<div class="col">
 				   		<div class="form-floating">
-					  		<textarea class="form-control custom-no-resize" style="height: 250px;" autocomplete="off" placeholder="Raw Data" id="rawdata" name="rawdata"></textarea>
+					  		<textarea class="form-control custom-no-resize border-0" style="height: 250px;" autocomplete="off" placeholder="Raw Data" id="rawdata" name="rawdata"></textarea>
 					  		<label for="rawdata">Raw Data</label>
 				   		</div>
 				   		<br>
@@ -41,6 +41,7 @@
 	   		success: function (data) {
 		 		var rawdata = data.split(',');
 		 		console.log(data);
+				if (data.includes('Unknown column')) { alert('NOAH file unclean. Check console for more details.'); }
 		 		$('#btnSubmit').prop("disabled", false);
 		 		$("select[name='choice']").prop('disabled', false);
 		 		$("#btnSubmit").html('Submit');
