@@ -540,7 +540,12 @@
                     }
                     elseif ($DBNO == "DGPN0000") {
                         if (strpos($SALESMAN_CODE, 'OFF') !== false) { $DSM = "OSD-OFFICE STA. BARBARA"; $DSMSORT = 16; }
-                        else {}
+                        else {
+                            $DDONE = array("BK0000000166","BK0000000191","BK0000000206","VX0000000194","VX0000000216","VX0000000221","VX0000000246");
+                            $SDONE = array("BK0000000136","VX0000000095","VX0000000095");
+                            if (in_array($SALESMAN_CODE, $DDONE)) { $DSM = "DD1-STABARBARA"; $DSMSORT = 15; }
+                            elseif (in_array($SALESMAN_CODE, $SDONE)) { $DSM = "SD1-CAUAYAN"; $DSMSORT = 20; }
+                        }
                     }
                     elseif ($DBNO == "EDSA0000") {
                         if (strpos($SALESMAN_CODE, 'OFF') !== false) { $DSM = "OSE-OFFICE SALES EDSA"; $DSMSORT = 8; }
