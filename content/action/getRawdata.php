@@ -256,19 +256,21 @@
     // Macola
     elseif ($dbval == 2) {
         $US = 90000000;
-        $DB = '1';
+        $DB = '3';
         $startday = "00";
         $endday = "99";
         if ($lim <> '') {
-            if (!strpos($lim, 'LIMIT')) {
+            if (strpos($lim, 'LIMIT') === false) {
                 $param = explode(",", $lim);
                 $startday = $param[0];
                 $endday = $param[1];
+                $limit = '';
             }
+            else { $limit = $lim; }
         }
-        $limit = $lim;
-        $STARTER = $yval . $mval . $startday;
-        $ENDER = $yval . $mval . $endday;
+        else { $limit = ''; }
+        $STARTER = "$yval" . "$mval" . "$startday";
+        $ENDER = "$yval" . "$mval" . "$endday";
         $sql = "SELECT 
         (SELECT C.CUSTOMER FROM v_customer_info C WHERE TRIM(C.DBNO) = TRIM(l.DATABASE_NO) 
         AND C.CUS_NO LIKE CONCAT ('%' , TRIM(l.CUSTOMER) , '%') LIMIT 1) AS CUSTOMERN, 
@@ -528,7 +530,7 @@
                     }
                     elseif ($DBNO == "CEBU0000") {
                         $BD = array("BK0000000118","BK0000000245","BK0000000116","BK0000000224","BK0000000041","BK0000000195","HRI000000121","BK0000000120","HRI000000122","BK0000000204","BK0000000247","BK0000000248","BH-S00000225");
-                        $BX = array("VX0000000212","VX0000000126","VX0000000213","VX0000000152","VX0000000131","BK0000000119","VX0000000129","VX0000000127","VX0000000215");
+                        $BX = array("VX0000000212","VX0000000126","VX0000000213","VX0000000152","VX0000000131","BK0000000119","VX0000000129","VX0000000127","VX0000000215","VX0000000128","VX0000000125","VX0000000130","VX0000000169");
                         $TD = array("BK0000000200","HRI000000208","BK0000000201");
 
                         if (strpos($SALESMAN_CODE, 'OFF') !== false) {
@@ -541,10 +543,10 @@
                     elseif ($DBNO == "DGPN0000") {
                         if (strpos($SALESMAN_CODE, 'OFF') !== false) { $DSM = "OSD-OFFICE STA. BARBARA"; $DSMSORT = 16; }
                         else {
-                            $DDONE = array("BK0000000166","BK0000000191","BK0000000206","VX0000000194","VX0000000216","VX0000000221","VX0000000246");
-                            $SDONE = array("BK0000000136","VX0000000095","VX0000000095");
-                            if (in_array($SALESMAN_CODE, $DDONE)) { $DSM = "DD1-STABARBARA"; $DSMSORT = 15; }
-                            elseif (in_array($SALESMAN_CODE, $SDONE)) { $DSM = "SD1-CAUAYAN"; $DSMSORT = 20; }
+                            $DD = array("BK0000000166","BK0000000191","BK0000000206","VX0000000194","VX0000000216","VX0000000221","VX0000000246","BK0000000178","BK0000000092");
+                            $SD = array("BK0000000136","VX0000000095","VX0000000095","VX0000000096");
+                            if (in_array($SALESMAN_CODE, $DD)) { $DSM = "DD1-STABARBARA"; $DSMSORT = 15; }
+                            elseif (in_array($SALESMAN_CODE, $SD)) { $DSM = "SD1-CAUAYAN"; $DSMSORT = 20; }
                         }
                     }
                     elseif ($DBNO == "EDSA0000") {
