@@ -18,13 +18,13 @@
 			echo "MAX PACKET SET.";
 		}
 		else {
-			// cleaners
+			// CLEANERS
 			$rawdata = preg_replace(array('/\s{2,}/', '/[\t\n]/'), ' ', $_POST['rawdata']);
 			$rawdata = str_replace(["'","UPDATE","OR ","INSERT","INTO","VALUES", "MATCHING","DATABASE_NO,ORDER_NO,SEQUENCE_NO","DATABASE_NO, OE_NO, CUSTOMER_NO","(", ")", ";", "/"], "",$rawdata);
 			$rawdata = preg_replace('/\\\\/', '', $rawdata);
 			$rawdata = strtolower($rawdata);
 		
-			// line oelinhst mecha
+			// LINE OELINHST MECHA
 			if (strpos($rawdata, 'oelinhst') !== false AND strpos($rawdata, 'oehdrhst') === false) {
 				$rowdata = explode('oelinhst', $rawdata);
 				$autodivide = substr_count($rawdata, "oelinhst");
@@ -87,7 +87,7 @@
 				$stmdupdelete = $con->prepare($sqldupdelete);
 				$stmdupdelete->execute();
 			}
-			// head oehdrhst mecha
+			// HEAD OEHDRHST MECHA
 			elseif (strpos($rawdata, 'oelinhst') === false AND strpos($rawdata, 'oehdrhst') !== false) {
 				$rowdata = explode('oehdrhst', $rawdata);
 				$autodivide = substr_count($rawdata, "oehdrhst");
@@ -154,8 +154,8 @@
 				$stmdupdelete = $con->prepare($sqldupdelete);
 				$stmdupdelete->execute();
 			}
-			// item mecha
-			elseif (strpos($rawdata, 'oelinhst') === false AND strpos($rawdata, 'oehdrhst') === false AND strpos($rawdata, 'product') !== false) {
+			// ITEM MECHA
+			elseif (strpos($rawdata, 'oelinhst') === false AND strpos($rawdata, 'oehdrhst') === false AND strpos($rawdata, 'productx') !== false) {
 				$rowdata = explode('product', $rawdata);
 				$autodivide = substr_count($rawdata, "product");
 				$runner = 0;
@@ -188,7 +188,7 @@
 				$stmdupdelete = $con->prepare($sqldupdelete);
 				$stmdupdelete->execute();
 			}
-			// customer mecha
+			// CUSTOMER MECHA
 			elseif (strpos($rawdata, 'oelinhst') === false AND strpos($rawdata, 'oehdrhst') === false AND strpos($rawdata, 'customerz') !== false) {
 				$rowdata = explode('customerz', $rawdata);
 				$autodivide = substr_count($rawdata, "customerz");
@@ -229,7 +229,7 @@
 				$stmdupdelete = $con->prepare($sqldupdelete);
 				$stmdupdelete->execute();
 			}
-			// head oeorhdr mecha
+			// HEAD OEORHDR MECHA
 			elseif (strpos($rawdata, 'oelinhst') === false AND strpos($rawdata, 'oehdrhst') === false AND strpos($rawdata, 'oeorhdr') !== false) {
 				$rowdata = explode('oeorhdr', $rawdata);
 				$autodivide = substr_count($rawdata, "oeorhdr");
@@ -291,7 +291,7 @@
 				$stmdupdelete = $con->prepare($sqldupdelete);
 				$stmdupdelete->execute();
 			}
-			// line oeordlin mecha
+			// LINE OEORDLIN MECHA
 			elseif (strpos($rawdata, 'oelinhst') === false AND strpos($rawdata, 'oehdrhst') === false AND strpos($rawdata, 'oeordlin') !== false) {
 				$rowdata = explode('oeordlin', $rawdata);
 				$autodivide = substr_count($rawdata, "oeordlin");
@@ -347,8 +347,8 @@
 				$stmdupdelete = $con->prepare($sqldupdelete);
 				$stmdupdelete->execute();
 			}
-			// noah oeordlin mecha
-			elseif (strpos($rawdata, 'oelinhst') === false AND strpos($rawdata, 'oehdrhst') === false AND strpos($rawdata, 'noahs') !== false) {
+			// NOAH OEORDLIN MECHA
+			elseif (strpos($rawdata, 'oelinhst') === false AND strpos($rawdata, 'oehdrhst') === false AND strpos($rawdata, 'noahx') !== false) {
 				$rowdata = explode('noahs', $rawdata);
 				$autodivide = substr_count($rawdata, "noahs");
 				$runner = 0;
@@ -414,6 +414,137 @@
 				$runner = 0;
 				$values = '';
 
+			}
+			// ARCUSFIL
+			elseif (strpos($rawdata, 'oelinhst') === false AND strpos($rawdata, 'oehdrhst') === false AND strpos($rawdata, 'arcusfil_sql') !== false) {
+				$rowdata = explode('arcusfil_sql', $rawdata);
+				$autodivide = substr_count($rawdata, "arcusfil_sql");
+				$runner = 0;
+				$values = '';
+				while ($runner < $autodivide) {
+					$datarunner = $runner + 1;
+					$data = explode(',', $rowdata[$datarunner]);
+					$dbno = str_replace(' ', '', $data[0]);
+					$Cus_No = preg_replace('/\s+/', ' ', $data[1]);
+					$Slspsn_No = preg_replace('/\s+/', ' ', $data[2]);
+					$Cus_Name = preg_replace('/\s+/', ' ', $data[3]);
+					$Addr_1 = preg_replace('/\s+/', ' ', $data[4]);
+					$Addr_2 = preg_replace('/\s+/', ' ', $data[5]);
+					$City = preg_replace('/\s+/', ' ', $data[6]);
+					$State = preg_replace('/\s+/', ' ', $data[7]);
+					$Zip = preg_replace('/\s+/', ' ', $data[8]);
+					$Country = preg_replace('/\s+/', ' ', $data[9]);
+					$Contact = preg_replace('/\s+/', ' ', $data[10]);
+					$Contact_2 = preg_replace('/\s+/', ' ', $data[11]);
+					$Phone_No = preg_replace('/\s+/', ' ', $data[12]);
+					$Phone_No_2 = preg_replace('/\s+/', ' ', $data[13]);
+					$Phone_Ext = preg_replace('/\s+/', ' ', $data[14]);
+					$Phone_Ext_2 = preg_replace('/\s+/', ' ', $data[15]);
+					$Fax_No = preg_replace('/\s+/', ' ', $data[16]);
+					$Start_Dt = preg_replace('/\s+/', ' ', $data[17]);
+					$Cus_Type_Cd = preg_replace('/\s+/', ' ', $data[18]);
+					$Bal_Meth = preg_replace('/\s+/', ' ', $data[19]);
+					$Stm_Freq = preg_replace('/\s+/', ' ', $data[20]);
+					$Cr_Lmt = preg_replace('/\s+/', ' ', $data[21]);
+					$Cr_Rating = preg_replace('/\s+/', ' ', $data[22]);
+					$Hold_Fg = preg_replace('/\s+/', ' ', $data[23]);
+					$Collector = preg_replace('/\s+/', ' ', $data[24]);
+					$Fin_Chg_Fg = preg_replace('/\s+/', ' ', $data[25]);
+					$Cus_Origin = preg_replace('/\s+/', ' ', $data[26]);
+					$Filler_0003 = preg_replace('/\s+/', ' ', $data[27]);
+					$Terr = preg_replace('/\s+/', ' ', $data[28]);
+					$Curr_Cd = preg_replace('/\s+/', ' ', $data[29]);
+					$Par_Cus_No = preg_replace('/\s+/', ' ', $data[30]);
+					$Par_Cus_Fg = preg_replace('/\s+/', ' ', $data[31]);
+					$Ship_Via_Cd = preg_replace('/\s+/', ' ', $data[32]);
+					$Ups_Zone = preg_replace('/\s+/', ' ', $data[33]);
+					$Ar_Terms_Cd = preg_replace('/\s+/', ' ', $data[34]);
+					$Dsc_Pct = preg_replace('/\s+/', ' ', $data[35]);
+					$Ytd_Dsc_Given = preg_replace('/\s+/', ' ', $data[36]);
+					$Txbl_Fg = preg_replace('/\s+/', ' ', $data[37]);
+					$Tax_Cd = preg_replace('/\s+/', ' ', $data[38]);
+					$Tax_Cd_2 = preg_replace('/\s+/', ' ', $data[39]);
+					$Tax_Cd_3 = preg_replace('/\s+/', ' ', $data[40]);
+					$Exempt_No = preg_replace('/\s+/', ' ', $data[41]);
+					$Sls_Ptd = preg_replace('/\s+/', ' ', $data[42]);
+					$Sls_Ytd = preg_replace('/\s+/', ' ', $data[43]);
+					$Sls_Last_Yr = preg_replace('/\s+/', ' ', $data[44]);
+					$Cost_Ptd = preg_replace('/\s+/', ' ', $data[45]);
+					$Cost_Ytd = preg_replace('/\s+/', ' ', $data[46]);
+					$Cost_Last_Yr = preg_replace('/\s+/', ' ', $data[47]);
+					$Balance = preg_replace('/\s+/', ' ', $data[48]);
+					$High_Balance = preg_replace('/\s+/', ' ', $data[49]);
+					$Last_Sale_Dt = preg_replace('/\s+/', ' ', $data[50]);
+					$Last_Sale_Amt = preg_replace('/\s+/', ' ', $data[51]);
+					$Inv_Ytd = preg_replace('/\s+/', ' ', $data[52]);
+					$Inv_Last_Yr = preg_replace('/\s+/', ' ', $data[53]);
+					$Paid_Inv_Ytd = preg_replace('/\s+/', ' ', $data[54]);
+					$Last_Pay_Dt = preg_replace('/\s+/', ' ', $data[55]);
+					$Last_Pay_Amt = preg_replace('/\s+/', ' ', $data[56]);
+					$Avg_Pay_Ytd = preg_replace('/\s+/', ' ', $data[57]);
+					$Avg_Pay_Last_Yr = preg_replace('/\s+/', ' ', $data[58]);
+					$Last_Stm_Age_Dt = preg_replace('/\s+/', ' ', $data[59]);
+					$Amt_Age_Prd_1 = preg_replace('/\s+/', ' ', $data[60]);
+					$Amt_Age_Prd_2 = preg_replace('/\s+/', ' ', $data[61]);
+					$Amt_Age_Prd_3 = preg_replace('/\s+/', ' ', $data[62]);
+					$Amt_Age_Prd_4 = preg_replace('/\s+/', ' ', $data[63]);
+					$Allow_Sb_Item = preg_replace('/\s+/', ' ', $data[64]);
+					$Allow_Bo = preg_replace('/\s+/', ' ', $data[65]);
+					$Allow_Part_Ship = preg_replace('/\s+/', ' ', $data[66]);
+					$Print_Dunn_Fg = preg_replace('/\s+/', ' ', $data[67]);
+					$Cmt_1 = preg_replace('/\s+/', ' ', $data[68]);
+					$Cmt_2 = preg_replace('/\s+/', ' ', $data[69]);
+					$Vend_No = preg_replace('/\s+/', ' ', $data[70]);
+					$Tax_Sched = preg_replace('/\s+/', ' ', $data[71]);
+					$Cr_Card_1_Desc = preg_replace('/\s+/', ' ', $data[72]);
+					$Cr_Card_1_Acct = preg_replace('/\s+/', ' ', $data[73]);
+					$Cr_Card_1_Exp_Dt = preg_replace('/\s+/', ' ', $data[74]);
+					$Cr_Card_2_Desc = preg_replace('/\s+/', ' ', $data[75]);
+					$Cr_Card_2_Acct = preg_replace('/\s+/', ' ', $data[76]);
+					$Cr_Card_2_Exp_Dt = preg_replace('/\s+/', ' ', $data[77]);
+					$User_Def_Fld_1 = preg_replace('/\s+/', ' ', $data[78]);
+					$User_Def_Fld_2 = preg_replace('/\s+/', ' ', $data[79]);
+					$User_Def_Fld_3 = preg_replace('/\s+/', ' ', $data[80]);
+					$User_Def_Fld_4 = preg_replace('/\s+/', ' ', $data[81]);
+					$User_Def_Fld_5 = preg_replace('/\s+/', ' ', $data[82]);
+					$Dflt_Inv_Form = preg_replace('/\s+/', ' ', $data[83]);
+					$Loc = preg_replace('/\s+/', ' ', $data[84]);
+					$Note_1 = preg_replace('/\s+/', ' ', $data[85]);
+					$Note_2 = preg_replace('/\s+/', ' ', $data[86]);
+					$Note_3 = preg_replace('/\s+/', ' ', $data[87]);
+					$Note_4 = preg_replace('/\s+/', ' ', $data[88]);
+					$Note_5 = preg_replace('/\s+/', ' ', $data[89]);
+					$User_Dt = preg_replace('/\s+/', ' ', $data[90]);
+					$User_Amount = preg_replace('/\s+/', ' ', $data[91]);
+					$Amt_Age_Oe_Term = preg_replace('/\s+/', ' ', $data[92]);
+					$Cus_Alt_Adr_Cd = preg_replace('/\s+/', ' ', $data[93]);
+					$Rfc_No = preg_replace('/\s+/', ' ', $data[94]);
+					$Email_Addr = preg_replace('/\s+/', ' ', $data[95]);
+					// checker
+					$sqlchecker = "SELECT id, DBNO FROM arcusfil_sql WHERE dbno = '$dbno' AND Cus_No = '$Cus_No'";
+					$stmchecker = $con->prepare($sqlchecker);
+					$stmchecker->execute();
+					if ($stmchecker->rowCount() > 0) { $dbno = "DUPLI" . $dbno; }
+					$values .= "('$dbno','$Cus_No','$Slspsn_No','$Cus_Name','$Addr_1','$Addr_2','$City','$State','$Zip','$Country','$Contact','$Contact_2','$Phone_No','$Phone_No_2','$Phone_Ext','$Phone_Ext_2','$Fax_No','$Start_Dt','$Cus_Type_Cd','$Bal_Meth','$Stm_Freq','$Cr_Lmt','$Cr_Rating','$Hold_Fg','$Collector','$Fin_Chg_Fg','$Cus_Origin','$Filler_0003','$Terr','$Curr_Cd','$Par_Cus_No','$Par_Cus_Fg','$Ship_Via_Cd','$Ups_Zone','$Ar_Terms_Cd','$Dsc_Pct','$Ytd_Dsc_Given','$Txbl_Fg','$Tax_Cd','$Tax_Cd_2','$Tax_Cd_3','$Exempt_No','$Sls_Ptd','$Sls_Ytd','$Sls_Last_Yr','$Cost_Ptd','$Cost_Ytd','$Cost_Last_Yr','$Balance','$High_Balance','$Last_Sale_Dt','$Last_Sale_Amt','$Inv_Ytd','$Inv_Last_Yr','$Paid_Inv_Ytd','$Last_Pay_Dt','$Last_Pay_Amt','$Avg_Pay_Ytd','$Avg_Pay_Last_Yr','$Last_Stm_Age_Dt','$Amt_Age_Prd_1','$Amt_Age_Prd_2','$Amt_Age_Prd_3','$Amt_Age_Prd_4','$Allow_Sb_Item','$Allow_Bo','$Allow_Part_Ship','$Print_Dunn_Fg','$Cmt_1','$Cmt_2','$Vend_No','$Tax_Sched','$Cr_Card_1_Desc','$Cr_Card_1_Acct','$Cr_Card_1_Exp_Dt','$Cr_Card_2_Desc','$Cr_Card_2_Acct','$Cr_Card_2_Exp_Dt','$User_Def_Fld_1','$User_Def_Fld_2','$User_Def_Fld_3','$User_Def_Fld_4','$User_Def_Fld_5','$Dflt_Inv_Form','$Loc','$Note_1','$Note_2','$Note_3','$Note_4','$Note_5','$User_Dt','$User_Amount','$Amt_Age_Oe_Term','$Cus_Alt_Adr_Cd','$Rfc_No','$Email_Addr'),";
+					$runner++;
+				}
+				$values = rtrim($values, ", ");
+				$sqlinsert = "INSERT INTO arcusfil_sql (dbno, Cus_No, Slspsn_No, Cus_Name, Addr_1, Addr_2, City, States, Zip, Country, Contact, Contact_2, Phone_No, Phone_No_2, Phone_Ext, Phone_Ext_2, Fax_No, Start_Dt, Cus_Type_Cd, Bal_Meth, Stm_Freq, Cr_Lmt, Cr_Rating, Hold_Fg, Collector, Fin_Chg_Fg, Cus_Origin, Filler_0003, Terr, Curr_Cd, Par_Cus_No, Par_Cus_Fg, Ship_Via_Cd, Ups_Zone, Ar_Terms_Cd, Dsc_Pct, Ytd_Dsc_Given, Txbl_Fg, Tax_Cd, Tax_Cd_2, Tax_Cd_3, Exempt_No, Sls_Ptd, Sls_Ytd, Sls_Last_Yr, Cost_Ptd, Cost_Ytd, Cost_Last_Yr, Balance, High_Balance, Last_Sale_Dt, Last_Sale_Amt, Inv_Ytd, Inv_Last_Yr, Paid_Inv_Ytd, Last_Pay_Dt, Last_Pay_Amt, Avg_Pay_Ytd, Avg_Pay_Last_Yr, Last_Stm_Age_Dt, Amt_Age_Prd_1, Amt_Age_Prd_2, Amt_Age_Prd_3, Amt_Age_Prd_4, Allow_Sb_Item, Allow_Bo, Allow_Part_Ship, Print_Dunn_Fg, Cmt_1, Cmt_2, Vend_No, Tax_Sched, Cr_Card_1_Desc, Cr_Card_1_Acct, Cr_Card_1_Exp_Dt, Cr_Card_2_Desc, Cr_Card_2_Acct, Cr_Card_2_Exp_Dt, User_Def_Fld_1, User_Def_Fld_2, User_Def_Fld_3, User_Def_Fld_4, User_Def_Fld_5, Dflt_Inv_Form, Loc, Note_1, Note_2, Note_3, Note_4, Note_5, User_Dt, User_Amount, Amt_Age_Oe_Term, Cus_Alt_Adr_Cd, Rfc_No, Email_Addr) VALUES " . $values;
+				//echo $sqlinsert;
+				$stminsert = $con->prepare($sqlinsert);
+				$stminsert->execute();
+				// duplicate checker
+				$sqldupchecker = "SELECT dbno FROM `arcusfil_sql` WHERE dbno LIKE '%DUPLI%' ";
+				$stmdupchecker = $con->prepare($sqldupchecker);
+				$stmdupchecker->execute();
+				$duplicounter = $stmdupchecker->rowCount();
+				echo "$duplicounter duplicate entry. \n";
+				// echo date('h:i A') . "\n";
+				echo "$runner(s) records inserted";
+				// delete duplicate
+				$sqldupdelete = "DELETE FROM `arcusfil_sql` WHERE dbno LIKE '%DUPLI%' ";
+				$stmdupdelete = $con->prepare($sqldupdelete);
+				$stmdupdelete->execute();
 			}
 			else { echo "Error"; }
 		}
