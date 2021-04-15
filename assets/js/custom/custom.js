@@ -155,6 +155,11 @@ function contentloader(loadid) {
     $("#page-content").load("../../content/parts/terminal.php");
     $('.section_name').text('Command');
   }
+  else if (loadid == 9) {
+    if (window.location.href.indexOf("calendar") > -1) { $(location).attr('href', '../../content/pages/'); }
+    $("#page-content").load("../../content/parts/datapage.php");
+    $('.section_name').text('Data');
+  }
 }
 // Email Automation
 $('#email').blur(function() {

@@ -193,7 +193,7 @@
             $('.section_name ').append(document.createTextNode(' (' + dbname + ' ' + mname + dy + ')'));
             var d = new Date();
             var gettime = d.getHours() + ':' + d.getMinutes() + ':' + d.getSeconds();
-            console.log('%c Starts @ ' + gettime, 'background: #222; color: #bada55');
+            console.log('%cStarts @ ' + gettime, 'background: #222; color: #bada55');
             $('#traw').removeClass('hidden');
             $('#rawdata-settings').modal("hide");
             $('#rawdata-settings').on('hidden.bs.modal', function (e) {

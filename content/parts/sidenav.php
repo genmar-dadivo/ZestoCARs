@@ -92,6 +92,19 @@
             <span>OSD Uploader</span>
             </a>
          </li>
+         <li class="sidebar-dropdown">
+            <a href="#">
+            <i class="fa fa-database"></i>
+            <span>Data</span>
+            </a>
+            <div class="sidebar-submenu">
+               <ul>
+                  <li>
+                     <a href="#" onclick="contentloader(9)">Customer</a>
+                  </li>
+               </ul>
+            </div>
+         </li>
          <li>
             <a href="#" class="text-danger">
                <i class="fa fa-book"></i>
