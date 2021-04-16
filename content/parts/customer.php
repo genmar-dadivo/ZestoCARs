@@ -226,7 +226,7 @@
                 extend: "excel",
                 className: "btn btn-sm btn-primary",
                 text: 'Export',
-                filename: 'Sales Report',
+                filename: 'Customer List',
                 init: function(api, node, config) { $(node).removeClass('dt-button') }
             },
             {

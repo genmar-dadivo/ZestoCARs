@@ -57,6 +57,8 @@ $('#formSignup').on('submit', function(e) {
 });
 if ($("#enumber")[0]){ $('#enumber').inputmask("99-999999"); }
 $(document).ready(function () {
+  // remove loader
+  $('.loading-body').delay(1000).fadeOut(1000);
   if (window.location.href.indexOf("pages") > -1) {
     var appid = Cookies.get('appid');
     var uid = $('#uid').val();
@@ -157,8 +159,8 @@ function contentloader(loadid) {
   }
   else if (loadid == 9) {
     if (window.location.href.indexOf("calendar") > -1) { $(location).attr('href', '../../content/pages/'); }
-    $("#page-content").load("../../content/parts/datapage.php");
-    $('.section_name').text('Data');
+    $("#page-content").load("../../content/parts/customer.php");
+    $('.section_name').text('Customer Data');
   }
 }
 // Email Automation

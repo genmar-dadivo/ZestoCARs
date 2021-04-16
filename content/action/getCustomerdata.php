@@ -1,6 +1,8 @@
 <?php
+    // !
+    ini_set('memory_limit', '-1');
     require '../dbase/dbconfig.php';
-    $sql = "SELECT * FROM arcusfil_sql LIMIT 44900";
+    $sql = "SELECT * FROM arcusfil_sql WHERE Last_Sale_Dt > 20170000 OR Last_Pay_Dt > 20170000";
     $stm = $con->prepare($sql);
     $stm->execute();
     $results = $stm->fetchAll(PDO::FETCH_ASSOC);
@@ -44,7 +46,7 @@
             $Ar_Terms_Cd = strtoupper($row['Ar_Terms_Cd']);
             $Dsc_Pct = $row['Dsc_Pct'];
             $Ytd_Dsc_Given = $row['Ytd_Dsc_Given'];
-            $Txbl_Fg = $row['Txbl_Fg'];
+            $Txbl_Fg = strtoupper($row['Txbl_Fg']);
             $Tax_Cd = strtoupper($row['Tax_Cd']);
             $Tax_Cd_2 = strtoupper($row['Tax_Cd_2']);
             $Tax_Cd_3 = strtoupper($row['Tax_Cd_3']);
