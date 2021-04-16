@@ -45,11 +45,6 @@
 		<title>Zesto | CARS</title>
 	</head>
 	<body class="noselect custom-bg-1">
-		<div class="loading-body">
-			<div class="loading-animation"></div>
-			<svg class="loading-logo" viewBox="0 0 150 150">
-			</svg>
-		</div>
         <div class="page-wrapper chiller-theme toggled">
             <a id="show-sidebar" class="btn btn-sm btn-dark" href="#" style="z-index: 999;">
                 <i class="fas fa-bars"></i>

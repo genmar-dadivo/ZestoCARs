@@ -57,8 +57,6 @@ $('#formSignup').on('submit', function(e) {
 });
 if ($("#enumber")[0]){ $('#enumber').inputmask("99-999999"); }
 $(document).ready(function () {
-  // remove loader
-  $('.loading-body').delay(1000).fadeOut(1000);
   if (window.location.href.indexOf("pages") > -1) {
     var appid = Cookies.get('appid');
     var uid = $('#uid').val();
