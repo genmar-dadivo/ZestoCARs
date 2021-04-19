@@ -111,6 +111,8 @@
 		<script src="../../assets/js/notify/bootstrap-notify.min.js"></script>
 		<!-- CMD JS -->
 		<script src="../../assets/js/cmd/cmd.min.js"></script>
+		<!-- QR JS -->
+		<script src="../../assets/js/qr/qrcode.min.js"></script>
 		<!-- Custom JS -->
 		<script src="../../assets/js/custom/custom.js"></script>
 	</body>

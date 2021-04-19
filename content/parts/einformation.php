@@ -33,9 +33,14 @@
                     placeholder="2x2 Picture">
                 </div>
                 <div class="col">
-                    <i class="fas fa-qrcode fa-3x pointer qrid popper" data-bs-container="body" data-bs-toggle="popover"></i>
+                    <i id="qrid" class="popover__title fas fa-qrcode fa-3x pointer qrid"  data-bs-container="body" data-bs-toggle="popover"></i>
+                    <div class="popover__wrapper">
+                        <div class="popover__content">
+                          <p class="popover__message">Joseph Francis "Joey" Tribbiani, Jr.</p>
+                          <img alt="Joseph Francis Joey Tribbiani, Jr." src="https://media.giphy.com/media/11SIBu3s72Co8w/giphy.gif">
+                        </div>
+                    </div>
                 </div>
-                <div class="popper-content hidden">My first popover content goes here.</div>
             </div>
             <div class="mt-3 row namearea">
                 <div class="col">
@@ -384,17 +389,12 @@
     });
     $('.numberonly').keyup(function(event) { this.value = this.value.replace(/[^0-9.\.]/g,''); });
     $(document).ready(function(){
-        var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'))
-        var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
-            return new bootstrap.Popover(popoverTriggerEl);
-        });
-        $('.popper').popover({
-            placement: 'bottom',
-            container: 'body',
+        var qrid = document.getElementById('qrid')
+        var popover = new bootstrap.Popover(qrid, {
             html: true,
-            content: function () {
-                return $(this).next('.popper-content').html();
-            }
+            container: "body",
+            placement: "left",
+            template: $("#selector").html(),
         });
         $('#sss').inputmask("99-9999999-9");
         $('#pagibigrtn').inputmask("9999-9999-9999");
@@ -427,6 +427,7 @@
                 if (udata[6] == udata[7]) { $('#permanentaddress').prop('checked', true); }
                 $('#phonenumber').val(udata[8]);
                 $('#eidnumber').val(udata[9]);
+                $('#eidnumber').click();
                 $('#company').val(udata[10]);
                 $("#region option[value='" + udata[11] + "']").prop('selected', true);
                 $("#department option[value='" + udata[12] + "']").prop('selected', true);
@@ -514,6 +515,16 @@
         }
     });
     $('.letteronly').keyup(function(event) { this.value = this.value.replace(/[^A-Za-z \.]/g,''); });
+    $('#eidnumber').click(function(e) {
+        var eidnumber = $('#eidnumber').val();
+        // var qrcode = new QRCode("qrcode", {
+        //     text: eidnumber,
+        //     width: 128,
+        //     height: 128,
+        //     colorDark : "#000000",
+        //     colorLight : "#ffffff"
+        // });
+    });
     // Webcam
     // Webcam.attach('#my_camera');
     // Webcam.set({

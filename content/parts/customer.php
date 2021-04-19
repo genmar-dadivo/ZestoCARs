@@ -4,57 +4,12 @@
             <nav class="navbar">
             </nav>
             <div class="modal-body">
-                Raw Data Filter
-                <form id="rawdata-form">
-                    <div class="container">
-                        <div class="row">
-                            <div class="mt-3">
-                                <div class="form-floating">
-                                    <select class="form-select" id="database-name">
-                                        <option value="" selected disabled>Select Source</option>
-                                        <option value="1">CSI</option>
-                                        <option value="2">Macola</option>
-                                        <option value="3">Noah</option>
-                                    </select>
-                                    <label for="database-name">Database</label>
-                                </div>
-                            </div>
-                            <div class="mt-1">
-                                <div class="form-floating">
-                                    <select class="form-select" id="data-month">
-                                        <option value="" disabled selected></option>
-                                        <?php
-                                        $months = array("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sept", "Oct", "Nov", "Dec");
-                                        $length = count($months);
-                                        for ($i = 0; $i < $length; $i++) {
-                                            $mv = $i + 1;
-                                            echo "<option value='" . sprintf("%02d", $mv) . "'>" . $months[$i] . "</option>";
-                                        }
-                                        ?>
-                                    </select>
-                                    <label for="data-month">Month</label>
-                                </div>
-                            </div>
-                            <div class="mt-1">
-                                <div class="form-floating">
-                                    <input type="text" class="form-control" id="data-limit" placeholder="Limit" autocomplete="off">
-                                    <label for="data-limit">Limit</label>
-                                </div>
-                            </div>
-                            <div class="mt-3 mb-5">
-                                <div class="form-floating">
-                                    <input type="text" class="form-control" id="data-year" placeholder="Year" autocomplete="off">
-                                    <label for="data-year">Year</label>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </form>
+                Customer Data Filter
             </div>
         </div>
     </div>
 </div>
-<div class="col-lg-12" id="tCresultdiv">
+<div class="col-lg-12 hidden" id="tCresultdiv">
     <div class="container">
         <div class="row">
             <div class="card mt-5 border-0">
@@ -272,60 +227,65 @@
         </div>
     </div>
 </div>
+<div class="hidden">
+</div>
 <script>
-    $(document).ready(function() {
-        // $('#customer-settings').appendTo("body");
-        // $('#customer-settings').modal('show', {backdrop: 'static', keyboard: false});
-    });
-    var d = new Date();
-    var gettime = d.getHours() + ':' + d.getMinutes() + ':' + d.getSeconds();
-    console.log('%cStarts @ ' + gettime, 'background: #222; color: #bada55');
-    var table = $('#tcustomer').DataTable({
-        dom: 'Bfrtip',
-        "oLanguage": { "sSearch": "" },
-        buttons: [
-            {
-                extend: "excel",
-                className: "btn btn-sm btn-primary",
-                text: 'Export',
-                filename: 'Customer List',
-                init: function(api, node, config) { $(node).removeClass('dt-button') }
-            },
-            {
-                extend: "copy",
-                className: "btn btn-sm btn-primary",
-                text: 'Copy',
-                init: function(api, node, config) { $(node).removeClass('dt-button') }
-            },
-            {
-                extend: "print",
-                className: "btn btn-sm btn-primary",
-                text: 'Print',
-                title: function(){
-                    var printTitle = 'Sales Report';
-                    return printTitle
+    $("#customer-settings").on("change", function() {
+        var d = new Date();
+        var gettime = d.getHours() + ':' + d.getMinutes() + ':' + d.getSeconds();
+        console.log('%cStarts @ ' + gettime, 'background: #222; color: #bada55');
+        var table = $('#tcustomer').DataTable({
+            dom: 'Bfrtip',
+            "oLanguage": { "sSearch": "" },
+            buttons: [
+                {
+                    extend: "excel",
+                    className: "btn btn-sm btn-primary",
+                    text: 'Export',
+                    filename: 'Customer List',
+                    init: function(api, node, config) { $(node).removeClass('dt-button') }
                 },
-                init: function(api, node, config) { $(node).removeClass('dt-button') }
+                {
+                    extend: "copy",
+                    className: "btn btn-sm btn-primary",
+                    text: 'Copy',
+                    init: function(api, node, config) { $(node).removeClass('dt-button') }
+                },
+                {
+                    extend: "print",
+                    className: "btn btn-sm btn-primary",
+                    text: 'Print',
+                    title: function(){
+                        var printTitle = 'Sales Report';
+                        return printTitle
+                    },
+                    init: function(api, node, config) { $(node).removeClass('dt-button') }
+                },
+            ],
+            "ajax": {
+                'type': 'POST',
+                'url': '../action/getCustomerdata.php',
             },
-        ],
-        "ajax": {
-            'type': 'POST',
-            'url': '../action/getCustomerdata.php',
-        },
-        initComplete: function () {
-            var nd = new Date();
-            var ngettime = nd.getHours() + ':' + nd.getMinutes() + ':' + nd.getSeconds();
-            console.log('Finish @ ' + ngettime);
-            var diff = Math.abs(d - nd),
-            min = Math.floor((diff/1000/60) << 0),
-            sec = Math.floor((diff/1000) % 60);
-            console.log('Duration ' + min + ':' + sec);
-            this.api().columns().every( function () {
-                var that = this;
-                $('input', this.footer()).on('keyup change clear', function () {
-                    if ( that.search() !== this.value ) { that.search(this.value).draw(); }
+            initComplete: function () {
+                var nd = new Date();
+                var ngettime = nd.getHours() + ':' + nd.getMinutes() + ':' + nd.getSeconds();
+                console.log('Finish @ ' + ngettime);
+                var diff = Math.abs(d - nd),
+                min = Math.floor((diff/1000/60) << 0),
+                sec = Math.floor((diff/1000) % 60);
+                console.log('Duration ' + min + ':' + sec);
+                this.api().columns().every( function () {
+                    var that = this;
+                    $('input', this.footer()).on('keyup change clear', function () {
+                        if ( that.search() !== this.value ) { that.search(this.value).draw(); }
+                    });
                 });
-            });
-        }
+            }
+        });
     });
+    $(document).ready(function() {
+        $('#customer-settings').appendTo("body");
+        $('#customer-settings').modal('show', {backdrop: 'static', keyboard: false});
+    });
+    $("#customer-settings").dblclick(function(e) { if (e.ctrlKey) { $('#customer-settings').modal("hide"); } });
 </script>
