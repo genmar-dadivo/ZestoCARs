@@ -2,7 +2,7 @@
     // !
     ini_set('memory_limit', '-1');
     require '../dbase/dbconfig.php';
-    $sql = "SELECT * FROM arcusfil_sql WHERE Last_Sale_Dt > 20170000 OR Last_Pay_Dt > 20170000";
+    $sql = "SELECT A.*, (SELECT B.description FROM customer_type B WHERE B.code = A.Cus_Type_Cd) AS CUSTYPE, (SELECT C.AR_TERMS_DESC FROM terms C WHERE C.AR_TERMS_CD = A.Ar_Terms_Cd) AS ARSDESC, (SELECT D.LONG_DESCRIPTION FROM terms D WHERE D.AR_TERMS_CD = A.Ar_Terms_Cd) AS ARLDESC FROM arcusfil_sql A WHERE Last_Sale_Dt > 20170000 OR Last_Pay_Dt > 20170000";
     $stm = $con->prepare($sql);
     $stm->execute();
     $results = $stm->fetchAll(PDO::FETCH_ASSOC);
@@ -105,6 +105,9 @@
             $Cus_Alt_Adr_Cd = strtoupper($row['Cus_Alt_Adr_Cd']);
             $Rfc_No = $row['Rfc_No'];
             $Email_Addr = strtolower($row['Email_Addr']);
+            $CUSTYPE = strtoupper($row['CUSTYPE']);
+            $ARSDESC = strtoupper($row['ARSDESC']);
+            $ARLDESC = strtoupper($row['ARLDESC']);
             $output['data'][] = array(
                 "",
                 "$dbno",
@@ -125,7 +128,7 @@
                 "$Phone_Ext_2",
                 "$Fax_No",
                 "$Start_Dt",
-                "$Cus_Type_Cd",
+                "$CUSTYPE",
                 "$Bal_Meth",
                 "$Stm_Freq",
                 "$Cr_Lmt",
@@ -141,7 +144,7 @@
                 "$Par_Cus_Fg",
                 "$Ship_Via_Cd",
                 "$Ups_Zone",
-                "$Ar_Terms_Cd",
+                "$ARSDESC / $ARLDESC",
                 "$Dsc_Pct",
                 "$Ytd_Dsc_Given",
                 "$Txbl_Fg",

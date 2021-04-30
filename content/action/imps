@@ -23,15 +23,15 @@ UPDATE product SET CATEGORY = REPLACE(CATEGORY, ' ', '')
 // CSI
 // HEADER
 SELECT * FROM OEORDHDR a WHERE a.ORDER_DATE BETWEEN 20210100 AND 20210199
-SELECT * FROM OEORDLIN a WHERE a.BILL_DATE BETWEEN 20210100 AND 20210105
+SELECT * FROM OEORDLIN a WHERE a.REQUEST_DATE BETWEEN 20210100 AND 20210105
 // Line
 ="insert into oeordlin " &Table2[@[DB_NO]]& "," &Table2[@[ORDER_TYPE]]& "," &Table2[@[ORDER_NO]]& "," &Table2[@[SEQUENCE_NO]]& "," &Table2[@[GEN_INV_NO]]& "," &Table2[@[ITEM_NO]]& "," &Table2[@LOCATION]& "," &Table2[@[QTY_ORDERED]]& "," &Table2[@[QTY_TO_SHIP]]& "," &Table2[@[UNIT_PRICE]]& "," &Table2[@[REQUEST_DATE]]& "," &Table2[@[UNIT_OF_MEASURE]]& "," &Table2[@[UNIT_COST]]& "," &Table2[@[TOTAL_QTY_ORDERED]]& "," &Table2[@[TOTAL_QTY_SHIPPED]]& "," &Table2[@[PRICE_ORG]]& "," &Table2[@[ITEM_PROD_CAT]]& "," &Table2[@[USER_FIELD_3]]& "," &Table2[@[USER_FIELD_5]]& "," &Table2[@[BILL_DATE]]& "," &Table2[@[ITEM_CUSTOMER]]& ","
 // Head
 ="insert into oeorhdr " &Table1[@DBNO]&  "," &Table1[@[ORDER_TYPE]]&  "," &Table1[@[ORDER_NO]]&  ","  &Table1[@[ORDER_STATUS]]&  ","  &Table1[@[ORDER_DATE_ENTERED]]&  ","  &Table1[@[ORDER_DATE]]&  ","  &Table1[@[ORDER_APPLY_TO_NO]]&  ","  &Table1[@[ORDER_PUR_ORDER_NO]]&  ","  &Table1[@[ORDER_CUSTOMER_NO]]&  ","  &Table1[@[CUSTOMER_BAL_METHOD]]&  "," &Table1[@[SHIPPING_DATE]]&  "," &Table1[@[SHIPPING_DATE2]]&  "," &Table1[@[TERMS_CODE]]&  "," &Table1[@[SALESMAN_NO_1]]&  "," &Table1[@[MFGING_LOCATION]]&  "," &Table1[@[TOTAL_SALE_AMOUNT]]&  "," &Table1[@[TOTAL_COST]]&  "," &Table1[@[INVOICE_NO]]&  "," &Table1[@[INVOICE_DATE]]&  "," &Table1[@[OE_CASH_KEY]]&  "," &Table1[@[USER_FIELD_1]]&  "," &Table1[@[USER_FIELD_2]]&  "," &Table1[@[USER_FIELD_3]]&  "," &Table1[@[USER_FIELD_4]]&  "," &Table1[@[USER_FIELD_5]]&  "," &Table1[@[ENCODED_BY]]&  ","
 SET GLOBAL max_allowed_packet=1073741824;
-
+// ARCUSFIL TO v_customer_info
+="customerz "&[@DBNO]& "," &[@[CUSTOMER NO]]& "," &[@[CUSTOMER NAME]]& "," &[@[ADDRESS 1]]& ","&CUSTOMERS[[#Headers],[EMAIL ADDRESS / TIN]]&","&CUSTOMERS[[#Headers],[CONTACT 1]]&","&[@[CREDIT LIMIT]]& ","
 =MID([@INVOICEDATE],5,2)&"/"&RIGHT([@INVOICEDATE],2)&"/"&LEFT([@INVOICEDATE],4)
-
 MONTH-IN-NUMBER + YEAR + DEPARTMENT + UNIQUE
 M+Y
 MIS - 1
@@ -43,7 +43,7 @@ SALES - 25
 ADMIN - 5
 38970
 Select * from X$File order by xf$name
-
+// EXCEL MACOLA
 SELECT 
         (SELECT C.CUSTOMER FROM v_customer_info C WHERE TRIM(C.DBNO) = TRIM(l.DATABASE_NO) 
         AND C.CUS_NO LIKE CONCAT ('%' , TRIM(l.CUSTOMER) , '%') LIMIT 1) AS CUSTOMERN, 
@@ -56,9 +56,10 @@ SELECT
         (SELECT d.dsm_desc FROM dsm d WHERE d.dsm_code = DSMCODE) AS DSMDESC, 
         (SELECT ds.DSMSORT FROM dsm ds WHERE ds.dsm_code = DSMCODE) AS DSMSORT,
         (SELECT CONCAT(DSMSORT," ",DSMCODE,"-",DSMDESC)) AS DSMSORTER, 
-        (SELECT i.CATEGORY FROM product i WHERE i.ITEM_NO = l.ITEM_NO) AS ITEMCAT, 
+        (SELECT TRIM(UCASE(i.CATEGORY)) FROM product i WHERE i.ITEM_NO = l.ITEM_NO) AS ITEMCAT, 
         (SELECT n.SKU FROM product n WHERE n.ITEM_NO = l.ITEM_NO) AS INAME, 
-        (SELECT p.PROD_CODE FROM product p WHERE p.ITEM_NO = l.ITEM_NO) AS PRODCAT,
+        (SELECT MC_ID FROM mrktng_category_dtl WHERE TRIM(CATEGORY) = TRIM(ITEMCAT)) AS MCID,
+        (SELECT MC_DESCRIPTION FROM mrktng_category_hdr WHERE TRIM(ID) = TRIM(MCID)) AS PRODCAT,
         (SELECT l.QTY_TO_SHIP * l.PRICE_ORG) AS GROSS,
         (SELECT l.QTY_TO_SHIP * l.UNIT_PRICE) AS NET, 
         (SELECT LEFT(l.INVOICE_DATE , 4) ) AS YEAR, 
@@ -69,4 +70,5 @@ SELECT
         l.INVOICE_NO, l.INVOICE_DATE, IF(l.USER_FIELD_5 = l.CUSTOMER, '', '0') AS USER_FIELD_5 
         FROM oelinhst l 
         WHERE l.DATABASE_NO IN (1,2,3,4,5,6,7,8,9,10,11,12,13,14,15) AND USER_FIELD_5 = '' AND TRIM(l.ORDER_TYPE) = 'o' AND l.UNIT_PRICE <> 0 
-        AND l.INVOICE_NO < 90000000 AND l.INVOICE_DATE BETWEEN 20200101 AND 20201231
+        AND l.INVOICE_NO < 90000000 AND l.INVOICE_DATE BETWEEN 20200101 AND 20200331 LIMIT 10000
+// EXCEL NOAH

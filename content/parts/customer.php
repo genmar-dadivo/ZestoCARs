@@ -9,7 +9,7 @@
         </div>
     </div>
 </div>
-<div class="col-lg-12 hidden" id="tCresultdiv">
+<div class="col-lg-12" id="tCresultdiv">
     <div class="container">
         <div class="row">
             <div class="card mt-5 border-0">
@@ -230,7 +230,7 @@
 <div class="hidden">
 </div>
 <script>
-    $("#customer-settings").on("change", function() {
+    //$("#customer-settings").on("change", function() {
         var d = new Date();
         var gettime = d.getHours() + ':' + d.getMinutes() + ':' + d.getSeconds();
         console.log('%cStarts @ ' + gettime, 'background: #222; color: #bada55');
@@ -282,10 +282,10 @@
                 });
             }
         });
-    });
+    //});
     $(document).ready(function() {
-        $('#customer-settings').appendTo("body");
-        $('#customer-settings').modal('show', {backdrop: 'static', keyboard: false});
+        // $('#customer-settings').appendTo("body");
+        // $('#customer-settings').modal('show', {backdrop: 'static', keyboard: false});
     });
     $("#customer-settings").dblclick(function(e) { if (e.ctrlKey) { $('#customer-settings').modal("hide"); } });
 </script>

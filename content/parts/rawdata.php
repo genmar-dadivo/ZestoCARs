@@ -190,7 +190,7 @@
             dmnew = parseInt(dm);
             dmnew = dmnew - 1;
             mname = months[dmnew];
-            $('.section_name ').append(document.createTextNode(' (' + dbname + ' ' + mname + dy + ')'));
+            $('.section_name ').append(document.createTextNode(' (' + dbname + ' ' + mname + dy + ' ' + lim + ')'));
             var d = new Date();
             var gettime = d.getHours() + ':' + d.getMinutes() + ':' + d.getSeconds();
             console.log('%cStarts @ ' + gettime, 'background: #222; color: #bada55');
@@ -209,9 +209,12 @@
                         e = e || window.event;
                         if( wasPressed ) return; 
                         if (e.keyCode == 116) {
-                        var appid = Cookies.get('appid');
-                        wasPressed = true;
-                        if (appid == 4) { confirm('Are you sure you want to leave this page?') }
+                            var appid = Cookies.get('appid');
+                            wasPressed = true;
+                            if (appid == 4) {
+                                var confirm = confirm('Are you sure you want to leave this page?');
+                                if (confirm === true) { location.reload(); } 
+                            }
                         }
                     }
             });

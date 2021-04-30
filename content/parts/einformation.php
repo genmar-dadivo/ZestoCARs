@@ -34,11 +34,8 @@
                 </div>
                 <div class="col">
                     <i id="qrid" class="popover__title fas fa-qrcode fa-3x pointer qrid"  data-bs-container="body" data-bs-toggle="popover"></i>
-                    <div class="popover__wrapper">
-                        <div class="popover__content">
-                          <p class="popover__message">Joseph Francis "Joey" Tribbiani, Jr.</p>
-                          <img alt="Joseph Francis Joey Tribbiani, Jr." src="https://media.giphy.com/media/11SIBu3s72Co8w/giphy.gif">
-                        </div>
+                    <div id="selector">
+                        asdasd
                     </div>
                 </div>
             </div>
@@ -389,12 +386,12 @@
     });
     $('.numberonly').keyup(function(event) { this.value = this.value.replace(/[^0-9.\.]/g,''); });
     $(document).ready(function(){
-        var qrid = document.getElementById('qrid')
+        var qrid = document.getElementById('qrid');
         var popover = new bootstrap.Popover(qrid, {
             html: true,
             container: "body",
             placement: "left",
-            template: $("#selector").html(),
+            template: '<div class="popover" role="tooltip"><div class="popover-arrow"></div><h3 class="popover-header"></h3><div class="popover-body"></div></div>',
         });
         $('#sss').inputmask("99-9999999-9");
         $('#pagibigrtn').inputmask("9999-9999-9999");

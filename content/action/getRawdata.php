@@ -4,16 +4,6 @@
     $mval = $_POST['mval'];
     $yval = $_POST['yval'];
     $lim = $_POST['lim'];
-    if ($lim <> '') {
-        if (strpos($lim, 'LIMIT')) {
-            $lim = "LIMIT " . $lim;
-        }
-        else {
-            $param = explode(",", $lim);
-            $starter = $param[0];
-            $ender = $param[1];
-        }
-    }
     // CSI
     if ($dbval == 1) {
         $US = 40000000;
@@ -22,26 +12,29 @@
         $startday = "00";
         $endday = "99";
         if ($lim <> '') {
-            if (!strpos($lim, 'LIMIT')) {
+            if (strpos($lim, 'LIMIT') !== false) {
+                $lim = $lim;
+            }
+            else {
                 $param = explode(",", $lim);
                 $startday = $param[0];
                 $endday = $param[1];
+                $lim = "";
             }
         }
         $limit = $lim;
         $S = $yval . $mval . $startday;
         $E = $yval . $mval . $endday;
         $sql = "SELECT
-        (SELECT os.ORDER_STATUS FROM oeordhdr os WHERE os.DB_NO = l.DB_NO AND os.ORDER_NO = l.ORDER_NO) AS ORDERSTATUS,
+        (SELECT os.ORDER_STATUS FROM oeordhdr os WHERE TRIM(os.DB_NO) = TRIM(l.DB_NO) AND TRIM(os.ORDER_NO) = TRIM(l.ORDER_NO)) AS ORDERSTATUS,
         (SELECT ode.ORDER_DATE_ENTERED FROM oeordhdr ode WHERE ode.DB_NO = l.DB_NO AND ode.ORDER_NO =l.ORDER_NO) AS ORDERDATEENTERED,
         (SELECT oatn.ORDER_APPLY_TO_NO FROM oeordhdr oatn WHERE oatn.DB_NO = l.DB_NO AND oatn.ORDER_NO = l.ORDER_NO LIMIT 1) AS ORDERAPPLYTONO,
         (SELECT opon.ORDER_PUR_ORDER_NO FROM oeordhdr opon WHERE opon.DB_NO = l.DB_NO AND opon.ORDER_NO = l.ORDER_NO LIMIT 1) AS ORDERPURORDERNO,
         (SELECT ocn.ORDER_CUSTOMER_NO FROM oeordhdr ocn WHERE ocn.DB_NO = l.DB_NO AND ocn.ORDER_NO = l.ORDER_NO LIMIT 1) AS ORDERCUSTOMERNO,
-        (SELECT C.CUSTOMER FROM v_customer_info C WHERE TRIM(C.DBNO) = TRIM(l.DB_NO) 
-        AND C.CUS_NO LIKE CONCAT ('%' , TRIM(ORDERCUSTOMERNO) , '%') LIMIT 1) AS CUSTOMERN,
-        (SELECT A.ADDRESS FROM v_customer_info A WHERE A.DBNO = l.DB_NO AND A.CUS_NO LIKE CONCAT ('%' , ORDERCUSTOMERNO , '%') LIMIT 1) AS ADDRESSC, 
-        (SELECT T.TIN_NO FROM v_customer_info T WHERE T.DBNO = l.DB_NO AND T.CUS_NO LIKE CONCAT ('%' , ORDERCUSTOMERNO , '%') LIMIT 1) AS TINC, 
-        (SELECT t.CUST_TYPE_CODE FROM v_customer_type t WHERE t.DBNO = l.DB_NO AND t.CUS_NO LIKE CONCAT ('%' , ORDERCUSTOMERNO , '%') LIMIT 1) AS TYPEC, 
+        (SELECT A.CUSTOMER FROM v_customer_info A WHERE TRIM(A.DBNO) = TRIM(l.DB_NO) AND TRIM(A.CUS_NO) LIKE CONCAT ('%' , ORDERCUSTOMERNO , '%') LIMIT 1) AS CUSTOMERN,
+        (SELECT A.ADDRESS FROM v_customer_info A WHERE TRIM(A.DBNO) = TRIM(l.DB_NO) AND TRIM(A.CUS_NO) LIKE CONCAT ('%' , ORDERCUSTOMERNO , '%') LIMIT 1) AS ADDRESSC, 
+        (SELECT T.TIN_NO FROM v_customer_info T WHERE TRIM(T.DBNO) = TRIM(l.DB_NO) AND TRIM(T.CUS_NO) LIKE CONCAT ('%' , ORDERCUSTOMERNO , '%') LIMIT 1) AS TINC, 
+        (SELECT t.CUST_TYPE_CODE FROM v_customer_type t WHERE TRIM(t.DBNO) = TRIM(l.DB_NO) AND TRIM(t.CUS_NO) LIKE CONCAT ('%' , ORDERCUSTOMERNO , '%') LIMIT 1) AS TYPEC, 
         (SELECT cbm.CUSTOMER_BAL_METHOD FROM oeordhdr cbm WHERE cbm.DB_NO = l.DB_NO AND cbm.ORDER_NO = l.ORDER_NO LIMIT 1) AS CUSTOMERBALMETHOD, 
         (SELECT sd.SHIPPING_DATE FROM oeordhdr sd WHERE sd.DB_NO = l.DB_NO AND sd.ORDER_NO = l.ORDER_NO LIMIT 1) AS SHIPPINGDATE, 
         (SELECT svc.SHIP_VIA_CODE FROM oeordhdr svc WHERE svc.DB_NO = l.DB_NO AND svc.ORDER_NO = l.ORDER_NO) AS SHIPVIACODE, 
@@ -55,7 +48,8 @@
         (SELECT ds.DSMSORT FROM dsm ds WHERE ds.dsm_code = DSMCODE) AS DSMSORT,  
         (SELECT i.CATEGORY FROM product i WHERE i.ITEM_NO = l.ITEM_NO) AS ITEMCAT, 
         (SELECT n.SKU FROM product n WHERE n.ITEM_NO = l.ITEM_NO) AS INAME, 
-        (SELECT p.PROD_CODE FROM product p WHERE p.ITEM_NO = l.ITEM_NO) AS PRODCAT, 
+        (SELECT MC_ID FROM mrktng_category_dtl WHERE TRIM(CATEGORY) = TRIM(ITEMCAT)) AS MCID,
+        (SELECT MC_DESCRIPTION FROM mrktng_category_hdr WHERE TRIM(ID) = TRIM(MCID)) AS PRODCAT,  
         l.DB_NO, l.ORDER_TYPE, l.ORDER_NO, l.SEQUENCE_NO, l.GEN_INV_NO, l.ITEM_NO, l.LOCATION, l.QTY_ORDERED, 
         l.QTY_TO_SHIP, l.UNIT_PRICE, l.REQUEST_DATE, l.UNIT_OF_MEASURE, l.UNIT_COST, l.TOTAL_QTY_ORDERED, l.TOTAL_QTY_SHIPPED, 
         l.PRICE_ORG, l.ITEM_PROD_CAT, l.USER_FIELD_3, l.USER_FIELD_5, l.BILL_DATE, l.ITEM_CUSTOMER 
@@ -133,7 +127,7 @@
                     $TINC = $row['TINC'];
                 }
                 else {
-                    $CUSTOMERN = strtoupper($row['CUSTOMER']);
+                    $CUSTOMERN = strtoupper($row['CUSTOMERN']);
                     $ADDRESSC = strtoupper("N/A");
                     $TYPEC = strtoupper("N/A");
                     $TINC = strtoupper("N/A");
@@ -209,7 +203,7 @@
         else {
             $output['data'][] = array(
                     "",
-                    "$S",
+                    "$sql",
                     "",
                     "",
                     "",
@@ -283,7 +277,8 @@
         (SELECT ds.DSMSORT FROM dsm ds WHERE ds.dsm_code = DSMCODE) AS DSMSORT, 
         (SELECT i.CATEGORY FROM product i WHERE i.ITEM_NO = l.ITEM_NO) AS ITEMCAT, 
         (SELECT n.SKU FROM product n WHERE n.ITEM_NO = l.ITEM_NO) AS INAME, 
-        (SELECT p.PROD_CODE FROM product p WHERE p.ITEM_NO = l.ITEM_NO) AS PRODCAT, 
+        (SELECT MC_ID FROM mrktng_category_dtl WHERE TRIM(CATEGORY) = TRIM(ITEMCAT)) AS MCID,
+        (SELECT MC_DESCRIPTION FROM mrktng_category_hdr WHERE TRIM(ID) = TRIM(MCID)) AS PRODCAT, 
         l.ID, l.DATABASE_NO, l.ORDER_TYPE, l.ORDER_NO, l.SEQUENCE_NO, l.ITEM_NO, l.LOCATION, l.QTY_ORDERED, l.QTY_TO_SHIP, l.UNIT_PRICE, 
         l.REQUEST_DATE, l.QTY_BACK_ORDERED, l.QTY_RETURN_TO_STOCK, l.UNIT_OF_MEASURE, l.UNIT_COST, l.TOTAL_QTY_ORDERED, l.TOTAL_QTY_SHIPPED, 
         l.PRICE_ORG, l.LAST_POST_DATE, l.ITEM_PROD_CAT, l.USER_FIELD_1, l.USER_FIELD_2, l.USER_FIELD_3, l.USER_FIELD_4, l.CUSTOMER, 

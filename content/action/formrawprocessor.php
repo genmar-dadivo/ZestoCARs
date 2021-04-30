@@ -23,7 +23,6 @@
 			$rawdata = str_replace(["'","UPDATE","OR ","INSERT","INTO","VALUES", "MATCHING","DATABASE_NO,ORDER_NO,SEQUENCE_NO","DATABASE_NO, OE_NO, CUSTOMER_NO","(", ")", ";", "/"], "",$rawdata);
 			$rawdata = preg_replace('/\\\\/', '', $rawdata);
 			$rawdata = strtolower($rawdata);
-		
 			// LINE OELINHST MECHA
 			if (strpos($rawdata, 'oelinhst') !== false AND strpos($rawdata, 'oehdrhst') === false) {
 				$rowdata = explode('oelinhst', $rawdata);
@@ -156,8 +155,8 @@
 			}
 			// ITEM MECHA
 			elseif (strpos($rawdata, 'oelinhst') === false AND strpos($rawdata, 'oehdrhst') === false AND strpos($rawdata, 'productx') !== false) {
-				$rowdata = explode('product', $rawdata);
-				$autodivide = substr_count($rawdata, "product");
+				$rowdata = explode('productx', $rawdata);
+				$autodivide = substr_count($rawdata, "productx");
 				$runner = 0;
 				while ($runner < $autodivide) {
 					$datarunner = $runner + 1;
@@ -175,6 +174,44 @@
 					$stminsert->execute();
 					$runner++;
 				}
+				// duplicate checker
+				$sqldupchecker = "SELECT ITEM_NO FROM `product` WHERE ITEM_NO LIKE '%D%' ";
+				$stmdupchecker = $con->prepare($sqldupchecker);
+				$stmdupchecker->execute();
+				$duplicounter = $stmdupchecker->rowCount();
+				echo "$duplicounter duplicate entry. \n";
+				echo date('h:i A') . "\n";
+				echo "$runner(s) records inserted.";
+				// delete duplicate
+				$sqldupdelete = "DELETE FROM `product` WHERE ITEM_NO LIKE '%D%' ";
+				$stmdupdelete = $con->prepare($sqldupdelete);
+				$stmdupdelete->execute();
+			}
+			// ITEM MECHA 2
+			elseif (strpos($rawdata, 'oelinhst') === false AND strpos($rawdata, 'oehdrhst') === false AND strpos($rawdata, 'prodx2') !== false) {
+				$rowdata = explode('prodx2', $rawdata);
+				$autodivide = substr_count($rawdata, "prodx2");
+				$runner = 0;
+				$values = '';
+				while ($runner < $autodivide) {
+					$datarunner = $runner + 1;
+					$data = explode(',', $rowdata[$datarunner]);
+					$CATEGORY = $data[0];
+					$ITEM_NO = $data[1];
+					$SKU = $data[2];
+					$PROD_CAT = $data[3];
+					// checker
+					$sqlchecker = "SELECT ITEM_NO FROM product WHERE ITEM_NO = $ITEM_NO ";
+					$stmchecker = $con->prepare($sqlchecker);
+					$stmchecker->execute();
+					if ($stmchecker->rowCount() > 0) { $ITEM_NO = "D" . $ITEM_NO; }
+					$values .= "('$CATEGORY', '$ITEM_NO', '$SKU', '$PROD_CAT'),";
+					$runner++;
+				}
+				$values = rtrim($values, ", ");
+				$sqlinsert = "INSERT INTO product (CATEGORY, ITEM_NO, SKU, PROD_CAT) VALUES " . $values;
+				$stminsert = $con->prepare($sqlinsert);
+				$stminsert->execute();
 				// duplicate checker
 				$sqldupchecker = "SELECT ITEM_NO FROM `product` WHERE ITEM_NO LIKE '%D%' ";
 				$stmdupchecker = $con->prepare($sqldupchecker);
@@ -270,7 +307,6 @@
 					$stmchecker->execute();
 					if ($stmchecker->rowCount() > 0) { $DB_NO = "D" . $DB_NO; }
 					$values .= "('$DB_NO', '$ORDER_TYPE', '$ORDER_NO', '$ORDER_STATUS', '$ORDER_DATE_ENTERED', '$ORDER_DATE', '$ORDER_APPLY_TO_NO', '$ORDER_PUR_ORDER_NO', '$ORDER_CUSTOMER_NO', '$CUSTOMER_BAL_METHOD', '$SHIPPING_DATE', '$SHIP_VIA_CODE', '$TERMS_CODE', '$SALESMAN_NO_1', '$MFGING_LOCATION', '$TOTAL_SALE_AMOUNT', '$TOTAL_COST', '$INVOICE_NO', '$INVOICE_DATE', '$OE_CASH_KEY', '$USER_FIELD_1', '$USER_FIELD_2', '$USER_FIELD_3', '$USER_FIELD_4', '$USER_FIELD_5', '$ENCODED_BY'),";
-
 					$runner++;
 				}
 				$values = rtrim($values, ", ");
