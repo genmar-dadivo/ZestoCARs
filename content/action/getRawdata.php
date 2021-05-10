@@ -26,30 +26,30 @@
         $S = $yval . $mval . $startday;
         $E = $yval . $mval . $endday;
         $sql = "SELECT
-        (SELECT os.ORDER_STATUS FROM oeordhdr os WHERE TRIM(os.DB_NO) = TRIM(l.DB_NO) AND TRIM(os.ORDER_NO) = TRIM(l.ORDER_NO)) AS ORDERSTATUS,
-        (SELECT ode.ORDER_DATE_ENTERED FROM oeordhdr ode WHERE ode.DB_NO = l.DB_NO AND ode.ORDER_NO =l.ORDER_NO) AS ORDERDATEENTERED,
-        (SELECT oatn.ORDER_APPLY_TO_NO FROM oeordhdr oatn WHERE oatn.DB_NO = l.DB_NO AND oatn.ORDER_NO = l.ORDER_NO LIMIT 1) AS ORDERAPPLYTONO,
-        (SELECT opon.ORDER_PUR_ORDER_NO FROM oeordhdr opon WHERE opon.DB_NO = l.DB_NO AND opon.ORDER_NO = l.ORDER_NO LIMIT 1) AS ORDERPURORDERNO,
-        (SELECT ocn.ORDER_CUSTOMER_NO FROM oeordhdr ocn WHERE ocn.DB_NO = l.DB_NO AND ocn.ORDER_NO = l.ORDER_NO LIMIT 1) AS ORDERCUSTOMERNO,
-        (SELECT A.CUSTOMER FROM v_customer_info A WHERE TRIM(A.DBNO) = TRIM(l.DB_NO) AND TRIM(A.CUS_NO) LIKE CONCAT ('%' , ORDERCUSTOMERNO , '%') LIMIT 1) AS CUSTOMERN,
-        (SELECT A.ADDRESS FROM v_customer_info A WHERE TRIM(A.DBNO) = TRIM(l.DB_NO) AND TRIM(A.CUS_NO) LIKE CONCAT ('%' , ORDERCUSTOMERNO , '%') LIMIT 1) AS ADDRESSC, 
-        (SELECT T.TIN_NO FROM v_customer_info T WHERE TRIM(T.DBNO) = TRIM(l.DB_NO) AND TRIM(T.CUS_NO) LIKE CONCAT ('%' , ORDERCUSTOMERNO , '%') LIMIT 1) AS TINC, 
-        (SELECT t.CUST_TYPE_CODE FROM v_customer_type t WHERE TRIM(t.DBNO) = TRIM(l.DB_NO) AND TRIM(t.CUS_NO) LIKE CONCAT ('%' , ORDERCUSTOMERNO , '%') LIMIT 1) AS TYPEC, 
-        (SELECT cbm.CUSTOMER_BAL_METHOD FROM oeordhdr cbm WHERE cbm.DB_NO = l.DB_NO AND cbm.ORDER_NO = l.ORDER_NO LIMIT 1) AS CUSTOMERBALMETHOD, 
-        (SELECT sd.SHIPPING_DATE FROM oeordhdr sd WHERE sd.DB_NO = l.DB_NO AND sd.ORDER_NO = l.ORDER_NO LIMIT 1) AS SHIPPINGDATE, 
-        (SELECT svc.SHIP_VIA_CODE FROM oeordhdr svc WHERE svc.DB_NO = l.DB_NO AND svc.ORDER_NO = l.ORDER_NO) AS SHIPVIACODE, 
-        (SELECT tc.TERMS_CODE FROM oeordhdr tc WHERE tc.DB_NO = l.DB_NO AND tc.ORDER_NO = l.ORDER_NO) AS TERMSCODE, 
-        (SELECT ml.MFGING_LOCATION FROM oeordhdr ml WHERE ml.DB_NO = l.DB_NO AND ml.ORDER_NO = l.ORDER_NO) AS MFGINGLOCATION, 
-        (SELECT ttc.TOTAL_COST FROM oeordhdr ttc WHERE ttc.DB_NO = l.DB_NO AND ttc.ORDER_NO = l.ORDER_NO) AS TOTALCOST, 
-        (SELECT tsa.TOTAL_SALE_AMOUNT FROM oeordhdr tsa WHERE tsa.DB_NO = l.DB_NO AND tsa.ORDER_NO = l.ORDER_NO) AS TOTALSALEAMOUNT, 
-        (SELECT sn.SALESMAN_NO_1 FROM oeordhdr sn WHERE sn.DB_NO = l.DB_NO AND sn.ORDER_NO = l.ORDER_NO LIMIT 1) AS SALESMAN, 
-        (SELECT p.dsm_code FROM psr p WHERE p.psr_code = SALESMAN) AS DSMCODE, 
-        (SELECT d.dsm_desc FROM dsm d WHERE d.dsm_code = DSMCODE) AS DSMDESC, 
-        (SELECT ds.DSMSORT FROM dsm ds WHERE ds.dsm_code = DSMCODE) AS DSMSORT,  
-        (SELECT i.CATEGORY FROM product i WHERE i.ITEM_NO = l.ITEM_NO) AS ITEMCAT, 
-        (SELECT n.SKU FROM product n WHERE n.ITEM_NO = l.ITEM_NO) AS INAME, 
-        (SELECT MC_ID FROM mrktng_category_dtl WHERE TRIM(CATEGORY) = TRIM(ITEMCAT)) AS MCID,
-        (SELECT MC_DESCRIPTION FROM mrktng_category_hdr WHERE TRIM(ID) = TRIM(MCID)) AS PRODCAT,  
+        (SELECT os.ORDER_STATUS FROM oeordhdr os WHERE TRIM(os.DB_NO) = TRIM(l.DB_NO) AND TRIM(os.ORDER_NO) = TRIM(l.ORDER_NO)) AS 'ORDERSTATUS',
+        (SELECT ode.ORDER_DATE_ENTERED FROM oeordhdr ode WHERE ode.DB_NO = l.DB_NO AND ode.ORDER_NO =l.ORDER_NO) AS 'ORDERDATEENTERED',
+        (SELECT oatn.ORDER_APPLY_TO_NO FROM oeordhdr oatn WHERE oatn.DB_NO = l.DB_NO AND oatn.ORDER_NO = l.ORDER_NO LIMIT 1) AS 'ORDERAPPLYTONO',
+        (SELECT opon.ORDER_PUR_ORDER_NO FROM oeordhdr opon WHERE opon.DB_NO = l.DB_NO AND opon.ORDER_NO = l.ORDER_NO LIMIT 1) AS 'ORDERPURORDERNO',
+        (SELECT ocn.ORDER_CUSTOMER_NO FROM oeordhdr ocn WHERE ocn.DB_NO = l.DB_NO AND ocn.ORDER_NO = l.ORDER_NO LIMIT 1) AS 'ORDERCUSTOMERNO',
+        (SELECT A.CUSTOMER FROM v_customer_info A WHERE TRIM(A.DBNO) = TRIM(l.DB_NO) AND TRIM(A.CUS_NO) LIKE CONCAT ('%' , 'ORDERCUSTOMERNO' , '%') LIMIT 1) AS 'CUSTOMERN',
+        (SELECT A.ADDRESS FROM v_customer_info A WHERE TRIM(A.DBNO) = TRIM(l.DB_NO) AND TRIM(A.CUS_NO) LIKE CONCAT ('%' , 'ORDERCUSTOMERNO' , '%') LIMIT 1) AS 'ADDRESSC', 
+        (SELECT T.TIN_NO FROM v_customer_info T WHERE TRIM(T.DBNO) = TRIM(l.DB_NO) AND TRIM(T.CUS_NO) LIKE CONCAT ('%' , 'ORDERCUSTOMERNO' , '%') LIMIT 1) AS 'TINC', 
+        (SELECT t.CUST_TYPE_CODE FROM v_customer_type t WHERE TRIM(t.DBNO) = TRIM(l.DB_NO) AND TRIM(t.CUS_NO) LIKE CONCAT ('%' , 'ORDERCUSTOMERNO' , '%') LIMIT 1) AS 'TYPEC', 
+        (SELECT cbm.CUSTOMER_BAL_METHOD FROM oeordhdr cbm WHERE cbm.DB_NO = l.DB_NO AND cbm.ORDER_NO = l.ORDER_NO LIMIT 1) AS 'CUSTOMERBALMETHOD', 
+        (SELECT sd.SHIPPING_DATE FROM oeordhdr sd WHERE sd.DB_NO = l.DB_NO AND sd.ORDER_NO = l.ORDER_NO LIMIT 1) AS 'SHIPPINGDATE', 
+        (SELECT svc.SHIP_VIA_CODE FROM oeordhdr svc WHERE svc.DB_NO = l.DB_NO AND svc.ORDER_NO = l.ORDER_NO) AS 'SHIPVIACODE', 
+        (SELECT tc.TERMS_CODE FROM oeordhdr tc WHERE tc.DB_NO = l.DB_NO AND tc.ORDER_NO = l.ORDER_NO) AS 'TERMSCODE', 
+        (SELECT ml.MFGING_LOCATION FROM oeordhdr ml WHERE ml.DB_NO = l.DB_NO AND ml.ORDER_NO = l.ORDER_NO) AS 'MFGINGLOCATION', 
+        (SELECT ttc.TOTAL_COST FROM oeordhdr ttc WHERE ttc.DB_NO = l.DB_NO AND ttc.ORDER_NO = l.ORDER_NO) AS 'TOTALCOST', 
+        (SELECT tsa.TOTAL_SALE_AMOUNT FROM oeordhdr tsa WHERE tsa.DB_NO = l.DB_NO AND tsa.ORDER_NO = l.ORDER_NO) AS 'TOTALSALEAMOUNT', 
+        (SELECT sn.SALESMAN_NO_1 FROM oeordhdr sn WHERE sn.DB_NO = l.DB_NO AND sn.ORDER_NO = l.ORDER_NO LIMIT 1) AS 'SALESMAN', 
+        (SELECT p.dsm_code FROM psr p WHERE p.psr_code = SALESMAN) AS 'DSMCODE', 
+        (SELECT d.dsm_desc FROM dsm d WHERE d.dsm_code = DSMCODE) AS 'DSMDESC', 
+        (SELECT ds.DSMSORT FROM dsm ds WHERE ds.dsm_code = DSMCODE) AS 'DSMSORT',  
+        (SELECT i.CATEGORY FROM product i WHERE i.ITEM_NO = l.ITEM_NO) AS 'ITEMCAT', 
+        (SELECT n.SKU FROM product n WHERE n.ITEM_NO = l.ITEM_NO) AS 'INAME', 
+        (SELECT MC_ID FROM mrktng_category_dtl WHERE TRIM(CATEGORY) = TRIM(ITEMCAT)) AS 'MCID',
+        (SELECT MC_DESCRIPTION FROM mrktng_category_hdr WHERE TRIM(ID) = TRIM(MCID)) AS 'PRODCAT',  
         l.DB_NO, l.ORDER_TYPE, l.ORDER_NO, l.SEQUENCE_NO, l.GEN_INV_NO, l.ITEM_NO, l.LOCATION, l.QTY_ORDERED, 
         l.QTY_TO_SHIP, l.UNIT_PRICE, l.REQUEST_DATE, l.UNIT_OF_MEASURE, l.UNIT_COST, l.TOTAL_QTY_ORDERED, l.TOTAL_QTY_SHIPPED, 
         l.PRICE_ORG, l.ITEM_PROD_CAT, l.USER_FIELD_3, l.USER_FIELD_5, l.BILL_DATE, l.ITEM_CUSTOMER 
@@ -167,7 +167,7 @@
                     "$ITEM_NO",
                     "$ITEMCAT",
                     "$PRODCAT",
-                    "$INAME",
+                    "$ITEM_NO" . "-" . "$INAME",
                     "$LOCATION",
                     "$QTY_ORDERED",
                     "$QTY_TO_SHIP",
@@ -203,7 +203,7 @@
         else {
             $output['data'][] = array(
                     "",
-                    "$sql",
+                    "No Data",
                     "",
                     "",
                     "",
@@ -395,7 +395,7 @@
                     "$ITEM_NO",
                     "$ITEMCAT",
                     "$PRODCAT",
-                    "$INAME",
+                    "$ITEM_NO" . "-" . "$INAME",
                     "$LOCATION",
                     "$QTY_ORDERED",
                     "$QTY_TO_SHIP",
@@ -481,28 +481,29 @@
         $B = $mval;
         $S = 0;
         $E = 99;
-        $startday = "00";
-        $endday = "99";
         if ($lim <> '') {
-            if (strpos($lim, 'LIMIT')) { $lim = "LIMIT " . $lim; }
-            else {
+            if (strpos($lim, 'LIMIT') === false) {
                 $param = explode(",", $lim);
-                $S = $param[0];
-                $E = $param[1];
+                $startday = $param[0];
+                $endday = $param[1];
+                $limit = "AND ARAW BETWEEN $startday AND $endday";
             }
+            else { $limit = $lim; }
         }
-        $limit = $lim;
+        else { $limit = ''; }
         $sql = "SELECT 
-        SUBSTRING(DSM, 1, 3) AS DSMCODE,
-        SUBSTRING(SKU, 1, 7) AS ITEMNO,
+        SUBSTRING(nl.DSM, 1, 3) AS DSMCODE,
         (SELECT ds.DSMSORT FROM dsm ds WHERE ds.dsm_code = DSMCODE) AS DSMSORT,
-        (SELECT p.PROD_CODE FROM product p WHERE p.ITEM_NO = ITEMNO LIMIT 1) AS PRODCAT, 
+        SUBSTRING(nl.SKU, 1, 7) AS ITEMNO,
+        (SELECT i.CATEGORY FROM product i WHERE i.ITEM_NO = ITEMNO) AS ITEMCAT, 
+        (SELECT n.SKU FROM product n WHERE n.ITEM_NO = ITEMNO) AS INAME, 
+        (SELECT MC_ID FROM mrktng_category_dtl WHERE TRIM(CATEGORY) = TRIM(ITEMCAT)) AS MCID,
+        (SELECT MC_DESCRIPTION FROM mrktng_category_hdr WHERE TRIM(ID) = TRIM(MCID)) AS PRODCAT,  
         nl.*
         FROM noah_oelinhst nl
         WHERE
         nl.TAON = $T AND
-        nl.BUWAN = $B AND
-        nl.ARAW BETWEEN 0 AND 99
+        nl.BUWAN = $B
         $limit";
         $stm = $con->prepare($sql);
         $stm->execute();
@@ -513,6 +514,7 @@
                 $DBNO = strtoupper($row['DBNO']);
                 $BRANCH_NAME = strtoupper($row['BRANCH_NAME']);
                 $DSM = strtoupper($row['DSM']);
+                $INAME = strtoupper(preg_replace('/[^A-Za-z0-9-]/', '', $row['INAME']));
                 $DSMSORT = $row['DSMSORT'];
                 $SALESMAN_CODE = preg_replace('/\s+/', '', strtoupper($row['SALESMAN_CODE']));
                 // SET DSM MECHA
@@ -525,7 +527,7 @@
                     }
                     elseif ($DBNO == "CEBU0000") {
                         $BD = array("BK0000000118","BK0000000245","BK0000000116","BK0000000224","BK0000000041","BK0000000195","HRI000000121","BK0000000120","HRI000000122","BK0000000204","BK0000000247","BK0000000248","BH-S00000225");
-                        $BX = array("VX0000000212","VX0000000126","VX0000000213","VX0000000152","VX0000000131","BK0000000119","VX0000000129","VX0000000127","VX0000000215","VX0000000128","VX0000000125","VX0000000130","VX0000000169");
+                        $BX = array("VX0000000212","VX0000000126","VX0000000213","VX0000000152","VX0000000131","BK0000000119","VX0000000129","VX0000000127","VX0000000215","VX0000000128","VX0000000125","VX0000000130","VX0000000169","VX0000000250");
                         $TD = array("BK0000000200","HRI000000208","BK0000000201");
 
                         if (strpos($SALESMAN_CODE, 'OFF') !== false) {
@@ -539,7 +541,7 @@
                         if (strpos($SALESMAN_CODE, 'OFF') !== false) { $DSM = "OSD-OFFICE STA. BARBARA"; $DSMSORT = 16; }
                         else {
                             $DD = array("BK0000000166","BK0000000191","BK0000000206","VX0000000194","VX0000000216","VX0000000221","VX0000000246","BK0000000178","BK0000000092");
-                            $SD = array("BK0000000136","VX0000000095","VX0000000095","VX0000000096");
+                            $SD = array("BK0000000136","VX0000000095","VX0000000095","VX0000000096", "VX0000000207");
                             if (in_array($SALESMAN_CODE, $DD)) { $DSM = "DD1-STABARBARA"; $DSMSORT = 15; }
                             elseif (in_array($SALESMAN_CODE, $SD)) { $DSM = "SD1-CAUAYAN"; $DSMSORT = 20; }
                         }
@@ -570,7 +572,7 @@
                 $CATEGORY = strtoupper(preg_replace('/\s+/', ' ',$row['CATEGORY']));
                 $PRODUCT_CATEGORY = strtoupper(preg_replace('/\s+/', ' ',$row['PRODUCT_CATEGORY']));
                 if (strpos($PRODUCT_CATEGORY, 'CARBONATED PET 1') !== false) { $PRODUCT_CATEGORY = 'ZESTO CARBONATED PET 1.5L'; }
-                $SKU = strtoupper(preg_replace('/[^A-Za-z0-9-]/', '', $row['SKU']));
+                $SKU = strtoupper($row['SKU']);
                 if (strpos($SKU, 'FRESHPICK') !== false) { $PRODUCT_CATEGORY = 'ZESTO FRESH PICK'; }
                 $UOM = strtoupper($row['UOM']);
                 $QTY = $row['QTY'];
@@ -584,6 +586,7 @@
                 if ($DSMCODE == '') { $DSMCODE = substr($DSM, 0, 3); }
                 else { $DSMCODE = preg_replace('/\s+/', '', strtoupper($row['DSMCODE'])); }
                 $ITEMNO = $row['ITEMNO'];
+                $ITEMCAT = $row['ITEMCAT'];
                 $PRODCAT = $row['PRODCAT'];
                 // REGION/AREA MECHA
                 $SL = array("CD1", "CD2", "ND1", "OSC", "OSN");
@@ -615,9 +618,9 @@
                     "$NOAH_INV_NO",
                     "",
                     "$ITEMNO",
-                    "$PRODUCT_CATEGORY",
+                    "$ITEMCAT",
                     "$PRODCAT",
-                    "$SKU",
+                    "$ITEMNO" . "-" . "$INAME",
                     "",
                     "$QTY",
                     "$QTY",

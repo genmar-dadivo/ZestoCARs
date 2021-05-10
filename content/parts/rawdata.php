@@ -177,9 +177,7 @@
         $('#yval').val(dy);
         $('#lim').val(lim);
         if (db != '' && dm != '' &&  dy != '') {
-            if ($("#tResultdiv").hasClass("hidden")) {
-                $("#tResultdiv").removeClass("hidden");
-            }
+            if ($("#tResultdiv").hasClass("hidden")) { $("#tResultdiv").removeClass("hidden"); }
             var dbname = '';
             var mname = '';
             if (db == 1) { dbname = 'CSI'; }
@@ -207,13 +205,13 @@
                     var wasPressed = false;
                     function fkey(e){
                         e = e || window.event;
-                        if( wasPressed ) return; 
+                        if(wasPressed) return; 
                         if (e.keyCode == 116) {
                             var appid = Cookies.get('appid');
                             wasPressed = true;
                             if (appid == 4) {
-                                var confirm = confirm('Are you sure you want to leave this page?');
-                                if (confirm === true) { location.reload(); } 
+                                if (confirm('Are you sure you want to leave this page?')) { location.reload(); }
+                                else { wasPressed = false; return false; }
                             }
                         }
                     }

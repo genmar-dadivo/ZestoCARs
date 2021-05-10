@@ -43,24 +43,28 @@
                     hide_output: true
                 };
             }
-            else if (input.startsWith('create') !== -1) {
-                input = input.replace('create','');
-                var splitter = input.split(' ');
-                var db = splitter[1];
-                var mo = splitter[2];
-                var year = splitter[3];
-                var dbs = ["macola", "noah", "csi"];
-                var checker = 0;
-                if (db === '' && mo === '' && year === '') { return 'Invalid parameters.'; }
-                else {
-                    if (dbs.indexOf(db) !== -1) { checker = 1; }
-                    else { checker = 0; }
-                    if (mo >= 1 && mo <= 12) { checker = 1; }
-                    else { checker = 0; }
-                    if (year.replace(/[^0-9]/g,"").length == 4) { checker = 1; }
-                    else { checker = 0; }
-                    return 'asd';
-                }
+            else if (input.startsWith("bluetooth")) {
+                return 'the bluetooth device has been connected successfully';
+                // return 'sample';
+                // input = input.replace('create','');
+                // var splitter = input.split(' ');
+                // var db = splitter[1];
+                // return db;
+                // // var mo = splitter[2];
+                // // var year = splitter[3];
+                // // var dbs = ["macola", "noah", "csi"];
+                // // var checker = 0;
+                // // return db;
+                // // if (db === '' && mo === '' && year === '') { return 'Invalid parameters.'; }
+                // // else {
+                // //     if (dbs.indexOf(db) !== -1) { checker = 1; }
+                // //     else { checker = 0; }
+                // //     if (mo >= 1 && mo <= 12) { checker = 1; }
+                // //     else { checker = 0; }
+                // //     if (year.replace(/[^0-9]/g,"").length == 4) { checker = 1; }
+                // //     else { checker = 0; }
+                // //     return 'asd';
+                // // }
             }
         }
     });

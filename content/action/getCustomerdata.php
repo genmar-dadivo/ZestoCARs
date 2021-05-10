@@ -2,7 +2,7 @@
     // !
     ini_set('memory_limit', '-1');
     require '../dbase/dbconfig.php';
-    $sql = "SELECT A.*, (SELECT B.description FROM customer_type B WHERE B.code = A.Cus_Type_Cd) AS CUSTYPE, (SELECT C.AR_TERMS_DESC FROM terms C WHERE C.AR_TERMS_CD = A.Ar_Terms_Cd) AS ARSDESC, (SELECT D.LONG_DESCRIPTION FROM terms D WHERE D.AR_TERMS_CD = A.Ar_Terms_Cd) AS ARLDESC FROM arcusfil_sql A WHERE Last_Sale_Dt > 20170000 OR Last_Pay_Dt > 20170000";
+    $sql = "SELECT A.*, (SELECT B.description FROM customer_type B WHERE B.code = A.Cus_Type_Cd) AS CUSTYPE, (SELECT C.AR_TERMS_DESC FROM terms C WHERE C.AR_TERMS_CD = A.Ar_Terms_Cd) AS ARSDESC, (SELECT D.LONG_DESCRIPTION FROM terms D WHERE D.AR_TERMS_CD = A.Ar_Terms_Cd) AS ARLDESC FROM arcusfil_sql A WHERE SUBSTRING(A.Cus_No, 5, 8) IN ('10030659', '10024391', '35030552', '35030544', '35030543', '35030542', '10161623', '10109687', '10050725')";
     $stm = $con->prepare($sql);
     $stm->execute();
     $results = $stm->fetchAll(PDO::FETCH_ASSOC);
@@ -11,7 +11,6 @@
             $id = $row['id'];
             $dbno = $row['dbno'];
             $Cus_No = $row['Cus_No'];
-            $Slspsn_No = strtoupper($row['Slspsn_No']);
             $Cus_Name = ucwords($row['Cus_Name']);
             $Addr_1 = ucwords($row['Addr_1']);
             $Addr_2 = ucwords($row['Addr_2']);
@@ -112,7 +111,7 @@
                 "",
                 "$dbno",
                 "$Cus_No",
-                "$Slspsn_No",
+                "$Collector",
                 "$Cus_Name",
                 "$Addr_1",
                 "$Addr_2",

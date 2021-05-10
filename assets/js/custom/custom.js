@@ -160,6 +160,12 @@ function contentloader(loadid) {
     $("#page-content").load("../../content/parts/customer.php");
     $('.section_name').text('Customer Data');
   }
+  else if (loadid == 10) {
+    if (window.location.href.indexOf("calendar") > -1) { $(location).attr('href', '../../content/pages/'); }
+    $("#page-content").load("../../content/parts/products.php");
+    $('.section_name').text('Products Data');
+    // alert();
+  }
 }
 // Email Automation
 $('#email').blur(function() {

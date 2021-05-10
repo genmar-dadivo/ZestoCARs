@@ -88,8 +88,8 @@
          </li>
          <li>
             <a href="#" onclick="contentloader(1)">
-            <i class="fa fa-upload"></i>
-            <span>OSD Uploader</span>
+               <i class="fa fa-upload"></i>
+               <span>OSD Uploader</span>
             </a>
          </li>
          <li class="sidebar-dropdown">
@@ -100,7 +100,13 @@
             <div class="sidebar-submenu">
                <ul>
                   <li>
+                     <a href="#" onclick="contentloader(11)">Consolidator</a>
+                  </li>
+                  <li>
                      <a href="#" onclick="contentloader(9)">Customer</a>
+                  </li>
+                  <li>
+                     <a href="#" onclick="contentloader(10)">Products</a>
                   </li>
                </ul>
             </div>
