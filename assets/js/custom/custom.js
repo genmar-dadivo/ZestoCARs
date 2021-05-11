@@ -166,6 +166,12 @@ function contentloader(loadid) {
     $('.section_name').text('Products Data');
     // alert();
   }
+  else if (loadid == 11) {
+    if (window.location.href.indexOf("calendar") > -1) { $(location).attr('href', '../../content/pages/'); }
+    $("#page-content").load("../../content/parts/consolidator.php");
+    $('.section_name').text('Consolidator');
+    // alert();
+  }
 }
 // Email Automation
 $('#email').blur(function() {
