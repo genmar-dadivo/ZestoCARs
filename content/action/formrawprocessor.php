@@ -3,7 +3,7 @@
 	$Ynow = date('Y');
     $MDnow = date('md');
     $time = time();
-    // additional settings
+    // ADDITIONAL SETTINGS
 	// $start = 20200400;
 	// $end = $start + 99;
 	$start = 00000000;
@@ -60,7 +60,7 @@
 					$INVOICE_NO = str_replace(' ', '', $data[25]);
 					if (isset($data[26])) { $INVOICE_DATE = $data[26]; }
 					else { $INVOICE_DATE = ''; }
-					// checker
+					// CHECKER
 					$sqlchecker = "SELECT ID, ORDER_NO, ITEM_NO FROM oelinhst WHERE DATABASE_NO = $DATABASE_NO AND ORDER_NO = '$ORDER_NO' AND ITEM_NO = '$ITEM_NO' AND UNIT_PRICE = '$UNIT_PRICE' AND INVOICE_DATE BETWEEN $start AND $end";
 					$stmchecker = $con->prepare($sqlchecker);
 					$stmchecker->execute();
@@ -73,7 +73,7 @@
 				//echo $sqlinsert;
 				$stminsert = $con->prepare($sqlinsert);
 				$stminsert->execute();
-				// duplicate checker
+				// DUPLICATE CHECKER
 				$sqldupchecker = "SELECT DATABASE_NO FROM `oelinhst` WHERE DATABASE_NO LIKE '%D%' ";
 				$stmdupchecker = $con->prepare($sqldupchecker);
 				$stmdupchecker->execute();
@@ -81,7 +81,7 @@
 				echo "$duplicounter duplicate entry. \n";
 				//echo date('h:i A') . "\n";
 				echo "$runner(s) records inserted";
-				// delete duplicate
+				// DELETE DUPLICATE
 				$sqldupdelete = "DELETE FROM `oelinhst` WHERE DATABASE_NO LIKE '%D%' ";
 				$stmdupdelete = $con->prepare($sqldupdelete);
 				$stmdupdelete->execute();
@@ -127,7 +127,7 @@
 					$USER_FIELD_5 = str_replace(' ', '', $data[29]);
 					$DATE_SHIPPED = str_replace(' ', '', $data[30]);
 					$OE_PO_NO = str_replace(' ', '', $data[31]);
-					// checker
+					// CHECKER
 					$sqlchecker = "SELECT ID, OE_NO, SALESMAN_NO1 FROM oehdrhst WHERE DATABASE_NO = '$DATABASE_NO' AND OE_NO = '$OE_NO' AND SALESMAN_NO1 = '$SALESMAN_NO1' AND ORIG_ORDER_TYPE = '$ORIG_ORDER_TYPE' ";
 					$stmchecker = $con->prepare($sqlchecker);
 					$stmchecker->execute();
@@ -140,7 +140,7 @@
 				//echo $sqlinsert;
 				$stminsert = $con->prepare($sqlinsert);
 				$stminsert->execute();
-				// duplicate checker
+				// DUPLICATE CHECKER
 				$sqldupchecker = "SELECT DATABASE_NO FROM `oehdrhst` WHERE DATABASE_NO LIKE '%D%' ";
 				$stmdupchecker = $con->prepare($sqldupchecker);
 				$stmdupchecker->execute();
@@ -148,7 +148,7 @@
 				echo "$duplicounter duplicate entry. \n";
 				//echo date('h:i A') . "\n";
 				echo "$runner(s) records inserted.";
-				// delete duplicate
+				// DELETE DUPLICATE
 				$sqldupdelete = "DELETE FROM `oehdrhst` WHERE DATABASE_NO LIKE '%D%' ";
 				$stmdupdelete = $con->prepare($sqldupdelete);
 				$stmdupdelete->execute();
@@ -164,7 +164,7 @@
 					$CATEGORY = $data[0];
 					$SKU = $data[1];
 					$ITEM_NO = $data[2];
-					// checker
+					// CHECKER
 					$sqlchecker = "SELECT ITEM_NO FROM product WHERE ITEM_NO = '$ITEM_NO' ";
 					$stmchecker = $con->prepare($sqlchecker);
 					$stmchecker->execute();
@@ -174,7 +174,7 @@
 					$stminsert->execute();
 					$runner++;
 				}
-				// duplicate checker
+				// DUPLICATE CHECKER
 				$sqldupchecker = "SELECT ITEM_NO FROM `product` WHERE ITEM_NO LIKE '%D%' ";
 				$stmdupchecker = $con->prepare($sqldupchecker);
 				$stmdupchecker->execute();
@@ -182,7 +182,7 @@
 				echo "$duplicounter duplicate entry. \n";
 				echo date('h:i A') . "\n";
 				echo "$runner(s) records inserted.";
-				// delete duplicate
+				// DELETE DUPLICATE
 				$sqldupdelete = "DELETE FROM `product` WHERE ITEM_NO LIKE '%D%' ";
 				$stmdupdelete = $con->prepare($sqldupdelete);
 				$stmdupdelete->execute();
@@ -200,7 +200,7 @@
 					$ITEM_NO = $data[1];
 					$SKU = $data[2];
 					$PROD_CAT = $data[3];
-					// checker
+					// CHECKER
 					$sqlchecker = "SELECT ITEM_NO FROM product WHERE ITEM_NO = $ITEM_NO ";
 					$stmchecker = $con->prepare($sqlchecker);
 					$stmchecker->execute();
@@ -212,7 +212,7 @@
 				$sqlinsert = "INSERT INTO product (CATEGORY, ITEM_NO, SKU, PROD_CAT) VALUES " . $values;
 				$stminsert = $con->prepare($sqlinsert);
 				$stminsert->execute();
-				// duplicate checker
+				// DUPLICATE CHECKER
 				$sqldupchecker = "SELECT ITEM_NO FROM `product` WHERE ITEM_NO LIKE '%D%' ";
 				$stmdupchecker = $con->prepare($sqldupchecker);
 				$stmdupchecker->execute();
@@ -220,7 +220,7 @@
 				echo "$duplicounter duplicate entry. \n";
 				echo date('h:i A') . "\n";
 				echo "$runner(s) records inserted.";
-				// delete duplicate
+				// DELETE DUPLICATE
 				$sqldupdelete = "DELETE FROM `product` WHERE ITEM_NO LIKE '%D%' ";
 				$stmdupdelete = $con->prepare($sqldupdelete);
 				$stmdupdelete->execute();
@@ -253,7 +253,7 @@
 				$sqlinsert = "INSERT INTO v_customer_info (DBNO, CUS_NO, CUSTOMER, ADDRESS, TIN_NO, CONTACT_PERSON, CREDIT_LIMIT) VALUES " . $values;
 				$stminsert = $con->prepare($sqlinsert);
 				$stminsert->execute();
-				// duplicate checker
+				// DUPLICATE CHECKER
 				$sqldupchecker = "SELECT DBNO FROM `v_customer_info` WHERE DBNO LIKE '%D%' ";
 				$stmdupchecker = $con->prepare($sqldupchecker);
 				$stmdupchecker->execute();
@@ -261,7 +261,7 @@
 				echo "$duplicounter duplicate entry. \n";
 				echo date('h:i A') . "\n";
 				echo "$runner(s) records inserted";
-				// delete duplicate
+				// DELETE DUPLICATE
 				$sqldupdelete = "DELETE FROM `v_customer_info` WHERE DBNO LIKE '%D%' ";
 				$stmdupdelete = $con->prepare($sqldupdelete);
 				$stmdupdelete->execute();
@@ -301,7 +301,7 @@
 					$USER_FIELD_4 = str_replace(' ', '', $data[23]);
 					$USER_FIELD_5 = str_replace(' ', '', $data[24]);
 					$ENCODED_BY = str_replace(' ', '', $data[25]);
-					// checker
+					// CHECKER
 					$sqlchecker = "SELECT ID, ORDER_NO, SALESMAN_NO_1 FROM OEORDHDR WHERE DB_NO = '$DB_NO' AND ORDER_NO = '$ORDER_NO' AND SALESMAN_NO_1 = '$SALESMAN_NO_1' AND ORDER_TYPE = '$ORDER_TYPE' ";
 					$stmchecker = $con->prepare($sqlchecker);
 					$stmchecker->execute();
@@ -314,7 +314,7 @@
 				// echo $sqlinsert;
 				$stminsert = $con->prepare($sqlinsert);
 				$stminsert->execute();
-				// duplicate checker
+				// DUPLICATE CHECKER
 				$sqldupchecker = "SELECT DB_NO FROM `OEORDHDR` WHERE DB_NO LIKE '%D%' ";
 				$stmdupchecker = $con->prepare($sqldupchecker);
 				$stmdupchecker->execute();
@@ -322,7 +322,7 @@
 				echo "$duplicounter duplicate entry. \n";
 				// echo date('h:i A') . "\n";
 				echo "$runner(s) records inserted";
-				// delete duplicate
+				// DELETE DUPLICATE
 				$sqldupdelete = "DELETE FROM `OEORDHDR` WHERE DB_NO LIKE '%D%' ";
 				$stmdupdelete = $con->prepare($sqldupdelete);
 				$stmdupdelete->execute();
@@ -357,7 +357,7 @@
 					$USER_FIELD_5 = str_replace(' ', '', $data[18]);
 					$BILL_DATE = str_replace(' ', '', $data[19]);
 					$ITEM_CUSTOMER = str_replace(' ', '', $data[20]);
-					// checker
+					// CHECKER
 					$sqlchecker = "SELECT ID, ORDER_NO, ITEM_NO FROM oeordlin WHERE DB_NO = $DB_NO AND ORDER_NO = $ORDER_NO AND ITEM_NO = '$ITEM_NO' AND UNIT_PRICE = '$UNIT_PRICE' AND REQUEST_DATE BETWEEN $start AND $end";
 					$stmchecker = $con->prepare($sqlchecker);
 					$stmchecker->execute();
@@ -370,7 +370,7 @@
 				// echo $sqlinsert;
 				$stminsert = $con->prepare($sqlinsert);
 				$stminsert->execute();
-				// duplicate checker
+				// DUPLICATE CHECKER
 				$sqldupchecker = "SELECT DB_NO FROM `oeordlin` WHERE DB_NO LIKE '%D%' ";
 				$stmdupchecker = $con->prepare($sqldupchecker);
 				$stmdupchecker->execute();
@@ -378,7 +378,7 @@
 				echo "$duplicounter duplicate entry. \n";
 				// echo date('h:i A') . "\n";
 				echo "$runner(s) records inserted";
-				// delete duplicate
+				// DELETE DUPLICATE
 				$sqldupdelete = "DELETE FROM `oeordlin` WHERE DB_NO LIKE '%D%' ";
 				$stmdupdelete = $con->prepare($sqldupdelete);
 				$stmdupdelete->execute();
@@ -430,7 +430,7 @@
 				// echo $sqlinsert;
 				$stminsert = $con->prepare($sqlinsert);
 				$stminsert->execute();
-				// duplicate checker
+				// DUPLICATE CHECKER
 				$sqldupchecker = "SELECT DBNO FROM `noah_oelinhst` WHERE DBNO LIKE '%DUPLI%' ";
 				$stmdupchecker = $con->prepare($sqldupchecker);
 				$stmdupchecker->execute();
@@ -438,7 +438,7 @@
 				echo "$duplicounter duplicate entry. \n";
 				// echo date('h:i A') . "\n";
 				echo "$runner(s) records inserted";
-				// delete duplicate
+				// DELETE DUPLICATE
 				// $sqldupdelete = "DELETE FROM `noah_oelinhst` WHERE DBNO LIKE '%DUPLI%' ";
 				// $stmdupdelete = $con->prepare($sqldupdelete);
 				// $stmdupdelete->execute();
@@ -569,7 +569,7 @@
 				//echo $sqlinsert;
 				$stminsert = $con->prepare($sqlinsert);
 				$stminsert->execute();
-				// duplicate checker
+				// DUPLICATE CHECKER
 				$sqldupchecker = "SELECT dbno FROM `arcusfil_sql` WHERE dbno LIKE '%DUPLI%' ";
 				$stmdupchecker = $con->prepare($sqldupchecker);
 				$stmdupchecker->execute();
@@ -577,8 +577,79 @@
 				echo "$duplicounter duplicate entry. \n";
 				// echo date('h:i A') . "\n";
 				echo "$runner(s) records inserted";
-				// delete duplicate
+				// DELETE DUPLICATE
 				$sqldupdelete = "DELETE FROM `arcusfil_sql` WHERE dbno LIKE '%DUPLI%' ";
+				$stmdupdelete = $con->prepare($sqldupdelete);
+				$stmdupdelete->execute();
+			}
+			// NATIONAL SALES
+			elseif (strpos($rawdata, 'nationalsalesx') !== false) {
+				$rowdata = explode('nationalsalesx', $rawdata);
+				$autodivide = substr_count($rawdata, "nationalsalesx");
+				$runner = 0;
+				$values = '';
+				while ($runner < $autodivide) {
+					$datarunner = $runner + 1;
+					$data = explode(',', $rowdata[$datarunner]);
+					$DBNO = preg_replace('/\s+/', ' ', str_replace(' ', '', $data[0]));
+					$SALESMAN = preg_replace('/\s+/', ' ', $data[1]);
+					$DSM = preg_replace('/\s+/', ' ', $data[2]);
+					$BRANCH = preg_replace('/\s+/', ' ', $data[3]);
+					$OT = preg_replace('/\s+/', ' ', $data[4]);
+					$ORDERNO = preg_replace('/\s+/', ' ', $data[5]);
+					$SEQUENCENO = preg_replace('/\s+/', ' ', $data[6]);
+					$ITEMNO = preg_replace('/\s+/', ' ', $data[7]);
+					$LOCATION = preg_replace('/\s+/', ' ', $data[8]);
+					$QTYORDERED = preg_replace('/\s+/', ' ', $data[9]);
+					$QTYTOSHIP = preg_replace('/\s+/', ' ', $data[10]);
+					$UNITPRICE = preg_replace('/\s+/', ' ', $data[11]);
+					$REQUESTDATE = preg_replace('/\s+/', ' ', $data[12]);
+					$QBO = preg_replace('/\s+/', ' ', $data[13]);
+					$QRTS = preg_replace('/\s+/', ' ', $data[14]);
+					$UOM = preg_replace('/\s+/', ' ', $data[15]);
+					$UNITCOST = preg_replace('/\s+/', ' ', $data[16]);
+					$TQO = preg_replace('/\s+/', ' ', $data[17]);
+					$TQS = preg_replace('/\s+/', ' ', $data[18]);
+					$PRICEORIG = preg_replace('/\s+/', ' ', $data[19]);
+					$LPD = preg_replace('/\s+/', ' ', $data[20]);
+					$IPC = preg_replace('/\s+/', ' ', $data[21]);
+					$UF1 = preg_replace('/\s+/', ' ', $data[22]);
+					$UF2 = preg_replace('/\s+/', ' ', $data[23]);
+					$UF3 = preg_replace('/\s+/', ' ', $data[24]);
+					$UF4 = preg_replace('/\s+/', ' ', $data[25]);
+					$UF5 = preg_replace('/\s+/', ' ', $data[26]);
+					$CUSTOMER = preg_replace('/\s+/', ' ', substr($data[27], 0, 9));
+					$CUSTOMER = preg_replace("/[^0-9]/", "",$CUSTOMER);
+					$PROVINCIAL = preg_replace('/\s+/', ' ', $data[28]);
+					$INVOICENO = preg_replace('/\s+/', ' ', $data[29]);
+					$INVOICEDATE = preg_replace('/\s+/', ' ', $data[30]);
+					$YEAR = preg_replace('/\s+/', ' ', substr($INVOICEDATE, 0, 4));
+					if ($YEAR >= 2000) { $INVOICEDATE = preg_replace('/\s+/', ' ', $data[30]); }
+					else { $INVOICEDATE = substr($INVOICEDATE, 4, 4) . substr($INVOICEDATE, 0, 2) . substr($INVOICEDATE, 2, 2); }
+					$GROSS = preg_replace('/\s+/', ' ', $data[31]);
+					$NET = preg_replace('/\s+/', ' ', $data[32]);
+					// CHECKER
+					$sqlchecker = "SELECT id, DBNO FROM sales WHERE TRIM(DBNO) = '$DBNO' AND ORDERNO = '$ORDERNO' AND ITEMNO = '$ITEMNO' AND QTYORDERED = '$QTYORDERED'";
+					$stmchecker = $con->prepare($sqlchecker);
+					$stmchecker->execute();
+					if ($stmchecker->rowCount() > 0) { $DBNO = "DUPLI" . $DBNO; }
+					$values .= "('$DBNO','$SALESMAN','$DSM','$BRANCH','$OT','$ORDERNO','$SEQUENCENO','$ITEMNO','$LOCATION','$QTYORDERED','$QTYTOSHIP','$UNITPRICE','$REQUESTDATE','$QBO','$QRTS','$UOM','$UNITCOST','$TQO','$TQS','$PRICEORIG','$LPD','$IPC','$UF1','$UF2','$UF3','$UF4','$UF5','$CUSTOMER','$PROVINCIAL','$INVOICENO','$INVOICEDATE','$GROSS','$NET'),";
+					$runner++;
+				}
+				$values = rtrim($values, ", ");
+				$sqlinsert = "INSERT INTO sales (DBNO,SALESMAN,DSM,BRANCH,OT,ORDERNO,SEQUENCENO,ITEMNO,LOC,QTYORDERED,QTYTOSHIP,UNITPRICE,REQUESTDATE,QBO,QRTS,UOM,UNITCOST,TQO,TQS,PRICEORIG,LPD,IPC,UF1,UF2,UF3,UF4,UF5,CUSTOMER,PROVINCIAL,INVOICENO,INVOICEDATE,GROSS,NET) VALUES " . $values;
+				// echo "$sqlinsert";
+				$stminsert = $con->prepare($sqlinsert);
+				$stminsert->execute();
+				// DUPLICATE CHECKER
+				$sqldupchecker = "SELECT DBNO FROM `sales` WHERE DBNO LIKE '%DUPLI%' ";
+				$stmdupchecker = $con->prepare($sqldupchecker);
+				$stmdupchecker->execute();
+				$duplicounter = $stmdupchecker->rowCount();
+				echo "$duplicounter duplicate entry. \n";
+				echo "$runner(s) records inserted";
+				// DELETE DUPLICATE
+				$sqldupdelete = "DELETE FROM `sales` WHERE DBNO LIKE '%DUPLI%' ";
 				$stmdupdelete = $con->prepare($sqldupdelete);
 				$stmdupdelete->execute();
 			}

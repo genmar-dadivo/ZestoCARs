@@ -5,43 +5,6 @@
     </div>
 </div>
 <script>
-    function contentloader(loadid) {
-        console.clear();
-        $("#bodyid").val(loadid);
-        Cookies.remove('appid');
-        Cookies.set("appid", loadid);
-        if (loadid == 0) {
-            if (window.location.href.indexOf("calendar") > -1) { $(location).attr('href', '../../content/pages/'); }
-            $("#page-content").load("../../content/parts/home.php");
-            $('.section_name').text('Home');
-        }
-        else if (loadid == 1) {
-            if (window.location.href.indexOf("calendar") > -1) { $(location).attr('href', '../../content/pages/'); }
-            $("#page-content").load("../../content/parts/upload.html");
-            $('.section_name').text('Data Uploader');
-        }
-        else if (loadid == 2) { $(location).attr('href', '../../content/parts/calendar'); }
-        else if (loadid == 3) {
-            if (window.location.href.indexOf("calendar") > -1) { $(location).attr('href', '../../content/pages/'); }
-            $("#page-content").load("../../content/parts/einformation.php");
-            $('.section_name').text('Employee Information');
-        }
-        else if (loadid == 4) {
-            if (window.location.href.indexOf("calendar") > -1) { $(location).attr('href', '../../content/pages/'); }
-            $("#page-content").load("../../content/parts/rawdata.php");
-            $('.section_name').text('Raw Data');
-        }
-        else if (loadid == 5) {
-            if (window.location.href.indexOf("calendar") > -1) { $(location).attr('href', '../../content/pages/'); }
-            $("#page-content").load("../../content/parts/announcement.php");
-            $('.section_name').text('Mailer');
-        }
-        else if (loadid == 6) {
-            if (window.location.href.indexOf("calendar") > -1) { $(location).attr('href', '../../content/pages/'); }
-            $("#page-content").load("../../content/parts/alreadygenerated.php");
-            $('.section_name').text('AG Data');
-        }
-    }
     const tilt = $('.zesto-logo').tilt({
         maxTilt:        20,
         perspective:    1000,

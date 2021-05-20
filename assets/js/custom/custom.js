@@ -168,8 +168,8 @@ function contentloader(loadid) {
   }
   else if (loadid == 11) {
     if (window.location.href.indexOf("calendar") > -1) { $(location).attr('href', '../../content/pages/'); }
-    $("#page-content").load("../../content/parts/consolidator.php");
-    $('.section_name').text('Consolidator');
+    $("#page-content").load("../../content/parts/pcv.php");
+    $('.section_name').text('PCV');
     // alert();
   }
 }

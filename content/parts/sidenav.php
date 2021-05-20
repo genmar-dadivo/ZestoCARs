@@ -33,6 +33,15 @@
    </div>
    <div class="sidebar-menu">
       <ul>
+         <li class="header-menu" style="opacity: 0;">
+            <span>Home</span>
+         </li>
+         <li>
+            <a href="#" onclick="contentloader(0)">
+               <i class="fa fa-upload"></i>
+               <span>Home</span>
+            </a>
+         </li>
          <li class="header-menu">
             <span>HR</span>
          </li>
@@ -60,8 +69,8 @@
          </li>
          <li class="sidebar-dropdown">
             <a href="#">
-            <i class="fa fa-file"></i>
-            <span>Reports</span>
+               <i class="fa fa-file"></i>
+               <span>Reports</span>
             </a>
             <div class="sidebar-submenu">
                <ul>
@@ -83,6 +92,12 @@
                </ul>
             </div>
          </li>
+         <li>
+            <a href="#" onclick="contentloader(1)">
+               <i class="fa fa-upload"></i>
+               <span>PCV</span>
+            </a>
+         </li>
          <li class="header-menu">
             <span>Extra</span>
          </li>
@@ -99,9 +114,6 @@
             </a>
             <div class="sidebar-submenu">
                <ul>
-                  <li>
-                     <a href="#" onclick="contentloader(11)">Consolidator</a>
-                  </li>
                   <li>
                      <a href="#" onclick="contentloader(9)">Customer</a>
                   </li>

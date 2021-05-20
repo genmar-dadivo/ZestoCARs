@@ -42,7 +42,7 @@
 		<!-- Custom CSS -->
 		<link href="../../assets/css/custom/custom.css" rel="stylesheet">
 		<link rel="icon" href="../../assets/img/logo.png" type="image/gif" sizes="30x30">
-		<title>Zesto | CARS</title>
+		<title>Zesto | CARs</title>
 	</head>
 	<body class="noselect custom-bg-1">
         <div class="page-wrapper chiller-theme toggled">

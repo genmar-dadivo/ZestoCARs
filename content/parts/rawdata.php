@@ -1,6 +1,6 @@
 <div class="modal fade" id="rawdata-settings" tabindex="-1" data-backdrop="static">
     <div class="modal-dialog" role="document">
-        <div class="modal-content">
+        <div class="modal-content custom-bg-1">
             <nav class="navbar">
             </nav>
             <div class="modal-body">
@@ -10,7 +10,7 @@
                         <div class="row">
                             <div class="mt-3">
                                 <div class="form-floating">
-                                    <select class="form-select" id="database-name">
+                                    <select class="form-select border-0 fw-light fs-6" id="database-name">
                                         <option value="" selected disabled>Select Source</option>
                                         <option value="1">CSI</option>
                                         <option value="2">Macola</option>
@@ -21,7 +21,7 @@
                             </div>
                             <div class="mt-1">
                                 <div class="form-floating">
-                                    <select class="form-select" id="data-month">
+                                    <select class="form-select border-0 fw-light fs-6" id="data-month">
                                         <option value="" disabled selected></option>
                                         <?php
                                         $months = array("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sept", "Oct", "Nov", "Dec");
@@ -37,13 +37,13 @@
                             </div>
                             <div class="mt-1">
                                 <div class="form-floating">
-                                    <input type="text" class="form-control" id="data-limit" placeholder="Limit" autocomplete="off">
+                                    <input type="text" class="form-control border-0 fw-light fs-6" id="data-limit" placeholder="Limit" autocomplete="off">
                                     <label for="data-limit">Limit</label>
                                 </div>
                             </div>
                             <div class="mt-3 mb-5">
                                 <div class="form-floating">
-                                    <input type="text" class="form-control" id="data-year" placeholder="Year" autocomplete="off">
+                                    <input type="text" class="form-control border-0 fw-light fs-6" id="data-year" placeholder="Year" autocomplete="off">
                                     <label for="data-year">Year</label>
                                 </div>
                             </div>

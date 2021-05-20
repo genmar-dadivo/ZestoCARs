@@ -122,7 +122,7 @@
                 }
                 if (isset($row['CUSTOMERN'])) {
                     $CUSTOMERN = strtoupper($row['CUSTOMERN']);
-                    $ADDRESSC = strtoupper($row['ADDRESSC']);
+                    $ADDRESSC = strtoupper(preg_replace("/[^a-zA-Z0-9]+/", "", $row['ADDRESSC']));
                     $TYPEC = $row['TYPEC'];
                     $TINC = $row['TINC'];
                 }
@@ -340,7 +340,7 @@
                 }
                 if (isset($row['CUSTOMERN'])) {
                     $CUSTOMERN = strtoupper($row['CUSTOMERN']);
-                    $ADDRESSC = strtoupper($row['ADDRESSC']);
+                    $ADDRESSC = strtoupper(preg_replace("/[^a-zA-Z0-9]+/", "", $row['ADDRESSC']));;
                     $TYPEC = $row['TYPEC'];
                     $TINC = $row['TINC'];
                 }
@@ -503,7 +503,7 @@
         FROM noah_oelinhst nl
         WHERE
         nl.TAON = $T AND
-        nl.BUWAN = $B
+        nl.BUWAN = $B AND SALESMAN_CODE = 'bk0000000120'
         $limit";
         $stm = $con->prepare($sql);
         $stm->execute();
@@ -513,7 +513,7 @@
                 $id = $row['id'];
                 $DBNO = strtoupper($row['DBNO']);
                 $BRANCH_NAME = strtoupper($row['BRANCH_NAME']);
-                $DSM = strtoupper($row['DSM']);
+                $DSM = strtoupper(preg_replace('/\s+/', ' ', $row['DSM']));
                 $INAME = strtoupper(preg_replace('/[^A-Za-z0-9-]/', '', $row['INAME']));
                 $DSMSORT = $row['DSMSORT'];
                 $SALESMAN_CODE = preg_replace('/\s+/', '', strtoupper($row['SALESMAN_CODE']));
@@ -523,7 +523,7 @@
                 else {
                     if ($DBNO == "BCLD0000") {
                         if (strpos($SALESMAN_CODE, 'OFF') !== false) { $DSM = "OSO-OFFICE BACOLOD"; $DSMSORT = 28; }
-                        else { $DSM = "OD1-BACOLOD"; $DSMSORT = 27; }
+                        else { $DSM = "OD1-BACOLOD"; $DSMSORT = 27; $DSMCODE = "OD1"; }
                     }
                     elseif ($DBNO == "CEBU0000") {
                         $BD = array("BK0000000118","BK0000000245","BK0000000116","BK0000000224","BK0000000041","BK0000000195","HRI000000121","BK0000000120","HRI000000122","BK0000000204","BK0000000247","BK0000000248","BH-S00000225");
@@ -532,31 +532,32 @@
 
                         if (strpos($SALESMAN_CODE, 'OFF') !== false) {
                             $DSM = "OSB-OFFICE SALES CEBU"; $DSMSORT = 24;
+                            $DSMCODE = "OSB";
                         }
-                        elseif (in_array($SALESMAN_CODE, $BD)) { $DSM = "BD1-CEBU MT"; $DSMSORT = 22; }
-                        elseif (in_array($SALESMAN_CODE, $BX)) { $DSM = "BX1-CEBU GT"; $DSMSORT = 23; }
-                        elseif (in_array($SALESMAN_CODE, $TD)) { $DSM = "TD1-TACLOBAN"; $DSMSORT = 29; }
+                        elseif (in_array($SALESMAN_CODE, $BD)) { $DSM = "BD1-CEBU MT"; $DSMSORT = 22; $DSMCODE = "BD1"; }
+                        elseif (in_array($SALESMAN_CODE, $BX)) { $DSM = "BX1-CEBU GT"; $DSMSORT = 23; $DSMCODE = "BX1"; }
+                        elseif (in_array($SALESMAN_CODE, $TD)) { $DSM = "TD1-TACLOBAN"; $DSMSORT = 29; $DSMCODE = "TD1"; }
                     }
                     elseif ($DBNO == "DGPN0000") {
-                        if (strpos($SALESMAN_CODE, 'OFF') !== false) { $DSM = "OSD-OFFICE STA. BARBARA"; $DSMSORT = 16; }
+                        if (strpos($SALESMAN_CODE, 'OFF') !== false) { $DSM = "OSD-OFFICE STA. BARBARA"; $DSMSORT = 16; $DSMCODE = "OSD"; }
                         else {
                             $DD = array("BK0000000166","BK0000000191","BK0000000206","VX0000000194","VX0000000216","VX0000000221","VX0000000246","BK0000000178","BK0000000092");
                             $SD = array("BK0000000136","VX0000000095","VX0000000095","VX0000000096", "VX0000000207");
-                            if (in_array($SALESMAN_CODE, $DD)) { $DSM = "DD1-STABARBARA"; $DSMSORT = 15; }
-                            elseif (in_array($SALESMAN_CODE, $SD)) { $DSM = "SD1-CAUAYAN"; $DSMSORT = 20; }
+                            if (in_array($SALESMAN_CODE, $DD)) { $DSM = "DD1-STABARBARA"; $DSMSORT = 15; $DSMCODE = "DD1"; }
+                            elseif (in_array($SALESMAN_CODE, $SD)) { $DSM = "SD1-CAUAYAN"; $DSMSORT = 20; $DSMCODE = "SD1"; }
                         }
                     }
                     elseif ($DBNO == "EDSA0000") {
-                        if (strpos($SALESMAN_CODE, 'OFF') !== false) { $DSM = "OSE-OFFICE SALES EDSA"; $DSMSORT = 8; }
-                        else { $DSM = "I97-HRI"; }
+                        if (strpos($SALESMAN_CODE, 'OFF') !== false) { $DSM = "OSE-OFFICE SALES EDSA"; $DSMSORT = 8; $DSMCODE = "OSE"; }
+                        else { $DSM = "I97-HRI"; $DSMCODE = "I97"; }
                     }
                     elseif ($DBNO == "ILOI0000") {
-                        if (strpos($SALESMAN_CODE, 'OFF') !== false) { $DSM = "OSL-OFFICE SALES ILOILO"; $DSMSORT = 26; }
-                        else { $DSM = "LD1-ILOILO"; $DSMSORT = 25; }
+                        if (strpos($SALESMAN_CODE, 'OFF') !== false) { $DSM = "OSL-OFFICE SALES ILOILO"; $DSMSORT = 26; $DSMCODE = "OSL"; }
+                        else { $DSM = "LD1-ILOILO"; $DSMSORT = 25; $DSMCODE = "LD1"; }
                     }
                     elseif ($DBNO == "STGO0000") {
-                        if (strpos($SALESMAN_CODE, 'OFF') !== false) { $DSM = "OSS-OFFICE CAUAYAN"; $DSMSORT = 21; }
-                        else { $DSM = "SD1-CAUAYAN"; $DSMSORT = 20; }
+                        if (strpos($SALESMAN_CODE, 'OFF') !== false) { $DSM = "OSS-OFFICE CAUAYAN"; $DSMSORT = 21; $DSMCODE = "OSS"; }
+                        else { $DSM = "SD1-CAUAYAN"; $DSMSORT = 20; $DSMCODE = "SD1"; }
                     }
                 }
                 $TAON = $row['TAON'];
@@ -564,7 +565,7 @@
                 $ARAW = $row['ARAW'];
                 $SELLING_TYPE = strtoupper($row['SELLING_TYPE']);
                 $CUSTOMERS = strtoupper($row['CUSTOMERS']);
-                $ADDRESS = strtoupper($row['ADDRESS']);
+                $ADDRESS = strtoupper(preg_replace("/[^a-zA-Z0-9]+/", "", $row['ADDRESS']));
                 $TIN = $row['TIN'];
                 $CUSTOMERS_TYPE = strtoupper($row['CUSTOMERS_TYPE']);
                 $PROVINCIAL = strtoupper($row['PROVINCIAL']);
@@ -587,7 +588,7 @@
                 else { $DSMCODE = preg_replace('/\s+/', '', strtoupper($row['DSMCODE'])); }
                 $ITEMNO = $row['ITEMNO'];
                 $ITEMCAT = $row['ITEMCAT'];
-                $PRODCAT = $row['PRODCAT'];
+                $PRODCAT = strtoupper($row['PRODCAT']);
                 // REGION/AREA MECHA
                 $SL = array("CD1", "CD2", "ND1", "OSC", "OSN");
                 $NL = array("DD1", "PD1", "PD2", "SD1", "OSP", "OSD", "OSS");
@@ -610,7 +611,7 @@
                 $output['data'][] = array(
                     "",
                     "$DBNO",
-                    "$SALESMAN_CODE",
+                    "$SALESMAN_CODE" . "-" . "$DSMCODE",
                     "$DSM",
                     "$DSMSORT $DSM",
                     "$BRANCH_NAME",
