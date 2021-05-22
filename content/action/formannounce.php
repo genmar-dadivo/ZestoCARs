@@ -5,7 +5,6 @@
     if (isset($_POST['mail_cc'])) { $mail_cc = $_POST['mail_cc']; }
     if (isset($_POST['mail_bcc'])) { $mail_bcc = $_POST['mail_bcc']; }
     if (isset($_POST['mail_replyto'])) { $mail_replyto = $_POST['mail_replyto']; }
-
     use PHPMailer\PHPMailer\PHPMailer;
     use PHPMailer\PHPMailer\SMTP;
     use PHPMailer\PHPMailer\Exception;

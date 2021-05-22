@@ -3,6 +3,7 @@
     $dbval = $_POST['dbval'];
     $mval = $_POST['mval'];
     $yval = $_POST['yval'];
+    $others = $_POST['others'];
     $lim = $_POST['lim'];
     // CSI
     if ($dbval == 1) {

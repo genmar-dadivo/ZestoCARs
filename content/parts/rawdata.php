@@ -41,6 +41,12 @@
                                     <label for="data-limit">Limit</label>
                                 </div>
                             </div>
+                            <div class="mt-3">
+                                <div class="form-floating">
+                                    <textarea class="form-control border-0 fw-light fs-6" placeholder="Others" id="others" style="resize: none; min-height: 150px;" name="others"></textarea>
+                                    <label for="others">Others</label>
+                                </div>
+                            </div>
                             <div class="mt-3 mb-5">
                                 <div class="form-floating">
                                     <input type="text" class="form-control border-0 fw-light fs-6" id="data-year" placeholder="Year" autocomplete="off">

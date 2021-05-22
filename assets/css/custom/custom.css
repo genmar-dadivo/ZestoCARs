@@ -15,6 +15,9 @@
 	height: 100%;
 	background: rgba(255, 255, 255, 0.5);
 }
+.center {
+	margin: auto;
+}
 .custom-container { max-width: 900px; }
 .custom-bg-1 { background-color: #f1f1f1; }
 .custom-bg-2 { background-color: #d6d6d6; }

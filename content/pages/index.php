@@ -32,6 +32,7 @@
     	<link rel="stylesheet" href="../../assets/js/dt/css/responsive.dataTables.min.css">
         <!-- FA CSS -->
         <link href="../../assets/css/fa/css/fontawesome.min.css" rel="stylesheet">
+        <link href="../../assets/css/fa/css/all.min.css" rel="stylesheet">
         <link href="../../assets/css/fa/css/brands.min.css" rel="stylesheet">
         <link href="../../assets/css/fa/css/solid.min.css" rel="stylesheet">
 		<!-- Quill CSS -->

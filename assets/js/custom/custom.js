@@ -186,7 +186,7 @@ $('#email').blur(function() {
   else { $(this).removeClass('text-lowercase').addClass('text-capitalize'); }
 });
 $('.numberonly').keyup(function(event) { this.value = this.value.replace(/[^0-9.\.]/g,''); });
-$('.letteronly').keyup(function(event) { this.value = this.value.replace(/[^A-Za-z \.]/g,''); });
+$('.letteronly').keyup(function(event) { this.value = this.value.replace(/[^A-Za-zÑñ \.]/g,''); });
 $('.code').keyup(function(event) { this.value = this.value.replace(/[^A-Za-z0-9/\ \.]/g,''); });
 // Calendar
 document.addEventListener('DOMContentLoaded', function() {
