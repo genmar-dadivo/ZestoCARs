@@ -69,9 +69,38 @@
                                 <div class="form-floating">
                                     <select class="form-select border-0 shadow-sm" id="branch" name="branch" aria-label="Branch" required>
                                         <option value="" disabled selected>Branch</option>
-                                        <option value="1"> Sample </option>
+                                        <option value="1"> GMA </option>
+                                        <option value="3"> Canlubang </option>
+                                        <option value="4"> Pili/Naga </option>
+                                        <option value="5"> Pampanga </option>
+                                        <option value="12"> Esmo </option>
+                                        <option value="13"> Osamiz </option>
+                                        <option value="14"> Agdao </option>
+                                        <option value="15"> Toril </option>
+                                        <option value="BCLD0000"> Bacolod </option>
+                                        <option value="CEBU0000"> Cebu </option>
+                                        <option value="DGPN0000"> Dagupan </option>
+                                        <option value="EDSA0000"> EDSA </option>
+                                        <option value="ILOI0000"> Iloilo </option>
+                                        <option value="STGO0000"> Santiago </option>
                                     </select>
                                     <label for="floatingSelect">Branchs</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mt-1">
+                            <div class="col-sm-12">
+                                <div class="form-floating mb-3">
+                                    <input type="email" class="form-control border-0 shadow-sm text-lowercase" id="emailapprover" name="emailapprover" placeholder="Approver's Email" autocomplete="off" required>
+                                    <label for="emailapprover">Approver's Email</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mt-1">
+                            <div class="col-sm-12">
+                                <div class="form-floating mb-3">
+                                    <input type="email" class="form-control border-0 shadow-sm text-lowercase" id="emailrequest" name="emailrequest" placeholder="Requestor's Email" autocomplete="off" required>
+                                    <label for="emailrequest">Requestor's Email</label>
                                 </div>
                             </div>
                         </div>
@@ -109,6 +138,14 @@
 	</div>
 </div>
 <script>
+    var options = $("#branch option");       
+    options.detach().sort(function(a,b) {
+        var at = $(a).text();
+        var bt = $(b).text();         
+        return (at > bt)?1:((at < bt)?-1:0);
+    });
+    options.appendTo("#branch");    
+
     $('.pcvno').on('blur', function(){
         if($(this).val()) {
             $(this).addClass('text-uppercase');

@@ -172,6 +172,12 @@ function contentloader(loadid) {
     $('.section_name').text('PCV');
     // alert();
   }
+  else if (loadid == 12) {
+    if (window.location.href.indexOf("calendar") > -1) { $(location).attr('href', '../../content/pages/'); }
+    $("#page-content").load("../../content/parts/bookedsales.php");
+    $('.section_name').text('Booked Sales');
+    // alert();
+  }
 }
 // Email Automation
 $('#email').blur(function() {

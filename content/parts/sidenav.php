@@ -75,7 +75,7 @@
             <div class="sidebar-submenu">
                <ul>
                   <li>
-                     <a href="#" class="text-danger">Booked</a>
+                     <a href="#" onclick="contentloader(12)">Booked</a>
                   </li>
                   <li>
                      <a href="#" class="text-danger">Commission</a>
@@ -94,7 +94,7 @@
          </li>
          <li>
             <a href="#" onclick="contentloader(11)">
-               <i class="fa fa-upload"></i>
+               <i class="fab fa-wpforms"></i>
                <span>PCV</span>
             </a>
          </li>
