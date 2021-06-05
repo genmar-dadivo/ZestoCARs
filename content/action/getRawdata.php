@@ -1,10 +1,13 @@
 <?php
     require '../dbase/dbconfig.php';
+    set_time_limit(10800);
     $dbval = $_POST['dbval'];
     $mval = $_POST['mval'];
     $yval = $_POST['yval'];
-    $others = $_POST['others'];
-    $lim = $_POST['lim'];
+    if (isset($_POST['others'])) { $others = $_POST['others']; }
+    else { $others = ''; }
+    if (isset($_POST['lim'])) { $lim = $_POST['lim']; }
+    else { $lim = ''; }
     // CSI
     if ($dbval == 1) {
         $US = 40000000;
@@ -27,8 +30,8 @@
         $S = $yval . $mval . $startday;
         $E = $yval . $mval . $endday;
         $sql = "SELECT
-        (SELECT os.ORDER_STATUS FROM oeordhdr os WHERE TRIM(os.DB_NO) = TRIM(l.DB_NO) AND TRIM(os.ORDER_NO) = TRIM(l.ORDER_NO)) AS 'ORDERSTATUS',
-        (SELECT ode.ORDER_DATE_ENTERED FROM oeordhdr ode WHERE ode.DB_NO = l.DB_NO AND ode.ORDER_NO =l.ORDER_NO) AS 'ORDERDATEENTERED',
+        (SELECT os.ORDER_STATUS FROM oeordhdr os WHERE TRIM(os.DB_NO) = TRIM(l.DB_NO) AND TRIM(os.ORDER_NO) = TRIM(l.ORDER_NO) LIMIT 1) AS 'ORDERSTATUS',
+        (SELECT ode.ORDER_DATE_ENTERED FROM oeordhdr ode WHERE ode.DB_NO = l.DB_NO AND ode.ORDER_NO = l.ORDER_NO LIMIT 1) AS 'ORDERDATEENTERED',
         (SELECT oatn.ORDER_APPLY_TO_NO FROM oeordhdr oatn WHERE oatn.DB_NO = l.DB_NO AND oatn.ORDER_NO = l.ORDER_NO LIMIT 1) AS 'ORDERAPPLYTONO',
         (SELECT opon.ORDER_PUR_ORDER_NO FROM oeordhdr opon WHERE opon.DB_NO = l.DB_NO AND opon.ORDER_NO = l.ORDER_NO LIMIT 1) AS 'ORDERPURORDERNO',
         (SELECT ocn.ORDER_CUSTOMER_NO FROM oeordhdr ocn WHERE ocn.DB_NO = l.DB_NO AND ocn.ORDER_NO = l.ORDER_NO LIMIT 1) AS 'ORDERCUSTOMERNO',
@@ -38,19 +41,42 @@
         (SELECT t.CUST_TYPE_CODE FROM v_customer_type t WHERE TRIM(t.DBNO) = TRIM(l.DB_NO) AND TRIM(t.CUS_NO) LIKE CONCAT ('%' , 'ORDERCUSTOMERNO' , '%') LIMIT 1) AS 'TYPEC', 
         (SELECT cbm.CUSTOMER_BAL_METHOD FROM oeordhdr cbm WHERE cbm.DB_NO = l.DB_NO AND cbm.ORDER_NO = l.ORDER_NO LIMIT 1) AS 'CUSTOMERBALMETHOD', 
         (SELECT sd.SHIPPING_DATE FROM oeordhdr sd WHERE sd.DB_NO = l.DB_NO AND sd.ORDER_NO = l.ORDER_NO LIMIT 1) AS 'SHIPPINGDATE', 
-        (SELECT svc.SHIP_VIA_CODE FROM oeordhdr svc WHERE svc.DB_NO = l.DB_NO AND svc.ORDER_NO = l.ORDER_NO) AS 'SHIPVIACODE', 
-        (SELECT tc.TERMS_CODE FROM oeordhdr tc WHERE tc.DB_NO = l.DB_NO AND tc.ORDER_NO = l.ORDER_NO) AS 'TERMSCODE', 
-        (SELECT ml.MFGING_LOCATION FROM oeordhdr ml WHERE ml.DB_NO = l.DB_NO AND ml.ORDER_NO = l.ORDER_NO) AS 'MFGINGLOCATION', 
-        (SELECT ttc.TOTAL_COST FROM oeordhdr ttc WHERE ttc.DB_NO = l.DB_NO AND ttc.ORDER_NO = l.ORDER_NO) AS 'TOTALCOST', 
-        (SELECT tsa.TOTAL_SALE_AMOUNT FROM oeordhdr tsa WHERE tsa.DB_NO = l.DB_NO AND tsa.ORDER_NO = l.ORDER_NO) AS 'TOTALSALEAMOUNT', 
+        (SELECT svc.SHIP_VIA_CODE FROM oeordhdr svc WHERE svc.DB_NO = l.DB_NO AND svc.ORDER_NO = l.ORDER_NO LIMIT 1) AS 'SHIPVIACODE', 
+        (SELECT tc.TERMS_CODE FROM oeordhdr tc WHERE tc.DB_NO = l.DB_NO AND tc.ORDER_NO = l.ORDER_NO LIMIT 1) AS 'TERMSCODE', 
+        (SELECT ml.MFGING_LOCATION FROM oeordhdr ml WHERE ml.DB_NO = l.DB_NO AND ml.ORDER_NO = l.ORDER_NO LIMIT 1) AS 'MFGINGLOCATION', 
+        (SELECT ttc.TOTAL_COST FROM oeordhdr ttc WHERE ttc.DB_NO = l.DB_NO AND ttc.ORDER_NO = l.ORDER_NO LIMIT 1) AS 'TOTALCOST', 
+        (SELECT tsa.TOTAL_SALE_AMOUNT FROM oeordhdr tsa WHERE tsa.DB_NO = l.DB_NO AND tsa.ORDER_NO = l.ORDER_NO LIMIT 1) AS 'TOTALSALEAMOUNT', 
         (SELECT sn.SALESMAN_NO_1 FROM oeordhdr sn WHERE sn.DB_NO = l.DB_NO AND sn.ORDER_NO = l.ORDER_NO LIMIT 1) AS 'SALESMAN', 
-        (SELECT p.dsm_code FROM psr p WHERE p.psr_code = SALESMAN) AS 'DSMCODE', 
-        (SELECT d.dsm_desc FROM dsm d WHERE d.dsm_code = DSMCODE) AS 'DSMDESC', 
-        (SELECT ds.DSMSORT FROM dsm ds WHERE ds.dsm_code = DSMCODE) AS 'DSMSORT',  
-        (SELECT i.CATEGORY FROM product i WHERE i.ITEM_NO = l.ITEM_NO) AS 'ITEMCAT', 
+        (SELECT p.dsm_code FROM psr p WHERE p.psr_code = SALESMAN LIMIT 1) AS 'DSMCODE', 
+        (SELECT d.dsm_desc FROM dsm d WHERE d.dsm_code = DSMCODE LIMIT 1) AS 'DSMDESC', 
+        (SELECT ds.DSMSORT FROM dsm ds WHERE ds.dsm_code = DSMCODE LIMIT 1) AS 'DSMSORT',  
+        (SELECT 
+        IF(i.CATEGORY LIKE '%juices in can%', 'ZESTO JUICE IN CAN', 
+        IF(i.CATEGORY LIKE '%dairy reg 200ml%', 'ZESTO CHOCO REG 200ML', 
+        IF(i.CATEGORY LIKE '%dairy twa 110ml%', 'ZESTO CHOCO TWA 110ML', 
+        IF(i.CATEGORY LIKE '%can 330ml%', 'ZESTO CARBONATED 330ML', 
+        IF(i.CATEGORY LIKE '%instant mami%', 'QUICK CHOW INSTANT', 
+        IF(i.CATEGORY LIKE '%dairy tba 250ml%', 'ZESTO CHOCO TBA 250ML', 
+        IF(i.CATEGORY LIKE '%pancit canton%', 'QUICK CHOW CANTON', 
+        IF(i.CATEGORY LIKE '%zesto freshpick%', 'ZESTO FRESH PICK', 
+        IF(i.CATEGORY LIKE '%z-iced tea 250%', 'ZESTO ICED TEA RTD', 
+        IF(i.CATEGORY LIKE '%pet 1.5l%', 'ZESTO CARBONATED PET 1.5L',
+        IF(i.CATEGORY LIKE '%pet 500ML%', 'ZESTO CARBONATED PET 500ML',
+        IF(i.CATEGORY LIKE '%lodi pet btl%', 'ZESTO CARBONATED 237ML',
+        IF(i.CATEGORY LIKE '%cup noodles%', 'QUICK CHOW CUP NOODLES',
+        IF(i.CATEGORY LIKE '%milko fm 1l%', 'ZESTO MILKO FM 1L',
+        IF(i.CATEGORY LIKE '%milko fm 250ml%', 'ZESTO MILKO FM 250ML',
+        IF(i.CATEGORY LIKE '%zesto slice 355%', 'ZESTO SLICE 355ML',
+        IF(i.CATEGORY LIKE '%z-o slice 1.25l%', 'ZESTO SLICE PET 1.25L',
+        IF(i.CATEGORY LIKE '%rice noodles%', 'QUICK CHOW RICE NOODLES',
+        IF(i.CATEGORY LIKE '%can 250ml%', 'ZESTO CARBONATED 250ML',
+        IF(i.CATEGORY LIKE '%iced tea powder%', 'ZESTO ICED TEA POWDER',
+        IF(i.CATEGORY LIKE '%sunglo powder%', 'SUNGLO POWDER JUICE',
+        IF(i.CATEGORY LIKE '%zesto powder%', 'ZESTO TEA POWDER',
+        UPPER(TRIM(i.CATEGORY)))))))))))))))))))))))) FROM product i WHERE i.ITEM_NO = l.ITEM_NO LIMIT 1) AS ITEMCAT,
         (SELECT n.SKU FROM product n WHERE n.ITEM_NO = l.ITEM_NO) AS 'INAME', 
         (SELECT MC_ID FROM mrktng_category_dtl WHERE TRIM(CATEGORY) = TRIM(ITEMCAT)) AS 'MCID',
-        (SELECT MC_DESCRIPTION FROM mrktng_category_hdr WHERE TRIM(ID) = TRIM(MCID)) AS 'PRODCAT',  
+        (SELECT MC_DESCRIPTION FROM mrktng_category_hdr WHERE TRIM(ID) = TRIM(MCID) LIMIT 1) AS 'PRODCAT',  
         l.DB_NO, l.ORDER_TYPE, l.ORDER_NO, l.SEQUENCE_NO, l.GEN_INV_NO, l.ITEM_NO, l.LOCATION, l.QTY_ORDERED, 
         l.QTY_TO_SHIP, l.UNIT_PRICE, l.REQUEST_DATE, l.UNIT_OF_MEASURE, l.UNIT_COST, l.TOTAL_QTY_ORDERED, l.TOTAL_QTY_SHIPPED, 
         l.PRICE_ORG, l.ITEM_PROD_CAT, l.USER_FIELD_3, l.USER_FIELD_5, l.BILL_DATE, l.ITEM_CUSTOMER 
@@ -273,10 +299,41 @@
         (SELECT T.TIN_NO FROM v_customer_info T WHERE T.DBNO = l.DATABASE_NO AND T.CUS_NO LIKE CONCAT ('%' , l.CUSTOMER , '%') LIMIT 1) AS TINC, 
         (SELECT t.CUST_TYPE_CODE FROM v_customer_type t WHERE t.DBNO = l.DATABASE_NO AND t.CUS_NO LIKE CONCAT ('%' , l.CUSTOMER , '%') LIMIT 1) AS TYPEC, 
         (SELECT h.SALESMAN_NO1 FROM oehdrhst h WHERE h.DATABASE_NO = TRIM(l.DATABASE_NO) AND h.OE_NO = l.ORDER_NO LIMIT 1) AS SALESMAN, 
-        (SELECT p.dsm_code FROM psr p WHERE p.psr_code = SALESMAN) AS DSMCODE, 
-        (SELECT d.dsm_desc FROM dsm d WHERE d.dsm_code = DSMCODE) AS DSMDESC, 
-        (SELECT ds.DSMSORT FROM dsm ds WHERE ds.dsm_code = DSMCODE) AS DSMSORT, 
-        (SELECT i.CATEGORY FROM product i WHERE i.ITEM_NO = l.ITEM_NO) AS ITEMCAT, 
+        (SELECT p.dsm_code FROM psr p WHERE p.psr_code = SALESMAN LIMIT 1) AS DSMCODE, 
+        (SELECT d.dsm_desc FROM dsm d WHERE d.dsm_code = DSMCODE LIMIT 1) AS DSMDESC, 
+        (SELECT ds.DSMSORT FROM dsm ds WHERE ds.dsm_code = DSMCODE LIMIT 1) AS DSMSORT, 
+        (SELECT 
+        IF(i.CATEGORY LIKE '%juices in can%', 'ZESTO JUICE IN CAN', 
+        IF(i.CATEGORY LIKE '%dairy reg 200ml%', 'ZESTO CHOCO REG 200ML', 
+        IF(i.CATEGORY LIKE '%dairy twa 110ml%', 'ZESTO CHOCO TWA 110ML', 
+        IF(i.CATEGORY LIKE '%can 330ml%', 'ZESTO CARBONATED 330ML', 
+        IF(i.CATEGORY LIKE '%instant mami%', 'QUICK CHOW INSTANT', 
+        IF(i.CATEGORY LIKE '%dairy tba 250ml%', 'ZESTO CHOCO TBA 250ML', 
+        IF(i.CATEGORY LIKE '%pancit canton%', 'QUICK CHOW CANTON', 
+        IF(i.CATEGORY LIKE '%zesto freshpick%', 'ZESTO FRESH PICK', 
+        IF(i.CATEGORY LIKE '%z-iced tea 250%', 'ZESTO ICED TEA RTD', 
+        IF(i.CATEGORY LIKE '%pet 1.5l%', 'ZESTO CARBONATED PET 1.5L',
+        IF(i.CATEGORY LIKE '%pet 500ML%', 'ZESTO CARBONATED PET 500ML',
+        IF(i.CATEGORY LIKE '%lodi pet btl%', 'ZESTO CARBONATED 237ML',
+        IF(i.CATEGORY LIKE '%cup noodles%', 'QUICK CHOW CUP NOODLES',
+        IF(i.CATEGORY LIKE '%milko fm 1l%', 'ZESTO MILKO FM 1L',
+        IF(i.CATEGORY LIKE '%milko fm 250ml%', 'ZESTO MILKO FM 250ML',
+        IF(i.CATEGORY LIKE '%zesto slice 355%', 'ZESTO SLICE 355ML',
+        IF(i.CATEGORY LIKE '%z-o slice 1.25l%', 'ZESTO SLICE PET 1.25L',
+        IF(i.CATEGORY LIKE '%rice noodles%', 'QUICK CHOW RICE NOODLES',
+        IF(i.CATEGORY LIKE '%can 250ml%', 'ZESTO CARBONATED 250ML',
+        IF(i.CATEGORY LIKE '%iced tea powder%', 'ZESTO ICED TEA POWDER',
+        IF(i.CATEGORY LIKE '%pet 1.5l%', 'ZESTO CARBONATED PET 1.5L',
+        IF(i.CATEGORY LIKE '%pet 500ML%', 'ZESTO CARBONATED PET 500ML',
+        IF(i.CATEGORY LIKE '%lodi pet btl%', 'ZESTO CARBONATED 237ML',
+        IF(i.CATEGORY LIKE '%cup noodles%', 'QUICK CHOW CUP NOODLES',
+        IF(i.CATEGORY LIKE '%milko fm 1l%', 'ZESTO MILKO FM 1L',
+        IF(i.CATEGORY LIKE '%milko fm 250ml%', 'ZESTO MILKO FM 250ML',
+        IF(i.CATEGORY LIKE '%zesto slice 355%', 'ZESTO SLICE 355ML',
+        IF(i.CATEGORY LIKE '%z-o slice 1.25l%', 'ZESTO SLICE PET 1.25L',
+        IF(i.CATEGORY LIKE '%sunglo powder%', 'SUNGLO POWDER JUICE',
+        IF(i.CATEGORY LIKE '%zesto powder%', 'ZESTO TEA POWDER',
+        UPPER(TRIM(i.CATEGORY)))))))))))))))))))))))))))))))) FROM product i WHERE i.ITEM_NO = l.ITEM_NO LIMIT 1) AS ITEMCAT,
         (SELECT n.SKU FROM product n WHERE n.ITEM_NO = l.ITEM_NO) AS INAME, 
         (SELECT MC_ID FROM mrktng_category_dtl WHERE TRIM(CATEGORY) = TRIM(ITEMCAT)) AS MCID,
         (SELECT MC_DESCRIPTION FROM mrktng_category_hdr WHERE TRIM(ID) = TRIM(MCID)) AS PRODCAT, 
@@ -496,7 +553,30 @@
         SUBSTRING(nl.DSM, 1, 3) AS DSMCODE,
         (SELECT ds.DSMSORT FROM dsm ds WHERE ds.dsm_code = DSMCODE) AS DSMSORT,
         SUBSTRING(nl.SKU, 1, 7) AS ITEMNO,
-        (SELECT i.CATEGORY FROM product i WHERE i.ITEM_NO = ITEMNO) AS ITEMCAT, 
+        (SELECT 
+        IF(i.CATEGORY LIKE '%juices in can%', 'ZESTO JUICE IN CAN', 
+        IF(i.CATEGORY LIKE '%dairy reg 200ml%', 'ZESTO CHOCO REG 200ML', 
+        IF(i.CATEGORY LIKE '%dairy twa 110ml%', 'ZESTO CHOCO TWA 110ML', 
+        IF(i.CATEGORY LIKE '%can 330ml%', 'ZESTO CARBONATED 330ML', 
+        IF(i.CATEGORY LIKE '%instant mami%', 'QUICK CHOW INSTANT', 
+        IF(i.CATEGORY LIKE '%dairy tba 250ml%', 'ZESTO CHOCO TBA 250ML', 
+        IF(i.CATEGORY LIKE '%pancit canton%', 'QUICK CHOW CANTON', 
+        IF(i.CATEGORY LIKE '%zesto freshpick%', 'ZESTO FRESH PICK', 
+        IF(i.CATEGORY LIKE '%z-iced tea 250%', 'ZESTO ICED TEA RTD', 
+        IF(i.CATEGORY LIKE '%pet 1.5l%', 'ZESTO CARBONATED PET 1.5L',
+        IF(i.CATEGORY LIKE '%pet 500ML%', 'ZESTO CARBONATED PET 500ML',
+        IF(i.CATEGORY LIKE '%lodi pet btl%', 'ZESTO CARBONATED 237ML',
+        IF(i.CATEGORY LIKE '%cup noodles%', 'QUICK CHOW CUP NOODLES',
+        IF(i.CATEGORY LIKE '%milko fm 1l%', 'ZESTO MILKO FM 1L',
+        IF(i.CATEGORY LIKE '%milko fm 250ml%', 'ZESTO MILKO FM 250ML',
+        IF(i.CATEGORY LIKE '%zesto slice 355%', 'ZESTO SLICE 355ML',
+        IF(i.CATEGORY LIKE '%z-o slice 1.25l%', 'ZESTO SLICE PET 1.25L',
+        IF(i.CATEGORY LIKE '%rice noodles%', 'QUICK CHOW RICE NOODLES',
+        IF(i.CATEGORY LIKE '%can 250ml%', 'ZESTO CARBONATED 250ML',
+        IF(i.CATEGORY LIKE '%iced tea powder%', 'ZESTO ICED TEA POWDER',
+        IF(i.CATEGORY LIKE '%sunglo powder%', 'SUNGLO POWDER JUICE',
+        IF(i.CATEGORY LIKE '%zesto powder%', 'ZESTO TEA POWDER',
+        UPPER(TRIM(i.CATEGORY)))))))))))))))))))))))) FROM product i WHERE i.ITEM_NO = ITEMNO LIMIT 1) AS ITEMCAT,
         (SELECT n.SKU FROM product n WHERE n.ITEM_NO = ITEMNO) AS INAME, 
         (SELECT MC_ID FROM mrktng_category_dtl WHERE TRIM(CATEGORY) = TRIM(ITEMCAT)) AS MCID,
         (SELECT MC_DESCRIPTION FROM mrktng_category_hdr WHERE TRIM(ID) = TRIM(MCID)) AS PRODCAT,  
@@ -504,7 +584,7 @@
         FROM noah_oelinhst nl
         WHERE
         nl.TAON = $T AND
-        nl.BUWAN = $B AND SALESMAN_CODE = 'bk0000000120'
+        nl.BUWAN = $B
         $limit";
         $stm = $con->prepare($sql);
         $stm->execute();
@@ -527,9 +607,9 @@
                         else { $DSM = "OD1-BACOLOD"; $DSMSORT = 27; $DSMCODE = "OD1"; }
                     }
                     elseif ($DBNO == "CEBU0000") {
-                        $BD = array("BK0000000118","BK0000000204","BK0000000120","BK0000000247","BK0000000041", "VX0000000131","VX0000000128", "VX0000000126");
-                        $BX = array();
-                        $TD = array("BK0000000119","VX0000000129","VX0000000215","VX0000000127","VX0000000152","VX0000000250","VX0000000251");
+                        $BD = array("BK0000000118","BK0000000116","BK0000000041","BK0000000247","BH-S00000225","BK0000000195","HRI000000121","BK0000000120","HRI000000122","VX0000000126","VX0000000131","VX0000000128","VX0000000130","VX0000000169","BK0000000222");
+                        $BX = array("BK0000000245","VX0000000250","VX0000000152","BK0000000119","VX0000000129","VX0000000127","VX0000000215","VX0000000125");
+                        $TD = array("BK0000000224","BK0000000248","BK0000000204","VX0000000212","VX0000000213","BK0000000200","HRI000000208","BK0000000201","BK0000000124");
 
                         if (strpos($SALESMAN_CODE, 'OFF') !== false) {
                             $DSM = "OSB-OFFICE SALES CEBU"; $DSMSORT = 24;
@@ -542,10 +622,7 @@
                     elseif ($DBNO == "DGPN0000") {
                         if (strpos($SALESMAN_CODE, 'OFF') !== false) { $DSM = "OSD-OFFICE STA. BARBARA"; $DSMSORT = 16; $DSMCODE = "OSD"; }
                         else {
-                            $DD = array("BK0000000166","BK0000000191","BK0000000206","VX0000000194","VX0000000216","VX0000000221","VX0000000246","BK0000000178","BK0000000092");
-                            $SD = array("BK0000000136","VX0000000095","VX0000000095","VX0000000096", "VX0000000207");
-                            if (in_array($SALESMAN_CODE, $DD)) { $DSM = "DD1-STABARBARA"; $DSMSORT = 15; $DSMCODE = "DD1"; }
-                            elseif (in_array($SALESMAN_CODE, $SD)) { $DSM = "SD1-CAUAYAN"; $DSMSORT = 20; $DSMCODE = "SD1"; }
+                            $DSM = "DD1-STABARBARA"; $DSMSORT = 15; $DSMCODE = "DD1";
                         }
                     }
                     elseif ($DBNO == "EDSA0000") {
@@ -612,7 +689,7 @@
                 $output['data'][] = array(
                     "",
                     "$DBNO",
-                    "$SALESMAN_CODE" . "-" . "$DSMCODE",
+                    "$SALESMAN_CODE",
                     "$DSM",
                     "$DSMSORT $DSM",
                     "$BRANCH_NAME",

@@ -1,7 +1,9 @@
 <?php date_default_timezone_set("Asia/Manila"); ?>
 <div class="row">
     <form id="formEinfo" class="container" enctype="multipart/form-data">
-        <input type="hidden" name="euname" id="euname" class="euname">
+        <br>
+        <br>
+        <input type="text" name="euname" id="euname" class="hidden">
         <div class="personalinfo">
             <div class="mt-5 row">
                 <div class="col-sm-3">
@@ -35,7 +37,6 @@
                 <div class="col">
                     <i id="qrid" class="popover__title fas fa-qrcode fa-3x pointer qrid"  data-bs-container="body" data-bs-toggle="popover"></i>
                     <div id="selector">
-                        asdasd
                     </div>
                 </div>
             </div>
@@ -465,8 +466,8 @@
     });
     // Einfo Mecha
     $('#formEinfo').on('submit', function(e) {
-        $('#btnSubmit').prop("disabled", true);
-        $("#btnSubmit").html('Loading ...');
+        // $('#btnSubmit').prop("disabled", true);
+        // $("#btnSubmit").html('Loading ...');
         e.preventDefault();
         var epicture = $('#epicture').prop('files')[0];
         var formData = new FormData(this);
@@ -479,6 +480,7 @@
             contentType: false,
             processData: false,
             success: function(data) {
+                alert(data);
                 Push.create("ZestCARs", {
                     body: data,
                     icon: 'https://img.favpng.com/22/25/10/zest-o-philippines-logo-corporation-business-png-favpng-Brbj4NqJYBXtHd0E28th7r3dQ.jpg',
@@ -487,8 +489,9 @@
                         window.focus();
                         this.close();
                     },
-                    onClose: function() { window.location.href = ''; },
+                    onClose: function() { },
                 });
+                // window.location.href = '';
             }
         });
     });

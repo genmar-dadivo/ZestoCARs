@@ -1,18 +1,32 @@
 <?php
     require '../dbase/dbconfig.php';
     $euname = $_POST['euname'];
-    $fullname = preg_replace('/[^a-zA-Z \']/', '', $_POST['fullname']);
+    $firstname = preg_replace('/[^a-zA-ZÑñ \']/', '', $_POST['firstname']);
+    $middlename = preg_replace('/[^a-zA-ZÑñ \']/', '', $_POST['middlename']);
+    $lastname = preg_replace('/[^a-zA-ZÑñ \']/', '', $_POST['lastname']);
+    $namesuffix = preg_replace('/[^a-zA-ZÑñ \']/', '', $_POST['namesuffix']);
     $birthdate = $_POST['birthdate'];
+    $sex = $_POST['sex'];
     $address = preg_replace('/[^a-zA-Z0-9#. \']/', '', $_POST['address']);
+    $permaaddress = preg_replace('/[^a-zA-Z0-9#. \']/', '', $_POST['permaaddress']);
+    $company = $_POST['company'];
     $phonenumber = $_POST['phonenumber'];
+    $eidnumber = $_POST['eidnumber'];
+    $prevdept = $_POST['prevdept'];
+    $datehired = $_POST['datehired'];
+    $dateregular = $_POST['dateregular'];
     $sss = $_POST['sss'];
-    $pagibig = $_POST['pagibig'];
+    $pagibigmid = $_POST['pagibigmid'];
+    $pagibigrtn = $_POST['pagibigrtn'];
     $tin = $_POST['tin'];
+    $coco = $_POST['coco'];
+    $ins = $_POST['ins'];
     $college = preg_replace('/[^a-zA-Z0-9., \']/', '', $_POST['college']);
     $hs = preg_replace('/[^a-zA-Z0-9., \']/', '', $_POST['hs']);
     $elem = preg_replace('/[^a-zA-Z0-9., \']/', '', $_POST['elem']);
     $workhist = preg_replace('/[^a-zA-Z0-9., \']/', '', $_POST['workhist']);
     $ephonenumber = $_POST['ephonenumber'];
+    $contactpersonrelation = preg_replace('/[^a-zA-Z \']/', '', $_POST['contactpersonrelation']);
     $contactperson = preg_replace('/[^a-zA-Z \']/', '', $_POST['contactperson']);
     $eaddress = preg_replace('/[^a-zA-Z0-9#. \']/', '', $_POST['eaddress']);
     $department = $_POST['department'];
@@ -21,10 +35,8 @@
     $stm = $con->prepare($sql);
 	$stm->execute();
     if ($stm->rowCount() == 0) {
-        $sqledata = "INSERT INTO edata(`uname`, `fname`, `bdate`, `address`, `phoneno`, `sssno`, `pagibig`, `tin`, `college`, `highschool`, `elementary`, 
-        `workhistory`, `ephoneno`, `contactper`, `eaddress`, `dept`, `pos`) 
-        VALUES ('$euname', '$fullname', '$birthdate', '$address', '$phonenumber', '$sss', '$pagibig', 
-        '$tin', '$college', '$hs', '$elem', '$workhist', '$ephonenumber', '$contactperson', '$eaddress', '$department', '$position')";
+        $sqledata = "INSERT INTO edata(`fname`, `mname`, `lname`, `ns`, `bdate`, `sex`, `address`, `permanentaddress`, `phonenumber`, `idnumber`, `company`, `region`, `department`, `position`, `prevdept`, `datehired`, `dateregular`, `sssno`, `pagibigrtn`, `pagibigmid`, `tin`, `cocolife`, `ccamount`, `college`, `hs`, `elem`, `workhistory`, `ephonenumb`, `econtactperson`, `econpersonrelation`, `eaddress`, `uname`) 
+        VALUES ('$firstname', '$middlename', '$lastname', '$namesuffix', '$birthdate', '$sex', '$address', '$permaaddress', '$phonenumber', '$eidnumber', '$company', '$region', '$department', '$position', '$prevdept', '$datehired', '$dateregular', '$sss', '$pagibigrtn', '$pagibigmid', '$tin', '$coco', '$ins', '$college', '$hs', '$elem', '$workhist', '$ephonenumber', '$contactperson', '$contactpersonrelation', '$eaddress', '$euname')";
         $stmedata = $con->prepare($sqledata);
         $stmedata->execute();
         if ($stmedata->rowCount() == 1) { echo "Data Inserted. \n"; }

@@ -2,7 +2,7 @@
     // !
     ini_set('memory_limit', '-1');
     require '../dbase/dbconfig.php';
-    $sql = "SELECT A.*, (SELECT B.description FROM customer_type B WHERE B.code = A.Cus_Type_Cd) AS CUSTYPE, (SELECT C.AR_TERMS_DESC FROM terms C WHERE C.AR_TERMS_CD = A.Ar_Terms_Cd) AS ARSDESC, (SELECT D.LONG_DESCRIPTION FROM terms D WHERE D.AR_TERMS_CD = A.Ar_Terms_Cd) AS ARLDESC FROM arcusfil_sql A WHERE SUBSTRING(A.Cus_No, 5, 8) IN ('10030659', '10024391', '35030552', '35030544', '35030543', '35030542', '10161623', '10109687', '10050725')";
+    $sql = "SELECT A.*, (SELECT B.description FROM customer_type B WHERE B.code = A.Cus_Type_Cd) AS CUSTYPE, (SELECT C.AR_TERMS_DESC FROM terms C WHERE C.AR_TERMS_CD = A.Ar_Terms_Cd) AS ARSDESC, (SELECT D.LONG_DESCRIPTION FROM terms D WHERE D.AR_TERMS_CD = A.Ar_Terms_Cd) AS ARLDESC FROM arcusfil_sql A";
     $stm = $con->prepare($sql);
     $stm->execute();
     $results = $stm->fetchAll(PDO::FETCH_ASSOC);

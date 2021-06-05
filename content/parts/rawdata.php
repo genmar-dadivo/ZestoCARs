@@ -37,7 +37,7 @@
                             </div>
                             <div class="mt-1">
                                 <div class="form-floating">
-                                    <input type="text" class="form-control border-0 fw-light fs-6" id="data-limit" placeholder="Limit" autocomplete="off">
+                                    <input type="text" class="form-control text-uppercase border-0 fw-light fs-6" id="data-limit" placeholder="Limit" autocomplete="off">
                                     <label for="data-limit">Limit</label>
                                 </div>
                             </div>
@@ -230,6 +230,15 @@
             var mval = $('#mval').val();
             var yval = $('#yval').val();
             var lim = $('#lim').val();
+            var dbname = '';
+            var months = ["January", "February", "March", "April", "May", "June", 
+           "July", "August", "September", "October", "November", "December"];
+            if (dbval == 1) { dbname = 'CSI'; }
+            else if (dbval == 2) { dbname = 'Macola'; }
+            else if (dbval == 3) { dbname = 'Noah'; }
+            var mvalue = parseInt(mval) - 1;
+            var excelfn = months[mvalue].substring(0,3).toUpperCase() + yval + ' ' + dbname;
+            var sectionname = $('.section_name ').text();
             var table = $('#traw').DataTable({
                 dom: 'Bfrtip',
                 "oLanguage": { "sSearch": "" },
@@ -238,7 +247,7 @@
                         extend: "excel",
                         className: "btn btn-sm btn-primary",
                         text: 'Export',
-                        filename: 'Sales Report',
+                        filename: sectionname,
                         init: function(api, node, config) { $(node).removeClass('dt-button') }
                     },
                     {

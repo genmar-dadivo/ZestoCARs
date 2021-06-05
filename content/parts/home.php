@@ -23,7 +23,7 @@
         success: function(data) {
             if(data.indexOf('Error') >= 0){
                 Push.create("ZestCARs", {
-                    body: 'Please input your details.',
+                    body: 'Please input your details.' + uid,
                     icon: 'https://img.favpng.com/22/25/10/zest-o-philippines-logo-corporation-business-png-favpng-Brbj4NqJYBXtHd0E28th7r3dQ.jpg',
                     //timeout: 4000,
                     onClick: function() {

@@ -145,7 +145,6 @@
         return (at > bt)?1:((at < bt)?-1:0);
     });
     options.appendTo("#branch");    
-
     $('.pcvno').on('blur', function(){
         if($(this).val()) {
             $(this).addClass('text-uppercase');
@@ -263,6 +262,8 @@
             data: $('#formPCV').serialize(),
             success: function(data) {
                 alert(data);
+                table.ajax.reload();
+                $('#pcvencode').modal('hide');
             }
         });
     });
