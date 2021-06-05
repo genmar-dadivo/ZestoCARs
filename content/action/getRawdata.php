@@ -47,9 +47,15 @@
         (SELECT ttc.TOTAL_COST FROM oeordhdr ttc WHERE ttc.DB_NO = l.DB_NO AND ttc.ORDER_NO = l.ORDER_NO LIMIT 1) AS 'TOTALCOST', 
         (SELECT tsa.TOTAL_SALE_AMOUNT FROM oeordhdr tsa WHERE tsa.DB_NO = l.DB_NO AND tsa.ORDER_NO = l.ORDER_NO LIMIT 1) AS 'TOTALSALEAMOUNT', 
         (SELECT sn.SALESMAN_NO_1 FROM oeordhdr sn WHERE sn.DB_NO = l.DB_NO AND sn.ORDER_NO = l.ORDER_NO LIMIT 1) AS 'SALESMAN', 
+<<<<<<< HEAD
         (SELECT p.dsm_code FROM psr p WHERE p.psr_code = SALESMAN LIMIT 1) AS 'DSMCODE', 
         (SELECT d.dsm_desc FROM dsm d WHERE d.dsm_code = DSMCODE LIMIT 1) AS 'DSMDESC', 
         (SELECT ds.DSMSORT FROM dsm ds WHERE ds.dsm_code = DSMCODE LIMIT 1) AS 'DSMSORT',  
+=======
+        (SELECT p.dsm_code FROM psr p WHERE p.psr_code = SALESMAN) AS 'DSMCODE', 
+        (SELECT d.dsm_desc FROM dsm d WHERE d.dsm_code = DSMCODE) AS 'DSMDESC', 
+        (SELECT ds.DSMSORT FROM dsm ds WHERE ds.dsm_code = DSMCODE) AS 'DSMSORT',  
+>>>>>>> 79468d77a0cb299671cc20bc4b266dd362baed69
         (SELECT 
         IF(i.CATEGORY LIKE '%juices in can%', 'ZESTO JUICE IN CAN', 
         IF(i.CATEGORY LIKE '%dairy reg 200ml%', 'ZESTO CHOCO REG 200ML', 
@@ -68,12 +74,16 @@
         IF(i.CATEGORY LIKE '%milko fm 250ml%', 'ZESTO MILKO FM 250ML',
         IF(i.CATEGORY LIKE '%zesto slice 355%', 'ZESTO SLICE 355ML',
         IF(i.CATEGORY LIKE '%z-o slice 1.25l%', 'ZESTO SLICE PET 1.25L',
+<<<<<<< HEAD
         IF(i.CATEGORY LIKE '%rice noodles%', 'QUICK CHOW RICE NOODLES',
         IF(i.CATEGORY LIKE '%can 250ml%', 'ZESTO CARBONATED 250ML',
         IF(i.CATEGORY LIKE '%iced tea powder%', 'ZESTO ICED TEA POWDER',
         IF(i.CATEGORY LIKE '%sunglo powder%', 'SUNGLO POWDER JUICE',
         IF(i.CATEGORY LIKE '%zesto powder%', 'ZESTO TEA POWDER',
         UPPER(TRIM(i.CATEGORY)))))))))))))))))))))))) FROM product i WHERE i.ITEM_NO = l.ITEM_NO LIMIT 1) AS ITEMCAT,
+=======
+        UPPER(TRIM(i.CATEGORY))))))))))))))))))) FROM product i WHERE i.ITEM_NO = ITEMNO LIMIT 1) AS ITEMCAT,
+>>>>>>> 79468d77a0cb299671cc20bc4b266dd362baed69
         (SELECT n.SKU FROM product n WHERE n.ITEM_NO = l.ITEM_NO) AS 'INAME', 
         (SELECT MC_ID FROM mrktng_category_dtl WHERE TRIM(CATEGORY) = TRIM(ITEMCAT)) AS 'MCID',
         (SELECT MC_DESCRIPTION FROM mrktng_category_hdr WHERE TRIM(ID) = TRIM(MCID) LIMIT 1) AS 'PRODCAT',  
@@ -299,9 +309,15 @@
         (SELECT T.TIN_NO FROM v_customer_info T WHERE T.DBNO = l.DATABASE_NO AND T.CUS_NO LIKE CONCAT ('%' , l.CUSTOMER , '%') LIMIT 1) AS TINC, 
         (SELECT t.CUST_TYPE_CODE FROM v_customer_type t WHERE t.DBNO = l.DATABASE_NO AND t.CUS_NO LIKE CONCAT ('%' , l.CUSTOMER , '%') LIMIT 1) AS TYPEC, 
         (SELECT h.SALESMAN_NO1 FROM oehdrhst h WHERE h.DATABASE_NO = TRIM(l.DATABASE_NO) AND h.OE_NO = l.ORDER_NO LIMIT 1) AS SALESMAN, 
+<<<<<<< HEAD
         (SELECT p.dsm_code FROM psr p WHERE p.psr_code = SALESMAN LIMIT 1) AS DSMCODE, 
         (SELECT d.dsm_desc FROM dsm d WHERE d.dsm_code = DSMCODE LIMIT 1) AS DSMDESC, 
         (SELECT ds.DSMSORT FROM dsm ds WHERE ds.dsm_code = DSMCODE LIMIT 1) AS DSMSORT, 
+=======
+        (SELECT p.dsm_code FROM psr p WHERE p.psr_code = SALESMAN) AS DSMCODE, 
+        (SELECT d.dsm_desc FROM dsm d WHERE d.dsm_code = DSMCODE) AS DSMDESC, 
+        (SELECT ds.DSMSORT FROM dsm ds WHERE ds.dsm_code = DSMCODE) AS DSMSORT, 
+>>>>>>> 79468d77a0cb299671cc20bc4b266dd362baed69
         (SELECT 
         IF(i.CATEGORY LIKE '%juices in can%', 'ZESTO JUICE IN CAN', 
         IF(i.CATEGORY LIKE '%dairy reg 200ml%', 'ZESTO CHOCO REG 200ML', 
@@ -320,6 +336,7 @@
         IF(i.CATEGORY LIKE '%milko fm 250ml%', 'ZESTO MILKO FM 250ML',
         IF(i.CATEGORY LIKE '%zesto slice 355%', 'ZESTO SLICE 355ML',
         IF(i.CATEGORY LIKE '%z-o slice 1.25l%', 'ZESTO SLICE PET 1.25L',
+<<<<<<< HEAD
         IF(i.CATEGORY LIKE '%rice noodles%', 'QUICK CHOW RICE NOODLES',
         IF(i.CATEGORY LIKE '%can 250ml%', 'ZESTO CARBONATED 250ML',
         IF(i.CATEGORY LIKE '%iced tea powder%', 'ZESTO ICED TEA POWDER',
@@ -334,6 +351,9 @@
         IF(i.CATEGORY LIKE '%sunglo powder%', 'SUNGLO POWDER JUICE',
         IF(i.CATEGORY LIKE '%zesto powder%', 'ZESTO TEA POWDER',
         UPPER(TRIM(i.CATEGORY)))))))))))))))))))))))))))))))) FROM product i WHERE i.ITEM_NO = l.ITEM_NO LIMIT 1) AS ITEMCAT,
+=======
+        UPPER(TRIM(i.CATEGORY))))))))))))))))))) FROM product i WHERE i.ITEM_NO = ITEMNO LIMIT 1) AS ITEMCAT,
+>>>>>>> 79468d77a0cb299671cc20bc4b266dd362baed69
         (SELECT n.SKU FROM product n WHERE n.ITEM_NO = l.ITEM_NO) AS INAME, 
         (SELECT MC_ID FROM mrktng_category_dtl WHERE TRIM(CATEGORY) = TRIM(ITEMCAT)) AS MCID,
         (SELECT MC_DESCRIPTION FROM mrktng_category_hdr WHERE TRIM(ID) = TRIM(MCID)) AS PRODCAT, 
@@ -571,12 +591,16 @@
         IF(i.CATEGORY LIKE '%milko fm 250ml%', 'ZESTO MILKO FM 250ML',
         IF(i.CATEGORY LIKE '%zesto slice 355%', 'ZESTO SLICE 355ML',
         IF(i.CATEGORY LIKE '%z-o slice 1.25l%', 'ZESTO SLICE PET 1.25L',
+<<<<<<< HEAD
         IF(i.CATEGORY LIKE '%rice noodles%', 'QUICK CHOW RICE NOODLES',
         IF(i.CATEGORY LIKE '%can 250ml%', 'ZESTO CARBONATED 250ML',
         IF(i.CATEGORY LIKE '%iced tea powder%', 'ZESTO ICED TEA POWDER',
         IF(i.CATEGORY LIKE '%sunglo powder%', 'SUNGLO POWDER JUICE',
         IF(i.CATEGORY LIKE '%zesto powder%', 'ZESTO TEA POWDER',
         UPPER(TRIM(i.CATEGORY)))))))))))))))))))))))) FROM product i WHERE i.ITEM_NO = ITEMNO LIMIT 1) AS ITEMCAT,
+=======
+        UPPER(TRIM(i.CATEGORY))))))))))))))))))) FROM product i WHERE i.ITEM_NO = ITEMNO LIMIT 1) AS ITEMCAT,
+>>>>>>> 79468d77a0cb299671cc20bc4b266dd362baed69
         (SELECT n.SKU FROM product n WHERE n.ITEM_NO = ITEMNO) AS INAME, 
         (SELECT MC_ID FROM mrktng_category_dtl WHERE TRIM(CATEGORY) = TRIM(ITEMCAT)) AS MCID,
         (SELECT MC_DESCRIPTION FROM mrktng_category_hdr WHERE TRIM(ID) = TRIM(MCID)) AS PRODCAT,  
@@ -607,9 +631,15 @@
                         else { $DSM = "OD1-BACOLOD"; $DSMSORT = 27; $DSMCODE = "OD1"; }
                     }
                     elseif ($DBNO == "CEBU0000") {
+<<<<<<< HEAD
                         $BD = array("BK0000000118","BK0000000116","BK0000000041","BK0000000247","BH-S00000225","BK0000000195","HRI000000121","BK0000000120","HRI000000122","VX0000000126","VX0000000131","VX0000000128","VX0000000130","VX0000000169","BK0000000222");
                         $BX = array("BK0000000245","VX0000000250","VX0000000152","BK0000000119","VX0000000129","VX0000000127","VX0000000215","VX0000000125");
                         $TD = array("BK0000000224","BK0000000248","BK0000000204","VX0000000212","VX0000000213","BK0000000200","HRI000000208","BK0000000201","BK0000000124");
+=======
+                        $BD = array("BK0000000118","BK0000000116","BK0000000041","BK0000000247","BH-S00000225","BK0000000195","HRI000000121","BK0000000120","HRI000000122","VX0000000126","VX0000000131","VX0000000128","VX0000000130","VX0000000169");
+                        $BX = array("BK0000000245","VX0000000250","VX0000000152","BK0000000119","VX0000000129","VX0000000127","VX0000000215","VX0000000125");
+                        $TD = array("BK0000000224","BK0000000248","BK0000000204","VX0000000212","VX0000000213","BK0000000200","HRI000000208","BK0000000201");
+>>>>>>> 79468d77a0cb299671cc20bc4b266dd362baed69
 
                         if (strpos($SALESMAN_CODE, 'OFF') !== false) {
                             $DSM = "OSB-OFFICE SALES CEBU"; $DSMSORT = 24;
