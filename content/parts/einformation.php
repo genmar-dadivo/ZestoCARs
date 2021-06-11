@@ -1,10 +1,8 @@
 <?php date_default_timezone_set("Asia/Manila"); ?>
 <div class="row">
     <form id="formEinfo" class="container" enctype="multipart/form-data">
-        <br>
-        <br>
         <input type="text" name="euname" id="euname" class="hidden">
-        <div class="personalinfo">
+        <div class="personalinfo mt-5">
             <div class="mt-5 row">
                 <div class="col-sm-3">
                     <div class="container-profile mb-3">

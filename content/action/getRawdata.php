@@ -62,7 +62,9 @@
         IF(i.CATEGORY LIKE '%iced tea powder%', 'ZESTO ICED TEA POWDER',
         IF(i.CATEGORY LIKE '%sunglo powder%', 'SUNGLO POWDER JUICE',
         IF(i.CATEGORY LIKE '%zesto powder%', 'ZESTO TEA POWDER',
-        UPPER(TRIM(i.CATEGORY)))))))))))))))))))))))) FROM product i WHERE i.ITEM_NO = l.ITEM_NO LIMIT 1) AS ITEMCAT,
+        IF(i.CATEGORY LIKE '%dairy 1liter%', 'ZESTO CHOCO 1L',
+        IF(i.CATEGORY LIKE '%pet 2l%', 'ZESTO CARBONATED PET 2L',
+        UPPER(TRIM(i.CATEGORY)))))))))))))))))))))))))) FROM product i WHERE i.ITEM_NO = l.ITEM_NO LIMIT 1) AS ITEMCAT,
         (SELECT n.SKU FROM product n WHERE n.ITEM_NO = l.ITEM_NO) AS 'INAME', 
         (SELECT MC_ID FROM mrktng_category_dtl WHERE TRIM(CATEGORY) = TRIM(ITEMCAT)) AS 'MCID',
         (SELECT MC_DESCRIPTION FROM mrktng_category_hdr WHERE TRIM(ID) = TRIM(MCID) LIMIT 1) AS 'PRODCAT',  
@@ -254,7 +256,7 @@
     // Macola
     elseif ($dbval == 2) {
         $US = 90000000;
-        $DB = '1,2,3,4,5,6,7,8,9,10,11,12,13,14,15';
+        $DB = '1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16';
         $startday = "00";
         $endday = "99";
         if ($lim <> '') {
@@ -300,17 +302,11 @@
         IF(i.CATEGORY LIKE '%rice noodles%', 'QUICK CHOW RICE NOODLES',
         IF(i.CATEGORY LIKE '%can 250ml%', 'ZESTO CARBONATED 250ML',
         IF(i.CATEGORY LIKE '%iced tea powder%', 'ZESTO ICED TEA POWDER',
-        IF(i.CATEGORY LIKE '%pet 1.5l%', 'ZESTO CARBONATED PET 1.5L',
-        IF(i.CATEGORY LIKE '%pet 500ML%', 'ZESTO CARBONATED PET 500ML',
-        IF(i.CATEGORY LIKE '%lodi pet btl%', 'ZESTO CARBONATED 237ML',
-        IF(i.CATEGORY LIKE '%cup noodles%', 'QUICK CHOW CUP NOODLES',
-        IF(i.CATEGORY LIKE '%milko fm 1l%', 'ZESTO MILKO FM 1L',
-        IF(i.CATEGORY LIKE '%milko fm 250ml%', 'ZESTO MILKO FM 250ML',
-        IF(i.CATEGORY LIKE '%zesto slice 355%', 'ZESTO SLICE 355ML',
-        IF(i.CATEGORY LIKE '%z-o slice 1.25l%', 'ZESTO SLICE PET 1.25L',
         IF(i.CATEGORY LIKE '%sunglo powder%', 'SUNGLO POWDER JUICE',
         IF(i.CATEGORY LIKE '%zesto powder%', 'ZESTO TEA POWDER',
-        UPPER(TRIM(i.CATEGORY)))))))))))))))))))))))))))))))) FROM product i WHERE i.ITEM_NO = l.ITEM_NO LIMIT 1) AS ITEMCAT,
+        IF(i.CATEGORY LIKE '%dairy 1liter%', 'ZESTO CHOCO 1L',
+        IF(i.CATEGORY LIKE '%pet 2l%', 'ZESTO CARBONATED PET 2L',
+        UPPER(TRIM(i.CATEGORY)))))))))))))))))))))))))) FROM product i WHERE i.ITEM_NO = l.ITEM_NO LIMIT 1) AS ITEMCAT,
         (SELECT n.SKU FROM product n WHERE n.ITEM_NO = l.ITEM_NO) AS INAME, 
         (SELECT MC_ID FROM mrktng_category_dtl WHERE TRIM(CATEGORY) = TRIM(ITEMCAT)) AS MCID,
         (SELECT MC_DESCRIPTION FROM mrktng_category_hdr WHERE TRIM(ID) = TRIM(MCID)) AS PRODCAT, 
@@ -553,7 +549,9 @@
         IF(i.CATEGORY LIKE '%iced tea powder%', 'ZESTO ICED TEA POWDER',
         IF(i.CATEGORY LIKE '%sunglo powder%', 'SUNGLO POWDER JUICE',
         IF(i.CATEGORY LIKE '%zesto powder%', 'ZESTO TEA POWDER',
-        UPPER(TRIM(i.CATEGORY)))))))))))))))))))))))) FROM product i WHERE i.ITEM_NO = ITEMNO LIMIT 1) AS ITEMCAT,
+        IF(i.CATEGORY LIKE '%dairy 1liter%', 'ZESTO CHOCO 1L',
+        IF(i.CATEGORY LIKE '%pet 2l%', 'ZESTO CARBONATED PET 2L',
+        UPPER(TRIM(i.CATEGORY)))))))))))))))))))))))))) FROM product i WHERE i.ITEM_NO = ITEMNO LIMIT 1) AS ITEMCAT,
         (SELECT n.SKU FROM product n WHERE n.ITEM_NO = ITEMNO) AS INAME, 
         (SELECT MC_ID FROM mrktng_category_dtl WHERE TRIM(CATEGORY) = TRIM(ITEMCAT)) AS MCID,
         (SELECT MC_DESCRIPTION FROM mrktng_category_hdr WHERE TRIM(ID) = TRIM(MCID)) AS PRODCAT,  
@@ -586,7 +584,7 @@
                     elseif ($DBNO == "CEBU0000") {
                         $BD = array("BK0000000118","BK0000000116","BK0000000041","BK0000000247","BH-S00000225","BK0000000195","HRI000000121","BK0000000120","HRI000000122","VX0000000126","VX0000000131","VX0000000128","VX0000000130","VX0000000169","BK0000000222");
                         $BX = array("BK0000000245","VX0000000250","VX0000000152","BK0000000119","VX0000000129","VX0000000127","VX0000000215","VX0000000125");
-                        $TD = array("BK0000000224","BK0000000248","BK0000000204","VX0000000212","VX0000000213","BK0000000200","HRI000000208","BK0000000201","BK0000000124");
+                        $TD = array("BK0000000224","BK0000000248","BK0000000204","VX0000000212","VX0000000213","BK0000000200","HRI000000208","BK0000000201","BK0000000124","VX0000000251");
 
                         if (strpos($SALESMAN_CODE, 'OFF') !== false) {
                             $DSM = "OSB-OFFICE SALES CEBU"; $DSMSORT = 24;
@@ -638,9 +636,7 @@
                 $NOAH_INV_NO = strtoupper($row['NOAH_INV_NO']);
                 $MANUAL_INV_NO = strtoupper($row['MANUAL_INV_NO']);
                 $DATE_CONFIRMED = $row['DATE_CONFIRMED'];
-                $DSMCODE = preg_replace('/\s+/', '', strtoupper($row['DSMCODE']));
-                if ($DSMCODE == '') { $DSMCODE = substr($DSM, 0, 3); }
-                else { $DSMCODE = preg_replace('/\s+/', '', strtoupper($row['DSMCODE'])); }
+                $DSMCODE = preg_replace('/\s+/', '', substr($DSM, 0, 3));
                 $ITEMNO = $row['ITEMNO'];
                 $ITEMCAT = $row['ITEMCAT'];
                 $PRODCAT = strtoupper($row['PRODCAT']);
