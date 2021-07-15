@@ -26,7 +26,7 @@
                 <div class="row mt-2">
                     <div class="col-lg-12">
                         <div class="form-floating">
-                            <select class="form-select" name="mail_receiver" id="mail_receiver" required>
+                            <select class="form-select border-0 shadow-sm" name="mail_receiver" id="mail_receiver" required>
                                 <option value="" disabled selected>Select Recipients</option>
                                 <option value="1">One</option>
                                 <option value="2">Two</option>
@@ -48,13 +48,13 @@
                 <div class="row mt-2 cc-bcc hidden" id="cc-bcc">
                     <div class="col-lg-6">
                         <div class="form-floating mb-3">
-                            <input type="email" class="form-control text-lowercase" name="mail_cc" id="mail_cc" placeholder="Cc" autocomplete="off" readonly required>
+                            <input type="email" class="form-control border-0 shadow-sm text-lowercase" name="mail_cc" id="mail_cc" placeholder="Cc" autocomplete="off" readonly required>
                             <label for="mail_cc">Cc</label>
                         </div>
                     </div>
                     <div class="col-lg-6">
                         <div class="form-floating mb-3">
-                            <input type="email" class="form-control text-lowercase" name="mail_bcc" id="mail_bcc" placeholder="Bcc" autocomplete="off" readonly required>
+                            <input type="email" class="form-control border-0 shadow-sm text-lowercase" name="mail_bcc" id="mail_bcc" placeholder="Bcc" autocomplete="off" readonly required>
                             <label for="mail_bcc">Bcc</label>
                         </div>
                     </div>
@@ -62,7 +62,7 @@
                 <div class="row mt-2 reply-to hidden" id="reply-to">
                     <div class="col-lg-12">
                         <div class="form-floating mb-3">
-                            <input type="email" class="form-control text-lowercase" name="mail_replyto" id="mail_replyto" placeholder="Subject" autocomplete="off" readonly required>
+                            <input type="email" class="form-control border-0 shadow-sm text-lowercase" name="mail_replyto" id="mail_replyto" placeholder="Subject" autocomplete="off" readonly required>
                             <label for="mail_replyto">Reply-to</label>
                         </div>
                     </div>
@@ -70,14 +70,14 @@
                 <div class="row mt-2">
                     <div class="col-lg-12">
                         <div class="form-floating mb-3">
-                            <input type="text" class="form-control text-capitalize" name="mail_subject" id="mail_subject" placeholder="Subject" autocomplete="off" required>
+                            <input type="text" class="form-control border-0 shadow-sm text-capitalize" name="mail_subject" id="mail_subject" placeholder="Subject" autocomplete="off" required>
                             <label for="mail_subject">Subject</label>
                         </div>
                     </div>
                 </div>
                 <div class="row mt-2 mb-5">
                     <div class="col-lg-12">
-                        <div id="mail_content" style="min-height: 200px;"></div>
+                        <div id="mail_content" class="border-0 shadow-sm bg-light" style="min-height: 200px;"></div>
                     </div>
                 </div>
             </div>

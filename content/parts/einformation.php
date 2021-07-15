@@ -423,6 +423,9 @@
                 if (udata[6] == udata[7]) { $('#permanentaddress').prop('checked', true); }
                 $('#phonenumber').val(udata[8]);
                 $('#eidnumber').val(udata[9]);
+                if (udata[9] != '') { 
+                    $('#eidnumber').prop('readonly', true);
+                }
                 $('#eidnumber').click();
                 $('#company').val(udata[10]);
                 $("#region option[value='" + udata[11] + "']").prop('selected', true);
@@ -433,19 +436,20 @@
                 $('#dateregular').val(udata[16]);
                 $('#sss').val(udata[17]);
                 $('#philhealth').val(udata[10]);
-                $('#tin').val(udata[10]);
-                $('#pagibigmid').val(udata[10]);
-                $('#pagibigrtn').val(udata[10]);
-                $('#coco').val(udata[10]);
-                $('#ins').val(udata[10]);
-                $('#college').val(udata[10]);
-                $('#hs').val(udata[10]);
-                $('#elem').val(udata[10]);
-                $('#workhist').val(udata[10]);
-                $('#ephonenumber').val(udata[10]);
-                $('#contactperson').val(udata[10]);
-                $('#contactpersonrelation').val(udata[10]);
-                $('#eaddress').val(udata[10]);
+                $('#tin').val(udata[20]);
+                $('#pagibigmid').val(udata[19]);
+                $('#pagibigrtn').val(udata[18]);
+                $('#coco').val(udata[21]);
+                $('#ins').val(udata[22]);
+                $('#college').val(udata[23]);
+                $('#hs').val(udata[24]);
+                $('#elem').val(udata[25]);
+                $('#workhist').val(udata[26]);
+                $('#ephonenumber').val(udata[27]);
+                $('#contactperson').val(udata[28]);
+                $('#contactpersonrelation').val(udata[29]);
+                $('#eaddress').val(udata[30]);
+                $('#philhealth').val(udata[31]);
             }
         });
     });

@@ -21,7 +21,7 @@
                                     <th></th>
                                     <th>DBNO</th>
                                     <th>CUSNO</th>
-                                    <th>SALESPERSON</th>
+                                    <th>SLS NO</th>
                                     <th>CUSNAME</th>
                                     <th>ADDRSS #1</th>
                                     <th>ADDRSS #2</th>
@@ -124,7 +124,7 @@
                                     <th></th>
                                     <th>DBNO</th>
                                     <th>CUSNO</th>
-                                    <th>SALESPERSON</th>
+                                    <th>SLS NO</th>
                                     <th>CUSNAME</th>
                                     <th>ADDRSS #1</th>
                                     <th>ADDRSS #2</th>

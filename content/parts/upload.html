@@ -1,5 +1,5 @@
 <div class="container">
-	<div class="row">
+	<div class="row rawbody">
 	   	<div class="col mx-auto">
 			<div style="height: 100px;"></div>
 		  	<form method="POST" id="formrawprocessor">
@@ -14,10 +14,101 @@
 					</div>
 			 	</div>
 		  	</form>
+			<div id="formatter" class="hidden">
+				<table id="tformatter" class="table table-striped responsive nowrap" width="100%">
+					<thead>
+						<tr>
+							<th></th>
+							<th>Area</th>
+							<th>DSM</th>
+							<th>MKTG</th>
+							<th>ITEM CAT</th>
+							<th>UOM</th>
+							<th>DESC</th>
+							<th>VOL</th>
+							<th>PV</th>
+							<th>MOS</th>
+							<th>YEAR</th>
+						</tr>
+					</thead>
+					<tbody>
+					</tbody>
+					<tfoot>
+						<tr>
+							<th></th>
+							<th>Area</th>
+							<th>DSM</th>
+							<th>MKTG</th>
+							<th>ITEM CAT</th>
+							<th>UOM</th>
+							<th>DESC</th>
+							<th>VOL</th>
+							<th>PV</th>
+							<th>MOS</th>
+							<th>YEAR</th>
+						</tr>
+					</tfoot>
+				</table>
+			</div>
 	   	</div>
 	</div>
+	<img src="../../assets/img/test.png" class="hidden helper animate__animated pointer">
 </div>
 <script>
+	var table = $('#tformatter').DataTable({
+            dom: 'Bfrtip',
+			"pageLength": 5,
+            "oLanguage": { "sSearch": "" },
+            buttons: [
+                {
+                    extend: "excel",
+                    className: "btn btn-sm btn-primary",
+                    text: 'Export',
+                    filename: 'Formatted',
+                    init: function(api, node, config) { $(node).removeClass('dt-button') }
+                },
+                {
+                    extend: "copy",
+                    className: "btn btn-sm btn-primary",
+                    text: 'Copy',
+                    init: function(api, node, config) { $(node).removeClass('dt-button') }
+                },
+                {
+                    extend: "print",
+                    className: "btn btn-sm btn-primary",
+                    text: 'Print',
+                    title: function(){
+                        var printTitle = 'Product List';
+                        return printTitle
+                    },
+                    init: function(api, node, config) { $(node).removeClass('dt-button') }
+                },
+            ],
+            "ajax": {
+                'type': 'POST',
+                'url': '../action/getFormatterdata.php?hidden',
+            },
+            initComplete: function () {
+                this.api().columns().every( function () {
+                    var that = this;
+                    $('input', this.footer()).on('keyup change clear', function () {
+                        if ( that.search() !== this.value ) { that.search(this.value).draw(); }
+                    });
+                });
+            }
+        });
+	var clicker = 0;
+	$('.helper').on('click', function (e) {
+		clicker++;
+	 	if (clicker >= 3) {
+			$("#show-sidebar").click();
+			$('#formrawprocessor').show();
+			$('#formrawprocessor').removeClass('hidden');
+			$('#formatter').hide();
+			$('.helper').removeClass('animate__slideInRight');
+			$('.helper').addClass('animate__slideOutRight');
+		}
+	});
 	$('#formrawprocessor').on('submit', function (e) {
 		$('#btnSubmit').prop("disabled", true);
 	 	$("#btnSubmit").html('Loading ...');
@@ -27,12 +118,6 @@
 	 	var d = new Date();
 	 	var gettime = d.getHours() + ':' + d.getMinutes() + ':' + d.getSeconds();
 	 	console.log('%cStarts @ ' + gettime, 'background: #222; color: #bada55');
-	 	if (raw.includes('oelinhst')) { countme = 'oelinhst'; }
-	 	else if (raw.includes('oehdrhst')) { countme = 'oehdrhst'; }
-	 	else if (raw.includes('product')) { countme = 'product'; }
-	 	else if (raw.includes('customerz')) { countme = 'customerz'; }
-	 	var checker = new RegExp(countme, 'g');
-	 	var count = (raw.match(checker));
 	 	e.preventDefault();
 	 	$.ajax({
 	   		type: 'POST',
@@ -41,7 +126,21 @@
 	   		success: function (data) {
 		 		var rawdata = data.split(',');
 		 		console.log(data);
-				if (data.includes('Unknown column')) { alert('NOAH file unclean. Check console for more details.'); }
+				if (data.includes('Unknown column')) { console.log('Unexpected Comma Detected.'); }
+				else if (data.includes('Showing Custom Formatter.')) {
+					var param = data.match(/\d+/);
+					table.clear().draw();
+					table.ajax.url('../action/getFormatterdata.php?param=' + param).load();
+					//table.columns.adjust().draw();
+					//$("#tformatter").DataTable().ajax.reload(); 
+					$("#close-sidebar").click();
+					$('#formrawprocessor').hide(); 
+					$('.helper').addClass('animate__slideInRight');
+					$('.helper').removeClass('hidden');
+					$('.helper').removeClass('animate__slideOutRight');
+					$('#formatter').show();
+					$('#formatter').removeClass('hidden');
+				}
 		 		$('#btnSubmit').prop("disabled", false);
 		 		$("select[name='choice']").prop('disabled', false);
 		 		$("#btnSubmit").html('Submit');

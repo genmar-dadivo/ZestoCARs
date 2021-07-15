@@ -8,6 +8,8 @@
         foreach ($results as $row) {
             $pcvno = $row['pcvno'];
             $branch = $row['branch'];
+            if ($branch == 1) {}
+            elseif ($branch == 1) {}
             $particulars = explode(',', preg_replace('/[^a-zA-Z0-9,\']/', '', $row['particulars']));
             $itemone = $particulars[0];
             $amount = $row['amount'];
@@ -25,9 +27,9 @@
                 "$amount",
                 "$payto",
                 "$approvedby",
-                "$receivedby",
                 "$daterequest",
-                ""
+                "",
+                "<i class='pointer fa fa-print'></i>"
             );
         }
     }
@@ -35,6 +37,7 @@
         $output['data'][] = array(
             "",
             "No Data",
+            "",
             "",
             "",
             "",

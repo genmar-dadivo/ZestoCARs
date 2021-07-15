@@ -1,8 +1,22 @@
+// GENERAL INFO
+LVL 
+0 - root
+1 - user
+STATUS
+0 - offline
+1 - online
+2 - bypasslogin
+
+
 // FOR FILE DETAIL
 ="UPDATE OR INSERT INTO OELINHST VALUES ("&DBNO&",'"&A2&"',"&B2&","&C2&",'"&D2&"','"&E2&"',"&F2&","&G2&","&H2&","&I2&","&J2&","&K2&",'"&L2&"',"&M2&","&N2&","&O2&","&P2&","&Q2&",'"&R2&"','"&S2&"','"&T2&"','"&U2&"','"&V2&"','"&W2&"','"&Y2&"',"&X2&","&Z2&") MATCHING (DATABASE_NO,ORDER_NO,SEQUENCE_NO);"
 
 // FOR FILE NOAH
 ="INSERT INTO noahx "&A16&","&B16&","&C16&","&D16&","&E16&","&F16&","&G16&","&H16&","&I16&","&J16&","&K16&","&L16&","&M16&","&O16&","&P16&","&Q16&","&R16&","&S16&","&T16&","&U16&","&V16&","&W16&","&X16&","&Y16&","&Z16&","
+
+// FOR CSI
+
+
 
 // FOR CUSTOMER DATA
 ="arcusfil_sql ('1','"&A2&"','"&B2&"','"&D2&"','"&E2&"','"&F2&"','"&G2&"','"&H2&"','"&I2&"','"&J2&"','"&K2&"','"&L2&"','"&M2&"','"&N2&"','"&O2&"','"&P2&"','"&Q2&"','"&R2&"','"&S2&"','"&T2&"','"&U2&"','"&V2&"','"&W2&"','"&X2&"','"&Y2&"','"&Z2&"','"&AA2&"','"&AB2&"','"&AC2&"','"&AD2&"','"&AE2&"','"&AF2&"','"&AG2&"','"&AH2&"','"&AI2&"','"&AJ2&"','"&AK2&"','"&AL2&"','"&AM2&"','"&AN2&"','"&AO2&"','"&AP2&"','"&AQ2&"','"&AR2&"','"&AS2&"','"&AT2&"','"&AU2&"','"&AV2&"','"&AW2&"','"&AX2&"','"&AY2&"','"&AZ2&"','"&BA2&"','"&BB2&"','"&BC2&"','"&BD2&"','"&BE2&"','"&BF2&"','"&BG2&"','"&BH2&"','"&BI2&"','"&BJ2&"','"&BK2&"','"&BL2&"','"&BM2&"','"&BN2&"','"&BO2&"','"&BP2&"','"&BQ2&"','"&BR2&"','"&BS2&"','"&BT2&"','"&BU2&"','"&BV2&"','"&BW2&"','"&BX2&"','"&BY2&"','"&BZ2&"','"&CA2&"','"&CB2&"','"&CC2&"','"&CD2&"','"&CE2&"','"&CF2&"','"&CG2&"','"&CH2&"','"&CI2&"','"&CJ2&"','"&CK2&"','"&CL2&"','"&CM2&"','"&CN2&"','"&CO2&"','"&CP2&"','"&CQ2&"','"&CR2&"');"
@@ -45,6 +59,7 @@ SET GLOBAL max_allowed_packet=1073741824;
 
 // TRANSDATE
 =MID([@INVOICEDATE],5,2)&"/"&RIGHT([@INVOICEDATE],2)&"/"&LEFT([@INVOICEDATE],4)
+=MID([@INVOICEDATE],5,4)&MID([@INVOICEDATE],1,2)&MID([@INVOICEDATE],3,2)
 MONTH-IN-NUMBER + YEAR + DEPARTMENT + UNIQUE
 M+Y
 MIS - 1
@@ -97,14 +112,14 @@ SELECT
 // NATIONAL SALES EXCEL QUERY
 SELECT 
 sl.DBNO AS DBNO,
-(SELECT sl.DBNO) AS DBFILTER,
+(SELECT IF(CHAR_LENGTH(sl.DBNO) < 5, (sl.DBNO * 1), UPPER(sl.DBNO))) AS DBFILTER,
 sl.SALESMAN,
-(SELECT sl.SALESMAN) AS SALESMANFILTER,
+(SELECT UPPER(sl.SALESMAN)) AS SALESMANFILTER,
 
-(SELECT CONCAT((SELECT ds.DSMSORT FROM dsm ds WHERE ds.dsm_code IN (SELECT p.dsm_code FROM psr p WHERE p.psr_code = sl.SALESMAN) LIMIT 1), " ", d.DSM_CODE, "-", d.DSM_DESC) FROM dsm d WHERE d.dsm_code IN (SELECT p.dsm_code FROM psr p WHERE 
-(SELECT IF(CHAR_LENGTH(sl.DBNO) > 3, p.NOAH_SLM_CODE, p.psr_code)) = sl.SALESMAN) LIMIT 1) AS DSMSORT,
+(SELECT UPPER(sl.DSM)) AS DSM,
+(SELECT UPPER(sl.DSM)) AS DSMFILTER,
 
-(SELECT CONCAT(d.DSM_CODE, "-", d.DSM_DESC) FROM dsm d WHERE d.dsm_code IN (SELECT p.dsm_code FROM psr p WHERE p.psr_code = sl.SALESMAN) LIMIT 1) AS DSM,
+(SELECT CONCAT((SELECT ds.DSMSORT FROM dsm ds WHERE ds.dsm_code IN (SELECT p.DSM_CODE FROM psr p WHERE TRIM(p.DSM_CODE) = LEFT(sl.DSM , 3)) LIMIT 1), " ", UPPER(DSM))) AS DSMSORT,
 
 (SELECT 
 IF(FIND_IN_SET(TRIM((SELECT TRIM(p.dsm_code) FROM psr p WHERE p.psr_code = sl.SALESMAN LIMIT 1)), "CD1,CD2,ND1,OSC,OSN") > 0, "1. SOUTH-LUZON", 
@@ -116,15 +131,15 @@ IF(FIND_IN_SET(TRIM((SELECT TRIM(p.dsm_code) FROM psr p WHERE p.psr_code = sl.SA
 
 SELECT 
 IF(FIND_IN_SET(TRIM((SELECT TRIM(p.dsm_code) FROM psr p WHERE p.NOAH_SLM_CODE = sl.SALESMAN LIMIT 1)), "CD1,CD2,ND1,OSC,OSN") > 0, "1. SOUTH-LUZON", 
-IF(FIND_IN_SET(TRIM((SELECT TRIM(p.dsm_code) FROM psr p WHERE p.NOAH_SLM_CODE = sl.SALESMAN LIMIT 1)), "DD1,PD1,PD2,SD1,OSP,OSD") > 0, "2. NORTH-LUZON", 
+IF(FIND_IN_SET(TRIM((SELECT TRIM(p.dsm_code) FROM psr p WHERE p.NOAH_SLM_CODE = sl.SALESMAN LIMIT 1)), "DD1,PD1,PD2,SD1,OSP,OSD,OSS") > 0, "2. NORTH-LUZON", 
 IF(FIND_IN_SET((SELECT TRIM(p.dsm_code) FROM psr p WHERE p.NOAH_SLM_CODE = sl.SALESMAN LIMIT 1), "I97,GB1,GB2") > 0, "3. MODERN TRADE", 
 IF(FIND_IN_SET(TRIM((SELECT TRIM(p.dsm_code) FROM psr p WHERE p.NOAH_SLM_CODE = sl.SALESMAN LIMIT 1)), "APX,GBX,GW1,GX1,GX2,GMS,OSE,RB1") > 0, "4. GEN TRADE", 
-IF(FIND_IN_SET(TRIM((SELECT TRIM(p.dsm_code) FROM psr p WHERE p.NOAH_SLM_CODE = sl.SALESMAN LIMIT 1)), "BD1,BX1,LD1,OD1,TD1,OSO,OSL") > 0, "5. VISAYAS", 
-IF(FIND_IN_SET(TRIM((SELECT TRIM(p.dsm_code) FROM psr p WHERE p.NOAH_SLM_CODE = sl.SALESMAN LIMIT 1)), "VD1,VD2,VD3,YD1,YX1,ZD1,OSA,OSY,OSZ,OST") > 0, "6. MINDANAO", (SELECT sl.SALESMAN)))))))
+IF(FIND_IN_SET(TRIM((SELECT TRIM(p.dsm_code) FROM psr p WHERE p.NOAH_SLM_CODE = sl.SALESMAN LIMIT 1)), "BD1,BX1,LD1,OD1,TD1,OSO,OSL,OSB") > 0, "5. VISAYAS", 
+IF(FIND_IN_SET(TRIM((SELECT TRIM(p.dsm_code) FROM psr p WHERE p.NOAH_SLM_CODE = sl.SALESMAN LIMIT 1)), "VD1,VD2,VD3,YD1,YX1,ZD1,OSA,OSY,OSZ,OST") > 0, "6. MINDANAO", (SELECT sl.DSM)))))))
 
 
 ))))))) LIMIT 1) AS REGION,
-UPPER(sl.BRANCH),
+UPPER(sl.BRANCH) AS BRANCH,
 UPPER(sl.BRANCH) AS BRANCHFILTER,
 sl.OT, 
 sl.ORDERNO,
@@ -143,7 +158,29 @@ IF(i.CATEGORY LIKE '%z-iced tea 250%', 'ZESTO ICED TEA RTD',
 IF(i.CATEGORY LIKE '%pet 1.5l%', 'ZESTO CARBONATED PET 1.5L',
 IF(i.CATEGORY LIKE '%pet 500ML%', 'ZESTO CARBONATED PET 500ML',
 IF(i.CATEGORY LIKE '%lodi pet btl%', 'ZESTO CARBONATED 237ML',
-UPPER(TRIM(i.CATEGORY)))))))))))))) FROM product i WHERE i.ITEM_NO = sl.ITEMNO LIMIT 1) AS ITEMCAT,
+IF(i.CATEGORY LIKE '%Z-O SLICE 1.25L%', 'ZESTO SLICE PET 1.25L',
+IF(i.CATEGORY LIKE '%CAN 250ML%', 'ZESTO CARBONATED 250ML',
+IF(i.CATEGORY LIKE '%ZESTO POWDER%', 'ZESTO TEA POWDER',
+IF(i.CATEGORY LIKE '%DAIRY 1LITER%', 'ZESTO CHOCO 1L',
+UPPER(TRIM(i.CATEGORY)))))))))))))))))) FROM product i WHERE i.ITEM_NO = sl.ITEMNO LIMIT 1) AS ITEMCAT,
+(SELECT 
+IF(i.CATEGORY LIKE '%juices in can%', 'JUICE IN CAN', 
+IF(i.CATEGORY LIKE '%dairy reg 200ml%', 'ZESTO CHOCO REG 200ML', 
+IF(i.CATEGORY LIKE '%dairy twa 110ml%', 'ZESTO CHOCO TWA 110ML', 
+IF(i.CATEGORY LIKE '%can 330ml%', 'ZESTO CARBONATED 330ML', 
+IF(i.CATEGORY LIKE '%instant mami%', 'QUICK CHOW INSTANT', 
+IF(i.CATEGORY LIKE '%dairy tba 250ml%', 'ZESTO CHOCO TBA 250ML', 
+IF(i.CATEGORY LIKE '%pancit canton%', 'QUICK CHOW CANTON', 
+IF(i.CATEGORY LIKE '%zesto freshpick%', 'ZESTO FRESH PICK', 
+IF(i.CATEGORY LIKE '%z-iced tea 250%', 'ZESTO ICED TEA RTD', 
+IF(i.CATEGORY LIKE '%pet 1.5l%', 'ZESTO CARBONATED PET 1.5L',
+IF(i.CATEGORY LIKE '%pet 500ML%', 'ZESTO CARBONATED PET 500ML',
+IF(i.CATEGORY LIKE '%lodi pet btl%', 'ZESTO CARBONATED 237ML',
+IF(i.CATEGORY LIKE '%Z-O SLICE 1.25L%', 'ZESTO SLICE PET 1.25L',
+IF(i.CATEGORY LIKE '%CAN 250ML%', 'ZESTO CARBONATED 250ML',
+IF(i.CATEGORY LIKE '%ZESTO POWDER%', 'ZESTO TEA POWDER',
+IF(i.CATEGORY LIKE '%DAIRY 1LITER%', 'ZESTO CHOCO 1L',
+UPPER(TRIM(i.CATEGORY)))))))))))))))))) FROM product i WHERE i.ITEM_NO = sl.ITEMNO LIMIT 1) AS ITEMCATFILTER,
 (SELECT UPPER(CONCAT(sl.ITEMNO, "-", (SELECT n.SKU FROM product n WHERE n.ITEM_NO = sl.ITEMNO))) LIMIT 1) AS SKU,
 (SELECT UPPER(CONCAT(sl.ITEMNO, "-", (SELECT n.SKU FROM product n WHERE n.ITEM_NO = sl.ITEMNO))) LIMIT 1) AS SKUFILTER,
 (SELECT CONCAT(ID, " ", MC_DESCRIPTION) FROM mrktng_category_hdr WHERE ID IN (SELECT MC_ID FROM mrktng_category_dtl WHERE TRIM(CATEGORY) 
@@ -160,11 +197,209 @@ IF(i.CATEGORY LIKE '%z-iced tea 250%', 'ZESTO ICED TEA RTD',
 IF(i.CATEGORY LIKE '%pet 1.5l%', 'ZESTO CARBONATED PET 1.5L',
 IF(i.CATEGORY LIKE '%pet 500ML%', 'ZESTO CARBONATED PET 500ML',
 IF(i.CATEGORY LIKE '%lodi pet btl%', 'ZESTO CARBONATED 237ML',
-TRIM(i.CATEGORY)))))))))))))
-FROM product i WHERE i.ITEM_NO = sl.ITEMNO LIMIT 1), '%'))) AS MKTGCAT,
+IF(i.CATEGORY LIKE '%Z-O SLICE 1.25L%', 'ZESTO SLICE PET 1.25L',
+IF(i.CATEGORY LIKE '%CAN 250ML%', 'ZESTO CARBONATED 250ML',
+IF(i.CATEGORY LIKE '%ZESTO POWDER%', 'ZESTO TEA POWDER',
+IF(i.CATEGORY LIKE '%DAIRY 1LITER%', 'ZESTO CHOCO 1L',
+TRIM(i.CATEGORY)))))))))))))))))
+FROM product i WHERE i.ITEM_NO = sl.ITEMNO LIMIT 1), '%'))) AS MKTGCATFILTER,
 sl.LOC, 
 (SELECT (sl.QTYORDERED * 1)) AS QO,
-(SELECT (sl.QTYTOSHIP * 1)) AS VOL,
+(SELECT (sl.QTYTOSHIP * 1)) AS VOLOLD,
+(SELECT 
+CASE
+    WHEN (sl.QTYTOSHIP * 1) LIKE '%.%' THEN
+        CASE
+            WHEN UPPER(TRIM(SKU)) LIKE '% 3X%' THEN
+                ROUND(((sl.QTYORDERED * 1) * 3))
+            WHEN UPPER(TRIM(SKU)) LIKE '% 4X%' THEN
+                ROUND(((sl.QTYORDERED * 1) * 4))
+            WHEN UPPER(TRIM(SKU)) LIKE '% -4X%' THEN
+                ROUND(((sl.QTYORDERED * 1) * 4))
+            WHEN UPPER(TRIM(SKU)) LIKE '% 6X%' THEN
+                ROUND(((sl.QTYORDERED * 1) * 6))
+            WHEN UPPER(TRIM(SKU)) LIKE '% 8X%' THEN
+                ROUND(((sl.QTYORDERED * 1) * 8))
+            WHEN UPPER(TRIM(SKU)) LIKE '% 10X%' THEN
+                ROUND(((sl.QTYORDERED * 1) * 10))
+            WHEN UPPER(TRIM(SKU)) LIKE '%-10X%' THEN
+                ROUND(((sl.QTYORDERED * 1) * 10))
+            WHEN UPPER(TRIM(SKU)) LIKE '% 11X%' THEN
+                ROUND(((sl.QTYORDERED * 1) * 11))
+            WHEN UPPER(TRIM(SKU)) LIKE '% 12X%' THEN
+                ROUND(((sl.QTYORDERED * 1) * 12))
+            WHEN UPPER(TRIM(SKU)) LIKE '% 15X%' THEN
+                ROUND(((sl.QTYORDERED * 1) * 15))
+            WHEN UPPER(TRIM(SKU)) LIKE '% 20X%' THEN
+                ROUND(((sl.QTYORDERED * 1) * 20))
+            WHEN UPPER(TRIM(SKU)) LIKE '% 24X%' THEN
+                ROUND(((sl.QTYORDERED * 1) * 24))
+            WHEN UPPER(TRIM(SKU)) LIKE '%-24X%' THEN
+                ROUND(((sl.QTYORDERED * 1) * 24))
+            WHEN UPPER(TRIM(SKU)) LIKE '% 25X%' THEN
+                ROUND(((sl.QTYORDERED * 1) * 25))
+            WHEN UPPER(TRIM(SKU)) LIKE '% 28X%' THEN
+                ROUND(((sl.QTYORDERED * 1) * 28))
+            WHEN UPPER(TRIM(SKU)) LIKE '% 30X%' THEN
+                ROUND(((sl.QTYORDERED * 1) * 30))
+            WHEN UPPER(TRIM(SKU)) LIKE '% 48X%' THEN
+                ROUND(((sl.QTYORDERED * 1) * 48))
+            WHEN UPPER(TRIM(SKU)) LIKE '% 50X%' THEN
+                ROUND(((sl.QTYORDERED * 1) * 50))
+            WHEN UPPER(TRIM(SKU)) LIKE '% 54X%' THEN
+                ROUND(((sl.QTYORDERED * 1) * 54))
+            WHEN UPPER(TRIM(SKU)) LIKE '% 56X%' THEN
+                ROUND(((sl.QTYORDERED * 1) * 56))
+            WHEN UPPER(TRIM(SKU)) LIKE '% 60X%' THEN
+                ROUND(((sl.QTYORDERED * 1) * 60))
+            WHEN UPPER(TRIM(SKU)) LIKE '% 72X%' THEN
+                ROUND(((sl.QTYORDERED * 1) * 72))
+            WHEN UPPER(TRIM(SKU)) LIKE '% 144X%' THEN
+                ROUND(((sl.QTYORDERED * 1) * 144))
+            WHEN UPPER(TRIM(SKU)) LIKE '% 240X%' THEN
+                ROUND(((sl.QTYORDERED * 1) * 240))
+            ELSE
+                CASE
+                    WHEN UPPER(TRIM(sl.UOM)) LIKE '%PK03%' THEN
+                        ROUND(((sl.QTYORDERED * 1) * 3))
+                    WHEN UPPER(TRIM(sl.UOM)) LIKE '%PK04%' THEN
+                        ROUND(((sl.QTYORDERED * 1) * 4))
+                    WHEN UPPER(TRIM(sl.UOM)) LIKE '%PK05%' THEN
+                        ROUND(((sl.QTYORDERED * 1) * 5))
+                    WHEN UPPER(TRIM(sl.UOM)) LIKE '%CS6%' THEN
+                        ROUND(((sl.QTYORDERED * 1) * 6))
+                    WHEN UPPER(TRIM(sl.UOM)) LIKE '%PK08%' THEN
+                        ROUND(((sl.QTYORDERED * 1) * 8))
+                    WHEN UPPER(TRIM(sl.UOM)) LIKE '%PK012%' THEN
+                        ROUND(((sl.QTYORDERED * 1) * 12))
+                    WHEN UPPER(TRIM(sl.UOM)) LIKE '%BX10%' THEN
+                        ROUND(((sl.QTYORDERED * 1) * 10))
+                    WHEN UPPER(TRIM(sl.UOM)) LIKE '%BX20%' THEN
+                        ROUND(((sl.QTYORDERED * 1) * 20))
+                    WHEN UPPER(TRIM(sl.UOM)) LIKE '%CS4%' THEN
+                        ROUND(((sl.QTYORDERED * 1) * 4))
+                    WHEN UPPER(TRIM(sl.UOM)) LIKE '%CS8%' THEN
+                        ROUND(((sl.QTYORDERED * 1) * 8))
+                    WHEN UPPER(TRIM(sl.UOM)) LIKE '%CS08%' THEN
+                        ROUND(((sl.QTYORDERED * 1) * 8))
+                    WHEN UPPER(TRIM(sl.UOM)) LIKE '%CS09%' THEN
+                        ROUND(((sl.QTYORDERED * 1) * 9))
+                    WHEN UPPER(TRIM(sl.UOM)) LIKE '%CS12%' THEN
+                        ROUND(((sl.QTYORDERED * 1) * 12))
+                    WHEN UPPER(TRIM(sl.UOM)) LIKE '%CS24%' THEN
+                        ROUND(((sl.QTYORDERED * 1) * 24))
+                    WHEN UPPER(TRIM(sl.UOM)) LIKE '%CS30%' THEN
+                        ROUND(((sl.QTYORDERED * 1) * 30))
+                    WHEN UPPER(TRIM(sl.UOM)) LIKE '%CS48%' THEN
+                        ROUND(((sl.QTYORDERED * 1) * 48))
+                    WHEN UPPER(TRIM(sl.UOM)) LIKE '%CS60%' THEN
+                        ROUND(((sl.QTYORDERED * 1) * 60))
+                    WHEN UPPER(TRIM(sl.UOM)) LIKE '%CS72%' THEN
+                        ROUND(((sl.QTYORDERED * 1) * 72))
+                    ELSE (sl.QTYORDERED * 1)
+                END
+        END
+    ELSE (sl.QTYORDERED * 1)
+END
+) AS VOL,
+(SELECT 
+CASE
+    WHEN (sl.QTYTOSHIP * 1) LIKE '%.%' THEN
+        CASE
+            WHEN UPPER(TRIM(SKU)) LIKE '% 3X%' THEN
+                ROUND(((sl.QTYORDERED * 1) * 3))
+            WHEN UPPER(TRIM(SKU)) LIKE '% 4X%' THEN
+                ROUND(((sl.QTYORDERED * 1) * 4))
+            WHEN UPPER(TRIM(SKU)) LIKE '% -4X%' THEN
+                ROUND(((sl.QTYORDERED * 1) * 4))
+            WHEN UPPER(TRIM(SKU)) LIKE '% 6X%' THEN
+                ROUND(((sl.QTYORDERED * 1) * 6))
+            WHEN UPPER(TRIM(SKU)) LIKE '% 8X%' THEN
+                ROUND(((sl.QTYORDERED * 1) * 8))
+            WHEN UPPER(TRIM(SKU)) LIKE '% 10X%' THEN
+                ROUND(((sl.QTYORDERED * 1) * 10))
+            WHEN UPPER(TRIM(SKU)) LIKE '%-10X%' THEN
+                ROUND(((sl.QTYORDERED * 1) * 10))
+            WHEN UPPER(TRIM(SKU)) LIKE '% 11X%' THEN
+                ROUND(((sl.QTYORDERED * 1) * 11))
+            WHEN UPPER(TRIM(SKU)) LIKE '% 12X%' THEN
+                ROUND(((sl.QTYORDERED * 1) * 12))
+            WHEN UPPER(TRIM(SKU)) LIKE '% 15X%' THEN
+                ROUND(((sl.QTYORDERED * 1) * 15))
+            WHEN UPPER(TRIM(SKU)) LIKE '% 20X%' THEN
+                ROUND(((sl.QTYORDERED * 1) * 20))
+            WHEN UPPER(TRIM(SKU)) LIKE '% 24X%' THEN
+                ROUND(((sl.QTYORDERED * 1) * 24))
+            WHEN UPPER(TRIM(SKU)) LIKE '%-24X%' THEN
+                ROUND(((sl.QTYORDERED * 1) * 24))
+            WHEN UPPER(TRIM(SKU)) LIKE '% 25X%' THEN
+                ROUND(((sl.QTYORDERED * 1) * 25))
+            WHEN UPPER(TRIM(SKU)) LIKE '% 28X%' THEN
+                ROUND(((sl.QTYORDERED * 1) * 28))
+            WHEN UPPER(TRIM(SKU)) LIKE '% 30X%' THEN
+                ROUND(((sl.QTYORDERED * 1) * 30))
+            WHEN UPPER(TRIM(SKU)) LIKE '% 48X%' THEN
+                ROUND(((sl.QTYORDERED * 1) * 48))
+            WHEN UPPER(TRIM(SKU)) LIKE '% 50X%' THEN
+                ROUND(((sl.QTYORDERED * 1) * 50))
+            WHEN UPPER(TRIM(SKU)) LIKE '% 54X%' THEN
+                ROUND(((sl.QTYORDERED * 1) * 54))
+            WHEN UPPER(TRIM(SKU)) LIKE '% 56X%' THEN
+                ROUND(((sl.QTYORDERED * 1) * 56))
+            WHEN UPPER(TRIM(SKU)) LIKE '% 60X%' THEN
+                ROUND(((sl.QTYORDERED * 1) * 60))
+            WHEN UPPER(TRIM(SKU)) LIKE '% 72X%' THEN
+                ROUND(((sl.QTYORDERED * 1) * 72))
+            WHEN UPPER(TRIM(SKU)) LIKE '% 144X%' THEN
+                ROUND(((sl.QTYORDERED * 1) * 144))
+            WHEN UPPER(TRIM(SKU)) LIKE '% 240X%' THEN
+                ROUND(((sl.QTYORDERED * 1) * 240))
+            ELSE
+                CASE
+                    WHEN UPPER(TRIM(sl.UOM)) LIKE '%PK03%' THEN
+                        ROUND(((sl.QTYORDERED * 1) * 3))
+                    WHEN UPPER(TRIM(sl.UOM)) LIKE '%PK04%' THEN
+                        ROUND(((sl.QTYORDERED * 1) * 4))
+                    WHEN UPPER(TRIM(sl.UOM)) LIKE '%PK05%' THEN
+                        ROUND(((sl.QTYORDERED * 1) * 5))
+                    WHEN UPPER(TRIM(sl.UOM)) LIKE '%CS6%' THEN
+                        ROUND(((sl.QTYORDERED * 1) * 6))
+                    WHEN UPPER(TRIM(sl.UOM)) LIKE '%PK08%' THEN
+                        ROUND(((sl.QTYORDERED * 1) * 8))
+                    WHEN UPPER(TRIM(sl.UOM)) LIKE '%PK012%' THEN
+                        ROUND(((sl.QTYORDERED * 1) * 12))
+                    WHEN UPPER(TRIM(sl.UOM)) LIKE '%BX%' THEN
+                        ROUND(((sl.QTYORDERED * 1) * 10))
+                    WHEN UPPER(TRIM(sl.UOM)) LIKE '%BX10%' THEN
+                        ROUND(((sl.QTYORDERED * 1) * 10))
+                    WHEN UPPER(TRIM(sl.UOM)) LIKE '%BX20%' THEN
+                        ROUND(((sl.QTYORDERED * 1) * 20))
+                    WHEN UPPER(TRIM(sl.UOM)) LIKE '%CS4%' THEN
+                        ROUND(((sl.QTYORDERED * 1) * 4))
+                    WHEN UPPER(TRIM(sl.UOM)) LIKE '%CS8%' THEN
+                        ROUND(((sl.QTYORDERED * 1) * 8))
+                    WHEN UPPER(TRIM(sl.UOM)) LIKE '%CS08%' THEN
+                        ROUND(((sl.QTYORDERED * 1) * 8))
+                    WHEN UPPER(TRIM(sl.UOM)) LIKE '%CS09%' THEN
+                        ROUND(((sl.QTYORDERED * 1) * 9))
+                    WHEN UPPER(TRIM(sl.UOM)) LIKE '%CS12%' THEN
+                        ROUND(((sl.QTYORDERED * 1) * 12))
+                    WHEN UPPER(TRIM(sl.UOM)) LIKE '%CS24%' THEN
+                        ROUND(((sl.QTYORDERED * 1) * 24))
+                    WHEN UPPER(TRIM(sl.UOM)) LIKE '%CS30%' THEN
+                        ROUND(((sl.QTYORDERED * 1) * 30))
+                    WHEN UPPER(TRIM(sl.UOM)) LIKE '%CS48%' THEN
+                        ROUND(((sl.QTYORDERED * 1) * 48))
+                    WHEN UPPER(TRIM(sl.UOM)) LIKE '%CS60%' THEN
+                        ROUND(((sl.QTYORDERED * 1) * 60))
+                    WHEN UPPER(TRIM(sl.UOM)) LIKE '%CS72%' THEN
+                        ROUND(((sl.QTYORDERED * 1) * 72))
+                    ELSE CONCAT((sl.QTYORDERED * 1), 'E1')
+                END
+        END
+    ELSE CONCAT((sl.QTYORDERED * 1), 'E2')
+END
+) AS VOLTEST,
 (SELECT (sl.QTYTOSHIP * 1)) AS VOLFILTER,
 sl.UNITPRICE, 
 sl.REQUESTDATE, 
@@ -182,22 +417,32 @@ sl.UF2,
 sl.UF3, 
 sl.UF4, 
 sl.UF5, 
-sl.CUSTOMER,
-(SELECT TRIM(CTD.CUST_TYPE_DESC) FROM v_customer_type CTD WHERE CTD.CUS_NO LIKE CONCAT('%', TRIM(sl.CUSTOMER) ,'%') AND TRIM(CTD.DBNO) = TRIM(sl.DBNO) LIMIT 1) AS CUSTOMERTYPEFILTER,
-sl.CUSTOMER AS CUSTOMERFILTER,
+(SELECT 
+IF(CHAR_LENGTH(sl.CUSTOMER) < 10, 
+(SELECT CONCAT((CN.CUS_NO * 1), "-", UPPER(CN.CUSTOMER)) FROM v_customer_info CN 
+WHERE TRIM(CN.CUS_NO) LIKE CONCAT('%', TRIM(sl.CUSTOMER), '%') AND TRIM(sl.DBNO) = TRIM(CN.DBNO) LIMIT 1), 
+UPPER(sl.CUSTOMER))) AS CUSTOMER,
+(SELECT 
+IF(CHAR_LENGTH(sl.CUSTOMER) < 10, 
+(SELECT UPPER(CT.ctype) FROM v_customer_info CT 
+WHERE TRIM(CT.CUS_NO) LIKE CONCAT('%', TRIM(sl.CUSTOMER), '%') AND TRIM(sl.DBNO) = TRIM(CT.DBNO) LIMIT 1), 
+sl.CUSTOMER)) AS CUSTOMERTYPE,
+ 
 UPPER(sl.PROVINCIAL) AS PROVINCIAL, 
 sl.INVOICENO,
 sl.INVOICENO AS INVOICENOFILTER,
 sl.INVOICEDATE,
 (SELECT (sl.GROSS * 1)) AS GROSS, 
 sl.NET,
-(SELECT SUBSTR(sl.INVOICEDATE,1,4)) AS YEAR,
-(SELECT SUBSTR(sl.INVOICEDATE,5,2)) AS MONTH,
+(SELECT (SUBSTR(sl.INVOICEDATE,1,4) * 1)) AS YEAR,
+(SELECT (SUBSTR(sl.INVOICEDATE,1,4) * 1)) AS YEARCOLUM,
+(SELECT (SUBSTR(sl.INVOICEDATE,5,2) * 1)) AS MONTH,
+(SELECT CONCAT((SUBSTR(sl.INVOICEDATE,5,2) * 1), ' ', ELT((SUBSTR(sl.INVOICEDATE,5,2) * 1), 'JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEPT','OCT','NOV','DEC'))) AS MONTHNAME,
 (SELECT 
 IF(SUBSTR(sl.INVOICEDATE,5,2) >= 1 AND SUBSTR(sl.INVOICEDATE,5,2) <= 3, "Q1", 
 IF(SUBSTR(sl.INVOICEDATE,5,2) >= 4 AND SUBSTR(sl.INVOICEDATE,5,2) <= 6, "Q2",
 IF(SUBSTR(sl.INVOICEDATE,5,2) >= 7 AND SUBSTR(sl.INVOICEDATE,5,2) <= 9, "Q3",
 IF(SUBSTR(sl.INVOICEDATE,5,2) >= 10 AND SUBSTR(sl.INVOICEDATE,5,2) <= 12, "Q4",
 "NA"))))) AS QUARTER,
-(SELECT SUBSTR(sl.INVOICEDATE,7,2)) AS DAY
-FROM sales sl LIMIT 1
+(SELECT (SUBSTR(sl.INVOICEDATE,7,2) * 1)) AS DAY
+FROM sales sl ORDER BY DBFILTER ASC, DSMFILTER ASC, VOLFILTER ASC, SKUFILTER ASC, BRANCHFILTER ASC, SALESMANFILTER ASC, MONTH ASC, DAY ASC

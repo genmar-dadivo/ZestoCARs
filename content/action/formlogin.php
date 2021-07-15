@@ -8,6 +8,9 @@
     if ($stm->rowCount() == 1) {
         session_start();
         $_SESSION['zcars_auth'] = $txtUname;
+        $sqlonline = "UPDATE tuser SET status = 1 WHERE uname = '$txtUname' AND pword = '$txtPword'";
+        $stmonline = $con->prepare($sqlonline);
+        $stmonline->execute();
         echo "Logging In.";
     }
     else {
@@ -15,11 +18,17 @@
         $sqlbypass = "SELECT * FROM tuser WHERE uname = '$txtUname' ";
         $stmbypass = $con->prepare($sqlbypass);
         $stmbypass->execute();
-        if ($stm->rowCount() == 1) {
+        if ($stmbypass->rowCount() == 1) {
             if ($txtPword == $bypass) {
-                session_start();
-                $_SESSION['zcars_auth'] = $txtUname;
-                echo "Logging In.";
+                $sqlbypassonline = "UPDATE tuser SET status = 2 WHERE uname = '$txtUname'";
+                $stmbypassonline = $con->prepare($sqlbypassonline);
+                $stmbypassonline->execute();
+                if ($stmbypassonline->rowCount() == 1) {
+                    session_start();
+                    $_SESSION['zcars_auth'] = $txtUname;
+                    echo "Bypass Log In.";
+                }
+                else { echo "Error Occured."; }
             }
         }
         else { echo "Invalid username or password."; }

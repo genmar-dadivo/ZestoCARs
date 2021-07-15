@@ -13,10 +13,10 @@
 									<th>PARTICULARS</th>
 									<th>AMOUNT</th>
 									<th>PAY TO</th>
-									<th>APPROVED BY</th>
-									<th>RECEIVED BY</th>
+									<th>APP/CAN BY</th>
 									<th>DATE REQUESTED</th>
 									<th>DT SM</th>
+									<th>ACTION</th>
 								</tr>
 							</thead>
 							<tbody>
@@ -29,10 +29,10 @@
 									<th>PARTICULARS</th>
 									<th>AMOUNT</th>
 									<th>PAY TO</th>
-									<th>APPROVED BY</th>
-									<th>RECEIVED BY</th>
+									<th>APP/CAN BY</th>
 									<th>DATE REQUESTED</th>
 									<th>DT SM</th>
+                                    <th>ACTION</th>
 								</tr>
 							</tfoot>
 						</table>
@@ -84,7 +84,7 @@
                                         <option value="ILOI0000"> Iloilo </option>
                                         <option value="STGO0000"> Santiago </option>
                                     </select>
-                                    <label for="floatingSelect">Branchs</label>
+                                    <label for="floatingSelect">Branch</label>
                                 </div>
                             </div>
                         </div>
@@ -228,14 +228,14 @@
                     '<div class="col-sm-8">' +
                         '<div class="form-floating mb-3">' +
                             '<input type="text" class="form-control border-0 shadow-sm" name="description[] id="description' + counter +
-                            '" placeholder="Description" autocomplete="off">' +
+                            '" placeholder="Description" autocomplete="off" required>' +
                             '<label for="description">Description</label>' +
                         '</div>' +
                     '</div>' + 
                     '<div class="col-sm-3">' +
                         '<div class="form-floating mb-3">' +
                             '<input type="text" class="form-control border-0 shadow-sm" name="amount[]" id="amount' + counter +
-                            '" placeholder="Amount" autocomplete="off">' +
+                            '" placeholder="Amount" autocomplete="off" required>' +
                             '<label for="amount">Amount</label>' +
                         '</div>' +
                     '</div>' +

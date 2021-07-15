@@ -15,8 +15,14 @@
 	height: 100%;
 	background: rgba(255, 255, 255, 0.5);
 }
-.center {
-	margin: auto;
+.center { margin: auto; }
+.heading {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    transition: all 0.6s;
 }
 .custom-container { max-width: 900px; }
 .custom-bg-1 { background-color: #f1f1f1; }
@@ -266,7 +272,6 @@ div .content-overlay {
 .sidebar-wrapper .sidebar-header .user-info .user-status i {
 	font-size: 8px;
 	margin-right: 4px;
-	color: #5cb85c;
 }
 .sidebar-wrapper .sidebar-search>div { padding: 10px 20px; }
 .sidebar-wrapper .sidebar-menu { padding-bottom: 10px; }
@@ -481,7 +486,7 @@ section#formHolder { padding: 50px 0; }
 	position: absolute;
 	top: 0;
 	left: 0;
-	background: #00793E;
+	background: #007C36;
 	z-index: -1;
 }
 .form { position: relative; }
@@ -796,4 +801,14 @@ select {
   }
   .popover__message {
 	text-align: center;
+  }
+
+  .helper {
+	right: 0px;
+bottom: 0px;
+	position: absolute;
+	bottom: 0;
+	right: 0;
+	width: 100px;
+	height: 150px;
   }

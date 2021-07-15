@@ -2,7 +2,10 @@
     // !
     ini_set('memory_limit', '-1');
     require '../dbase/dbconfig.php';
-    $sql = "SELECT A.*, (SELECT B.description FROM customer_type B WHERE B.code = A.Cus_Type_Cd) AS CUSTYPE, (SELECT C.AR_TERMS_DESC FROM terms C WHERE C.AR_TERMS_CD = A.Ar_Terms_Cd) AS ARSDESC, (SELECT D.LONG_DESCRIPTION FROM terms D WHERE D.AR_TERMS_CD = A.Ar_Terms_Cd) AS ARLDESC FROM arcusfil_sql A";
+    $sql = "SELECT SUBSTR(CUS_NO, 5), A.*, 
+    (SELECT B.description FROM customer_type B WHERE B.code = A.CUS_TP) AS CUSTYPE, (SELECT C.AR_TERMS_DESC FROM terms C WHERE C.AR_TERMS_CD = A.CUS_TERMS_CD) AS ARSDESC, (SELECT D.LONG_DESCRIPTION FROM terms D WHERE D.AR_TERMS_CD = A.CUS_TERMS_CD) AS ARLDESC
+    FROM arcusfil_sql A WHERE A.dbno = 1 AND 
+    TRIM(CUS_SLM_NO) IN ('G72', 'G06', 'W05', 'W07', 'W04', 'G12', 'G21', 'G20', 'G25', 'G04', 'G05', 'G10', 'G11', 'W01', 'G03', 'G17', 'W02', 'G02', 'G13', 'G15', 'G14') AND A.CUS_LAST_SALE_DT > 20170000";
     $stm = $con->prepare($sql);
     $stm->execute();
     $results = $stm->fetchAll(PDO::FETCH_ASSOC);
@@ -10,201 +13,202 @@
         foreach ($results as $row) {
             $id = $row['id'];
             $dbno = $row['dbno'];
-            $Cus_No = $row['Cus_No'];
-            $Cus_Name = ucwords($row['Cus_Name']);
-            $Addr_1 = ucwords($row['Addr_1']);
-            $Addr_2 = ucwords($row['Addr_2']);
-            $City = ucwords($row['City']);
-            $States = strtoupper($row['States']);
-            $Zip = strtoupper($row['Zip']);
-            $Country = strtoupper($row['Country']);
-            $Contact = ucwords($row['Contact']);
-            $Contact_2 = ucwords($row['Contact_2']);
-            $Phone_No = $row['Phone_No'];
-            $Phone_No_2 = $row['Phone_No_2'];
-            $Phone_Ext = strtoupper($row['Phone_Ext']);
-            $Phone_Ext_2 = strtoupper($row['Phone_Ext_2']);
-            $Fax_No = $row['Fax_No'];
-            $Start_Dt = $row['Start_Dt'];
-            $Cus_Type_Cd = strtoupper($row['Cus_Type_Cd']);
-            $Bal_Meth = strtoupper($row['Bal_Meth']);
-            $Stm_Freq = strtoupper($row['Stm_Freq']);
-            $Cr_Lmt = $row['Cr_Lmt'];
-            $Cr_Rating = $row['Cr_Rating'];
-            $Hold_Fg = strtoupper($row['Hold_Fg']);
-            $Collector = strtoupper($row['Collector']);
-            $Fin_Chg_Fg = strtoupper($row['Fin_Chg_Fg']);
-            $Cus_Origin = $row['Cus_Origin'];
-            $Filler_0003 = $row['Filler_0003'];
-            $Terr = strtoupper($row['Terr']);
-            $Curr_Cd = $row['Curr_Cd'];
-            $Par_Cus_No = $row['Par_Cus_No'];
-            $Par_Cus_Fg = strtoupper($row['Par_Cus_Fg']);
-            $Ship_Via_Cd = strtoupper($row['Ship_Via_Cd']);
-            $Ups_Zone = $row['Ups_Zone'];
-            $Ar_Terms_Cd = strtoupper($row['Ar_Terms_Cd']);
-            $Dsc_Pct = $row['Dsc_Pct'];
-            $Ytd_Dsc_Given = $row['Ytd_Dsc_Given'];
-            $Txbl_Fg = strtoupper($row['Txbl_Fg']);
-            $Tax_Cd = strtoupper($row['Tax_Cd']);
-            $Tax_Cd_2 = strtoupper($row['Tax_Cd_2']);
-            $Tax_Cd_3 = strtoupper($row['Tax_Cd_3']);
-            $Exempt_No = $row['Exempt_No'];
-            $Sls_Ptd = $row['Sls_Ptd'];
-            $Sls_Ytd = $row['Sls_Ytd'];
-            $Sls_Last_Yr = $row['Sls_Last_Yr'];
-            $Cost_Ptd = $row['Cost_Ptd'];
-            $Cost_Ytd = $row['Cost_Ytd'];
-            $Cost_Last_Yr = $row['Cost_Last_Yr'];
-            $Balance = $row['Balance'];
-            $High_Balance = $row['High_Balance'];
-            $Last_Sale_Dt = $row['Last_Sale_Dt'];
-            $Last_Sale_Amt = $row['Last_Sale_Amt'];
-            $Inv_Ytd = $row['Inv_Ytd'];
-            $Inv_Last_Yr = $row['Inv_Last_Yr'];
-            $Paid_Inv_Ytd = $row['Paid_Inv_Ytd'];
-            $Last_Pay_Dt = $row['Last_Pay_Dt'];
-            $Last_Pay_Amt = $row['Last_Pay_Amt'];
-            $Avg_Pay_Ytd = $row['Avg_Pay_Ytd'];
-            $Avg_Pay_Last_Yr = $row['Avg_Pay_Last_Yr'];
-            $Last_Stm_Age_Dt = $row['Last_Stm_Age_Dt'];
-            $Amt_Age_Prd_1 = $row['Amt_Age_Prd_1'];
-            $Amt_Age_Prd_2 = $row['Amt_Age_Prd_2'];
-            $Amt_Age_Prd_3 = $row['Amt_Age_Prd_3'];
-            $Amt_Age_Prd_4 = $row['Amt_Age_Prd_4'];
-            $Allow_Sb_Item = strtoupper($row['Allow_Sb_Item']);
-            $Allow_Bo = strtoupper($row['Allow_Bo']);
-            $Allow_Part_Ship = strtoupper($row['Allow_Part_Ship']);
-            $Print_Dunn_Fg = strtoupper($row['Print_Dunn_Fg']);
-            $Cmt_1 = ucwords($row['Cmt_1']);
-            $Cmt_2 = ucwords($row['Cmt_2']);
-            $Vend_No = $row['Vend_No'];
-            $Tax_Sched = $row['Tax_Sched'];
-            $Cr_Card_1_Desc = ucwords($row['Cr_Card_1_Desc']);
-            $Cr_Card_1_Acct = ucwords($row['Cr_Card_1_Acct']);
-            $Cr_Card_1_Exp_Dt = ucwords($row['Cr_Card_1_Exp_Dt']);
-            $Cr_Card_2_Desc = ucwords($row['Cr_Card_2_Desc']);
-            $Cr_Card_2_Acct = ucwords($row['Cr_Card_2_Acct']);
-            $Cr_Card_2_Exp_Dt = ucwords($row['Cr_Card_2_Exp_Dt']);
-            $User_Def_Fld_1 = ucwords($row['User_Def_Fld_1']);
-            $User_Def_Fld_2 = ucwords($row['User_Def_Fld_2']);
-            $User_Def_Fld_3 = ucwords($row['User_Def_Fld_3']);
-            $User_Def_Fld_4 = ucwords($row['User_Def_Fld_4']);
-            $User_Def_Fld_5 = ucwords($row['User_Def_Fld_5']);
-            $Dflt_Inv_Form = $row['Dflt_Inv_Form'];
-            $Loc = strtoupper($row['Loc']);
-            $Note_1 = ucwords($row['Note_1']);
-            $Note_2 = ucwords($row['Note_2']);
-            $Note_3 = ucwords($row['Note_3']);
-            $Note_4 = ucwords($row['Note_4']);
-            $Note_5 = ucwords($row['Note_5']);
-            $User_Dt = $row['User_Dt'];
-            $User_Amount = $row['User_Amount'];
-            $Amt_Age_Oe_Term = strtoupper($row['Amt_Age_Oe_Term']);
-            $Cus_Alt_Adr_Cd = strtoupper($row['Cus_Alt_Adr_Cd']);
-            $Rfc_No = $row['Rfc_No'];
-            $Email_Addr = strtolower($row['Email_Addr']);
+            $CUS_NO = $row['CUS_NO'];
+            $CUS_NAME = ucwords($row['CUS_NAME']);
+            $CUS_STREET1 = ucwords($row['CUS_STREET1']);
+            $CUS_STREET2 = ucwords($row['CUS_STREET2']);
+            $CUS_CITY = ucwords($row['CUS_CITY']);
+            $CUS_ST = strtoupper($row['CUS_ST']);
+            $CUS_ZIP = strtoupper($row['CUS_ZIP']);
+            $CUS_COUNTRY = strtoupper($row['CUS_COUNTRY']);
+            $CUS_CONTACT = ucwords($row['CUS_CONTACT']);
+            $CUS_CONTACT_2 = ucwords($row['CUS_CONTACT_2']);
+            $CUS_PHONE_NO = $row['CUS_PHONE_NO'];
+            $CUS_PHONE_NO_2 = $row['CUS_PHONE_NO_2'];
+            $CUS_PHONE_EXT = strtoupper($row['CUS_PHONE_EXT']);
+            $CUS_PHONE_EXT_2 = strtoupper($row['CUS_PHONE_EXT_2']);
+            $CUS_FAX_NO = $row['CUS_FAX_NO'];
+            $CUS_START_DT = $row['CUS_START_DT'];
+            $CUS_SLM_NO = strtoupper($row['CUS_SLM_NO']);
+            $CUS_TP = strtoupper($row['CUS_TP']);
+            $CUS_BAL_METH = strtoupper($row['CUS_BAL_METH']);
+            $CUS_STM_FREQ = strtoupper($row['CUS_STM_FREQ']);
+            $CUS_CR_LIMIT = $row['CUS_CR_LIMIT'];
+            $CUS_CR_RATING = $row['CUS_CR_RATING'];
+            $CUS_CR_HOLD_FG = strtoupper($row['CUS_CR_HOLD_FG']);
+            $CUS_COLLECTOR = strtoupper($row['CUS_COLLECTOR']);
+            $CUS_FIN_CHG_FG = strtoupper($row['CUS_FIN_CHG_FG']);
+            $CUS_ORIGIN = $row['CUS_ORIGIN'];
+            $FILLER_0003 = $row['FILLER_0003'];
+            $CUS_TERR = strtoupper($row['CUS_TERR']);
+            $CUS_CURR_CODE = $row['CUS_CURR_CODE'];
+            $CUS_PARENT_CUS_NO = $row['CUS_PARENT_CUS_NO'];
+            $CUS_PARENT_CUS_FLG = strtoupper($row['CUS_PARENT_CUS_FLG']);
+            $CUS_SHIP_VIA_CD = strtoupper($row['CUS_SHIP_VIA_CD']);
+            $CUS_UPS_ZONE = $row['CUS_UPS_ZONE'];
+            $CUS_TERMS_CD = strtoupper($row['CUS_TERMS_CD']);
+            $CUS_DSC_PCT = $row['CUS_DSC_PCT'];
+            $CUS_YTD_DSC_GIVEN = $row['CUS_YTD_DSC_GIVEN'];
+            $CUS_TXBL_FG = strtoupper($row['CUS_TXBL_FG']);
+            $CUS_TX_CD1 = strtoupper($row['CUS_TX_CD1']);
+            $CUS_TX_CD2 = strtoupper($row['CUS_TX_CD2']);
+            $CUS_TX_CD3 = strtoupper($row['CUS_TX_CD3']);
+            $CUS_EXEMPT_NO = $row['CUS_EXEMPT_NO'];
+            $CUS_SALES_PTD = $row['CUS_SALES_PTD'];
+            $CUS_SALES_YTD = $row['CUS_SALES_YTD'];
+            $CUS_SALES_LAST_YR = $row['CUS_SALES_LAST_YR'];
+            $CUS_COST_PTD = $row['CUS_COST_PTD'];
+            $CUS_COST_YTD = $row['CUS_COST_YTD'];
+            $CUS_COST_LAST_YR = $row['CUS_COST_LAST_YR'];
+            $CUS_BALANCE = $row['CUS_BALANCE'];
+            $CUS_HIGH_BALANCE = $row['CUS_HIGH_BALANCE'];
+            $CUS_LAST_SALE_DT = $row['CUS_LAST_SALE_DT'];
+            $CUS_LAST_SALE_AMT = $row['CUS_LAST_SALE_AMT'];
+            $CUS_INV_YTD = $row['CUS_INV_YTD'];
+            $CUS_INV_LAST_YR = $row['CUS_INV_LAST_YR'];
+            $CUS_PAID_INV_YTD = $row['CUS_PAID_INV_YTD'];
+            $CUS_LAST_PAY_DT = $row['CUS_LAST_PAY_DT'];
+            $CUS_LAST_PAY_AMT = $row['CUS_LAST_PAY_AMT'];
+            $CUS_AVG_PAY_YTD = $row['CUS_AVG_PAY_YTD'];
+            $CUS_AVG_PAY_LAST_YR = $row['CUS_AVG_PAY_LAST_YR'];
+            $CUS_LAST_STM_AGE_DT = $row['CUS_LAST_STM_AGE_DT'];
+            $CUS_AMT_AGE_PD1 = $row['CUS_AMT_AGE_PD1'];
+            $CUS_AMT_AGE_PD2 = $row['CUS_AMT_AGE_PD2'];
+            $CUS_AMT_AGE_PD3 = $row['CUS_AMT_AGE_PD3'];
+            $CUS_AMT_AGE_PD4 = $row['CUS_AMT_AGE_PD4'];
+            $CUS_ALLOW_SUB_ITMS = strtoupper($row['CUS_ALLOW_SUB_ITMS']);
+            $CUS_ALLOW_BO = strtoupper($row['CUS_ALLOW_BO']);
+            $CUS_ALLOW_PART_SHIP = strtoupper($row['CUS_ALLOW_PART_SHIP']);
+            $CUS_PRINT_DUNN_FG = strtoupper($row['CUS_PRINT_DUNN_FG']);
+            $CUS_COMMENT1 = ucwords($row['CUS_COMMENT1']);
+            $CUS_COMMENT2 = ucwords($row['CUS_COMMENT2']);
+            $CUS_AP_VENDOR = $row['CUS_AP_VENDOR'];
+            $CUS_TAX_SCHED = $row['CUS_TAX_SCHED'];
+            $CUS_CREDCRD1_DESC = ucwords($row['CUS_CREDCRD1_DESC']);
+            $CUS_CREDCRD1_ACCT = ucwords($row['CUS_CREDCRD1_ACCT']);
+            $CUS_CREDCRD1_EXP_DT = ucwords($row['CUS_CREDCRD1_EXP_DT']);
+            $CUS_CREDCRD2_DESC = ucwords($row['CUS_CREDCRD2_DESC']);
+            $CUS_CREDCRD2_ACCT = ucwords($row['CUS_CREDCRD2_ACCT']);
+            $CUS_CREDCRD2_EXP_DT = ucwords($row['CUS_CREDCRD2_EXP_DT']);
+            $CUS_USER_FLD1 = ucwords($row['CUS_USER_FLD1']);
+            $CUS_USER_FLD2 = ucwords($row['CUS_USER_FLD2']);
+            $CUS_USER_FLD3 = ucwords($row['CUS_USER_FLD3']);
+            $CUS_USER_FLD4 = ucwords($row['CUS_USER_FLD4']);
+            $CUS_USER_FLD5 = ucwords($row['CUS_USER_FLD5']);
+            $DEFAULT_INV_FORM = $row['DEFAULT_INV_FORM'];
+            $CUS_ORDER_LOC = strtoupper($row['CUS_ORDER_LOC']);
+            $CUS_NOTE_1 = ucwords($row['CUS_NOTE_1']);
+            $CUS_NOTE_2 = ucwords($row['CUS_NOTE_2']);
+            $CUS_NOTE_3 = ucwords($row['CUS_NOTE_3']);
+            $CUS_NOTE_4 = ucwords($row['CUS_NOTE_4']);
+            $CUS_NOTE_5 = ucwords($row['CUS_NOTE_5']);
+            $CUS_USER_DATE = $row['CUS_USER_DATE'];
+            $USER_AMOUNT = $row['USER_AMOUNT'];
+            $CUS_AMT_AGE_OE_TERM = strtoupper($row['CUS_AMT_AGE_OE_TERM']);
+            $CUS_ALT_ADDRESS = strtoupper($row['CUS_ALT_ADDRESS']);
+            $CUS_RFC_NUMBER = $row['CUS_RFC_NUMBER'];
+            $EMAIL_ADDR = strtolower($row['EMAIL_ADDR']);
             $CUSTYPE = strtoupper($row['CUSTYPE']);
             $ARSDESC = strtoupper($row['ARSDESC']);
             $ARLDESC = strtoupper($row['ARLDESC']);
             $output['data'][] = array(
                 "",
                 "$dbno",
-                "$Cus_No",
-                "$Collector",
-                "$Cus_Name",
-                "$Addr_1",
-                "$Addr_2",
-                "$City",
-                "$States",
-                "$Zip",
-                "$Country",
-                "$Contact",
-                "$Contact_2",
-                "$Phone_No",
-                "$Phone_No_2",
-                "$Phone_Ext",
-                "$Phone_Ext_2",
-                "$Fax_No",
-                "$Start_Dt",
-                "$CUSTYPE",
-                "$Bal_Meth",
-                "$Stm_Freq",
-                "$Cr_Lmt",
-                "$Cr_Rating",
-                "$Hold_Fg",
-                "$Collector",
-                "$Fin_Chg_Fg",
-                "$Cus_Origin",
-                "$Filler_0003",
-                "$Terr",
-                "$Curr_Cd",
-                "$Par_Cus_No",
-                "$Par_Cus_Fg",
-                "$Ship_Via_Cd",
-                "$Ups_Zone",
+                "$CUS_NO",
+                "$CUS_SLM_NO",
+                "$CUS_NAME",
+                "$CUS_STREET1",
+                "$CUS_STREET2",
+                "$CUS_CITY",
+                "$CUS_ST",
+                "$CUS_ZIP",
+                "$CUS_COUNTRY",
+                "$CUS_CONTACT",
+                "$CUS_CONTACT_2",
+                "$CUS_PHONE_NO",
+                "$CUS_PHONE_NO_2",
+                "$CUS_PHONE_EXT",
+                "$CUS_PHONE_EXT_2",
+                "$CUS_FAX_NO",
+                "$CUS_START_DT",
+                "$CUS_TP / $CUSTYPE",
+                "$CUS_BAL_METH",
+                "$CUS_STM_FREQ",
+                "$CUS_CR_LIMIT",
+                "$CUS_CR_RATING",
+                "$CUS_CR_HOLD_FG",
+                "$CUS_COLLECTOR",
+                "$CUS_FIN_CHG_FG",
+                "$CUS_ORIGIN",
+                "$FILLER_0003",
+                "$CUS_TERR",
+                "$CUS_CURR_CODE",
+                "$CUS_PARENT_CUS_NO",
+                "$CUS_PARENT_CUS_FLG",
+                "$CUS_SHIP_VIA_CD",
+                "$CUS_UPS_ZONE",
                 "$ARSDESC / $ARLDESC",
-                "$Dsc_Pct",
-                "$Ytd_Dsc_Given",
-                "$Txbl_Fg",
-                "$Tax_Cd",
-                "$Tax_Cd_2",
-                "$Tax_Cd_3",
-                "$Exempt_No",
-                "$Sls_Ptd",
-                "$Sls_Ytd",
-                "$Sls_Last_Yr",
-                "$Cost_Ptd",
-                "$Cost_Ytd",
-                "$Cost_Last_Yr",
-                "$Balance",
-                "$High_Balance",
-                "$Last_Sale_Dt",
-                "$Last_Sale_Amt",
-                "$Inv_Ytd",
-                "$Inv_Last_Yr",
-                "$Paid_Inv_Ytd",
-                "$Last_Pay_Dt",
-                "$Last_Pay_Amt",
-                "$Avg_Pay_Ytd",
-                "$Avg_Pay_Last_Yr",
-                "$Last_Stm_Age_Dt",
-                "$Amt_Age_Prd_1",
-                "$Amt_Age_Prd_2",
-                "$Amt_Age_Prd_3",
-                "$Amt_Age_Prd_4",
-                "$Allow_Sb_Item",
-                "$Allow_Bo",
-                "$Allow_Part_Ship",
-                "$Print_Dunn_Fg",
-                "$Cmt_1",
-                "$Cmt_2",
-                "$Vend_No",
-                "$Tax_Sched",
-                "$Cr_Card_1_Desc",
-                "$Cr_Card_1_Acct",
-                "$Cr_Card_1_Exp_Dt",
-                "$Cr_Card_2_Desc",
-                "$Cr_Card_2_Acct",
-                "$Cr_Card_2_Exp_Dt",
-                "$User_Def_Fld_1",
-                "$User_Def_Fld_2",
-                "$User_Def_Fld_3",
-                "$User_Def_Fld_4",
-                "$User_Def_Fld_5",
-                "$Dflt_Inv_Form",
-                "$Loc",
-                "$Note_1",
-                "$Note_2",
-                "$Note_3",
-                "$Note_4",
-                "$Note_5",
-                "$User_Dt",
-                "$User_Amount",
-                "$Amt_Age_Oe_Term",
-                "$Cus_Alt_Adr_Cd",
-                "$Rfc_No",
-                "$Email_Addr"
+                "$CUS_DSC_PCT",
+                "$CUS_YTD_DSC_GIVEN",
+                "$CUS_TXBL_FG",
+                "$CUS_TX_CD1",
+                "$CUS_TX_CD2",
+                "$CUS_TX_CD3",
+                "$CUS_EXEMPT_NO",
+                "$CUS_SALES_PTD",
+                "$CUS_SALES_YTD",
+                "$CUS_SALES_LAST_YR",
+                "$CUS_COST_PTD",
+                "$CUS_COST_YTD",
+                "$CUS_COST_LAST_YR",
+                "$CUS_BALANCE",
+                "$CUS_HIGH_BALANCE",
+                "$CUS_LAST_SALE_DT",
+                "$CUS_LAST_SALE_AMT",
+                "$CUS_INV_YTD",
+                "$CUS_INV_LAST_YR",
+                "$CUS_PAID_INV_YTD",
+                "$CUS_LAST_PAY_DT",
+                "$CUS_LAST_PAY_AMT",
+                "$CUS_AVG_PAY_YTD",
+                "$CUS_AVG_PAY_LAST_YR",
+                "$CUS_LAST_STM_AGE_DT",
+                "$CUS_AMT_AGE_PD1",
+                "$CUS_AMT_AGE_PD2",
+                "$CUS_AMT_AGE_PD3",
+                "$CUS_AMT_AGE_PD4",
+                "$CUS_ALLOW_SUB_ITMS",
+                "$CUS_ALLOW_BO",
+                "$CUS_ALLOW_PART_SHIP",
+                "$CUS_PRINT_DUNN_FG",
+                "$CUS_COMMENT1",
+                "$CUS_COMMENT2",
+                "$CUS_AP_VENDOR",
+                "$CUS_TAX_SCHED",
+                "$CUS_CREDCRD1_DESC",
+                "$CUS_CREDCRD1_ACCT",
+                "$CUS_CREDCRD1_EXP_DT",
+                "$CUS_CREDCRD2_DESC",
+                "$CUS_CREDCRD2_ACCT",
+                "$CUS_CREDCRD2_EXP_DT",
+                "$CUS_USER_FLD1",
+                "$CUS_USER_FLD2",
+                "$CUS_USER_FLD3",
+                "$CUS_USER_FLD4",
+                "$CUS_USER_FLD5",
+                "$DEFAULT_INV_FORM",
+                "$CUS_ORDER_LOC",
+                "$CUS_NOTE_1",
+                "$CUS_NOTE_2",
+                "$CUS_NOTE_3",
+                "$CUS_NOTE_4",
+                "$CUS_NOTE_5",
+                "$CUS_USER_DATE",
+                "$USER_AMOUNT",
+                "$CUS_AMT_AGE_OE_TERM",
+                "$CUS_ALT_ADDRESS",
+                "$CUS_RFC_NUMBER",
+                "$EMAIL_ADDR"
             );
         }
     }

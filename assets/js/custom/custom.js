@@ -52,6 +52,11 @@ $('#formSignup').on('submit', function(e) {
                   window.location.href = '';
               },
           });
+          $('#btnRegister').prop("disabled", false);
+          $("#btnRegister").html('Register');
+          $('#txtUname').prop('readonly', false);
+          $('#txtPword').prop('readonly', false);
+          $('#email').prop('readonly', false);
       }
   });
 });
@@ -63,14 +68,26 @@ $(document).ready(function () {
     if (appid) { $("#bodyid").val(appid); contentloader(appid); }
     // Get Employee information
     $.ajax({
-      type: "GET",
       url: '../../content/action/getEinfo.php?euid=' + uid,
       success: function(data) {
         var udata = data.split(",");
         $('.user-name').text(udata[0] + ' ');
         $('.user-role').text(udata[13] + ' ');
+        $('.user-status-desc').text(udata[13] + ' ');
         $('.euname').val(uid);
         $('#uid').val(uid);
+      }
+    });
+    $.ajax({
+      url: '../../content/action/getEinfo.php?stat=' + uid,
+      success: function(data) {
+        var udata = data.split(",");
+        var c;
+        $('.user-status-desc').text(udata[0]);
+        if (udata[0] == 'online') { c = 'green'; }
+        else if (udata[0] == 'offline') { c = 'grey'; }
+        else if (udata[0] == 'bypass') { c = 'red'; }
+        $('.user-lstatus').css("color", c);
       }
     });
   }
@@ -176,6 +193,24 @@ function contentloader(loadid) {
     if (window.location.href.indexOf("calendar") > -1) { $(location).attr('href', '../../content/pages/'); }
     $("#page-content").load("../../content/parts/bookedsales.php");
     $('.section_name').text('Booked Sales');
+    // alert();
+  }
+  else if (loadid == 13) {
+    if (window.location.href.indexOf("calendar") > -1) { $(location).attr('href', '../../content/pages/'); }
+    $("#page-content").load("../../content/parts/users.php");
+    $('.section_name').text('Users');
+    // alert();
+  }
+  else if (loadid == 14) {
+    if (window.location.href.indexOf("calendar") > -1) { $(location).attr('href', '../../content/pages/'); }
+    $("#page-content").load("../../content/parts/groups.php");
+    $('.section_name').text('Groups');
+    // alert();
+  }
+  else if (loadid == 15) {
+    if (window.location.href.indexOf("calendar") > -1) { $(location).attr('href', '../../content/pages/'); }
+    $("#page-content").load("../../content/parts/appettings.php");
+    $('.section_name').text('Settings');
     // alert();
   }
 }
@@ -298,4 +333,23 @@ $('#formschedule').on('submit', function(e) {
           });
       }
   });
+});
+// WEBSITE SETTINGS
+var url, imgurl;
+if (window.location.href.indexOf("content") > -1) {
+  url = '../../content/action/getAppsettings.php';
+  imgurl = '../../assets/img/';
+}
+else { 
+  url = 'content/action/getAppsettings.php';
+  imgurl = 'assets/img/';
+}
+$.ajax({
+  type: 'GET',
+  url: url,
+  success: function(data) {
+      var datasplit = data.split(",");
+      $(document).prop('title', datasplit[1]);
+      $("#favicon").attr("href", imgurl + datasplit[0]);
+  }
 });

@@ -30,15 +30,15 @@
         $S = $yval . $mval . $startday;
         $E = $yval . $mval . $endday;
         $sql = "SELECT
-        (SELECT ocn.ORDER_CUSTOMER_NO FROM oeordhdr ocn WHERE ocn.DB_NO = l.DB_NO AND ocn.ORDER_NO = l.ORDER_NO LIMIT 1) AS 'ORDERCUSTOMERNO',
-        (SELECT A.CUSTOMER FROM v_customer_info A WHERE TRIM(A.DBNO) = TRIM(l.DB_NO) AND TRIM(A.CUS_NO) LIKE CONCAT ('%' , 'ORDERCUSTOMERNO' , '%') LIMIT 1) AS 'CUSTOMERN',
-        (SELECT A.ADDRESS FROM v_customer_info A WHERE TRIM(A.DBNO) = TRIM(l.DB_NO) AND TRIM(A.CUS_NO) LIKE CONCAT ('%' , 'ORDERCUSTOMERNO' , '%') LIMIT 1) AS 'ADDRESSC', 
-        (SELECT T.TIN_NO FROM v_customer_info T WHERE TRIM(T.DBNO) = TRIM(l.DB_NO) AND TRIM(T.CUS_NO) LIKE CONCAT ('%' , 'ORDERCUSTOMERNO' , '%') LIMIT 1) AS 'TINC', 
-        (SELECT t.CUST_TYPE_CODE FROM v_customer_type t WHERE TRIM(t.DBNO) = TRIM(l.DB_NO) AND TRIM(t.CUS_NO) LIKE CONCAT ('%' , 'ORDERCUSTOMERNO' , '%') LIMIT 1) AS 'TYPEC', 
+        (SELECT (ocn.ORDER_CUSTOMER_NO * 1) FROM oeordhdr ocn WHERE ocn.DB_NO = l.DB_NO AND ocn.ORDER_NO = l.ORDER_NO LIMIT 1) AS 'ORDERCUSTOMERNO',
+        (SELECT A.CUSTOMER FROM v_customer_info A WHERE TRIM(A.DBNO) = TRIM(l.DB_NO) AND TRIM(A.CUS_NO) LIKE CONCAT ('%' , ORDERCUSTOMERNO , '%') LIMIT 1) AS 'CUSTOMERN',
+        (SELECT A.ADDRESS FROM v_customer_info A WHERE TRIM(A.DBNO) = TRIM(l.DB_NO) AND TRIM(A.CUS_NO) LIKE CONCAT ('%' , ORDERCUSTOMERNO , '%') LIMIT 1) AS 'ADDRESSC', 
+        (SELECT T.TIN_NO FROM v_customer_info T WHERE TRIM(T.DBNO) = TRIM(l.DB_NO) AND TRIM(T.CUS_NO) LIKE CONCAT ('%' , ORDERCUSTOMERNO , '%') LIMIT 1) AS 'TINC', 
+        (SELECT t.CUST_TYPE_CODE FROM v_customer_type t WHERE TRIM(t.DBNO) = TRIM(l.DB_NO) AND TRIM(t.CUS_NO) LIKE CONCAT ('%' , ORDERCUSTOMERNO , '%') LIMIT 1) AS 'TYPEC', 
         (SELECT sn.SALESMAN_NO_1 FROM oeordhdr sn WHERE sn.DB_NO = l.DB_NO AND sn.ORDER_NO = l.ORDER_NO LIMIT 1) AS 'SALESMAN', 
         (SELECT p.dsm_code FROM psr p WHERE p.psr_code = SALESMAN LIMIT 1) AS 'DSMCODE', 
         (SELECT d.dsm_desc FROM dsm d WHERE d.dsm_code = DSMCODE LIMIT 1) AS 'DSMDESC', 
-        (SELECT ds.DSMSORT FROM dsm ds WHERE ds.dsm_code = DSMCODE LIMIT 1) AS 'DSMSORT',  
+        (SELECT ds.DSMSORT FROM dsm ds WHERE TRIM(ds.dsm_code) = TRIM(DSMCODE) LIMIT 1) AS 'DSMSORT',  
         (SELECT 
         IF(i.CATEGORY LIKE '%juices in can%', 'ZESTO JUICE IN CAN', 
         IF(i.CATEGORY LIKE '%dairy reg 200ml%', 'ZESTO CHOCO REG 200ML', 
@@ -193,7 +193,7 @@
                     "$USER_FIELD_3",
                     "",
                     "$USER_FIELD_5",
-                    "$CUSTOMERN",
+                    "$ORDERCUSTOMERNO" . "-" . "$CUSTOMERN",
                     "$ADDRESSC",
                     "$TINC",
                     "",
@@ -256,7 +256,7 @@
     // Macola
     elseif ($dbval == 2) {
         $US = 90000000;
-        $DB = '1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16';
+        $DB = '1';
         $startday = "00";
         $endday = "99";
         if ($lim <> '') {
@@ -446,7 +446,7 @@
                     "$USER_FIELD_3",
                     "$USER_FIELD_4",
                     "$USER_FIELD_5",
-                    "$CUSTOMERN",
+                    "$CUSTOMER" . "-" . "$CUSTOMERN",
                     "$ADDRESSC",
                     "$TINC",
                     "$TYPEC",
@@ -524,7 +524,7 @@
         else { $limit = ''; }
         $sql = "SELECT 
         SUBSTRING(nl.DSM, 1, 3) AS DSMCODE,
-        (SELECT ds.DSMSORT FROM dsm ds WHERE ds.dsm_code = DSMCODE) AS DSMSORT,
+        (SELECT ds.DSMSORT FROM dsm ds WHERE TRIM(ds.dsm_code) = TRIM(DSMCODE)) AS DSMSORT,
         SUBSTRING(nl.SKU, 1, 7) AS ITEMNO,
         (SELECT 
         IF(i.CATEGORY LIKE '%juices in can%', 'ZESTO JUICE IN CAN', 
@@ -554,7 +554,8 @@
         UPPER(TRIM(i.CATEGORY)))))))))))))))))))))))))) FROM product i WHERE i.ITEM_NO = ITEMNO LIMIT 1) AS ITEMCAT,
         (SELECT n.SKU FROM product n WHERE n.ITEM_NO = ITEMNO) AS INAME, 
         (SELECT MC_ID FROM mrktng_category_dtl WHERE TRIM(CATEGORY) = TRIM(ITEMCAT)) AS MCID,
-        (SELECT MC_DESCRIPTION FROM mrktng_category_hdr WHERE TRIM(ID) = TRIM(MCID)) AS PRODCAT,  
+        (SELECT MC_DESCRIPTION FROM mrktng_category_hdr WHERE TRIM(ID) = TRIM(MCID)) AS PRODCAT, 
+        (SELECT CONCAT((SUBSTR(TRANSDATE,5,4) * 1), (SUBSTR(TRANSDATE,1,2) * 1), (SUBSTR(TRANSDATE,3,2) * 1))) AS FTRANSDATE, 
         nl.*
         FROM noah_oelinhst nl
         WHERE
@@ -583,7 +584,7 @@
                     }
                     elseif ($DBNO == "CEBU0000") {
                         $BD = array("BK0000000118","BK0000000116","BK0000000041","BK0000000247","BH-S00000225","BK0000000195","HRI000000121","BK0000000120","HRI000000122","VX0000000126","VX0000000131","VX0000000128","VX0000000130","VX0000000169","BK0000000222");
-                        $BX = array("BK0000000245","VX0000000250","VX0000000152","BK0000000119","VX0000000129","VX0000000127","VX0000000215","VX0000000125");
+                        $BX = array("BK0000000245","VX0000000250","VX0000000152","BK0000000119","VX0000000129","VX0000000127","VX0000000215","VX0000000125","VX0000000253");
                         $TD = array("BK0000000224","BK0000000248","BK0000000204","VX0000000212","VX0000000213","BK0000000200","HRI000000208","BK0000000201","BK0000000124","VX0000000251");
 
                         if (strpos($SALESMAN_CODE, 'OFF') !== false) {
@@ -632,7 +633,7 @@
                 $QTY = $row['QTY'];
                 $AMOUNT = $row['AMOUNT'];
                 $NET_AMOUNT = $row['NET_AMOUNT'];
-                $TRANSDATE = $row['TRANSDATE'];
+                $FTRANSDATE = $row['FTRANSDATE'];
                 $NOAH_INV_NO = strtoupper($row['NOAH_INV_NO']);
                 $MANUAL_INV_NO = strtoupper($row['MANUAL_INV_NO']);
                 $DATE_CONFIRMED = $row['DATE_CONFIRMED'];
@@ -677,7 +678,7 @@
                     "$QTY",
                     "$QTY",
                     "",
-                    "$TRANSDATE",
+                    "$FTRANSDATE",
                     "",
                     "",
                     "$UOM",
@@ -699,7 +700,7 @@
                     "$PROVINCIAL",
                     "$AREA",
                     "$MANUAL_INV_NO",
-                    "$TRANSDATE",
+                    "$FTRANSDATE",
                     "$AMOUNT",
                     "$NET_AMOUNT",
                 );

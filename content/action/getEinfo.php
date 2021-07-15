@@ -65,11 +65,25 @@
             $econtactperson = $row['econtactperson']; // 28
             $econpersonrelation = $row['econpersonrelation']; // 29
             $eaddress = $row['eaddress']; // 30
-            echo "$fname,$mname,$lname,$ns,$bdate,$sex,$address,$permanentaddress,$phonenumber,$idnumber,$company,$region,$department,$position,$prevdept,$datehired,$dateregular,$sssno,$pagibigrtn,$pagibigmid,$tin,$cocolife,$ccamount,$college,$hs,$elem,$workhistory,$ephonenumb,$econtactperson,$eaddress";
+            $philhealth = $row['philhealth']; // 31
+            echo "$fname,$mname,$lname,$ns,$bdate,$sex,$address,$permanentaddress,$phonenumber,$idnumber,$company,$region,$department,$position,$prevdept,$datehired,$dateregular,$sssno,$pagibigrtn,$pagibigmid,$tin,$cocolife,$ccamount,$college,$hs,$elem,$workhistory,$ephonenumb,$econtactperson,$eaddress,$philhealth";
         }
         else { echo "Error"; }
     }
-    elseif (isset($_GET['uid'])) {
-
+    elseif (isset($_GET['stat'])) {
+        $stat = $_GET['stat'];
+        $sql = "SELECT status FROM tuser WHERE eidnum = '$stat' ";
+        $stm = $con->prepare($sql);
+        $stm->execute();
+        if ($stm->rowCount() == 1) {
+            $row = $stm->fetch();
+            $status = $row['status'];
+            if ($status == 0) { $status = 'offline'; }
+            elseif ($status == 1) { $status = 'online'; }
+            elseif ($status == 2) { $status = 'bypass'; }
+            else { $status = 'error'; }
+            echo $status;
+        }
+        else { echo "Error"; }
     }
 ?>

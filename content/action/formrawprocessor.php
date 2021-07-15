@@ -3,9 +3,6 @@
 	$Ynow = date('Y');
     $MDnow = date('md');
     $time = time();
-    // ADDITIONAL SETTINGS
-	// $start = 20200400;
-	// $end = $start + 99;
 	$start = 00000000;
 	$end = 99999999;
 	require '../dbase/dbconfig.php';
@@ -16,6 +13,111 @@
 			$stmsetglobal = $con->prepare($sqlsetglobal);
 			$stmsetglobal->execute();
 			echo "MAX PACKET SET.";
+		}
+		elseif (strpos(strtolower($rawdata), 'dtf') !== false) { 
+			echo "Showing Custom Formatter. \n";
+			$splitter = explode(" ", $rawdata);
+			echo $splitter[1];
+		}
+		elseif (strpos($rawdata, 'formatter') !== false) {
+			//="formatter "&A1&","&B1&","&C1
+			$rawdata = str_replace(["'","1-TOTAL", "2-TOTAL", "3-TOTAL", "4-TOTAL", "5-TOTAL", "6-TOTAL", "1. ", "2. ", "3. ", "4. ", "5. ", "6. ", "1 ", "2 ", "3 ", "4 ", "5 "], "",$rawdata);
+			$rowdata = explode('formatter', $rawdata);
+			$autodivide = substr_count($rawdata, "formatter");
+			$runner = 0;
+			$skurunner = 0;
+			$yearcounter = -1;
+			$monthcounter = -1;
+			$areacounter = -1;
+			$dsmcounter = -1;
+			$mktgcounter = -1;
+			$itmcounter = -1;
+			$uomcounter = -1;
+			$yeararraypusher = array();
+			$montharraypusher = array();
+			$areaarraypusher = array();
+			$dsmarraypusher = array();
+			$mktgarraypusher = array();
+			$itmarraypusher = array();
+			$uomarraypusher = array();
+			$skuarray = array();
+			while ($runner < $autodivide) {
+				$datarunner = $runner + 1;
+				$data = explode(',', preg_replace('/\s+/', ' ', $rowdata[$datarunner]));
+				$areaarray = array("MINDANAO", "NORTH LUZON", "NCR",  "SOUTH LUZON", "VISAYAS", "MODERN TRADE", "GEN TRADE", "SOUTH-LUZON", "NORTH-LUZON");
+				$dsmarray = array("APX-ASIA PRIMERA", "BD1-CEBU MT", "BX1-CEBU GT",  "CD1-CANLUBANG", "CD2-CANLUBANG", "DD1-STA BARBARA", "GB1-BOOKING I", "GB2-BOOKING II", "GBX-NORTH-GMA", "GW1-SOUTH-GMA", "GX1-EAST-GMA", "GX2-WEST-GMA", "I97-HRI", "LD1-ILOILO", "ND1-PILI", "OD1-BACOLOD", "PD1-PABAZA DISTRICT", "PD2-BUNETA DISTRICT", "RB1-DAIRY BARN", "SD1-CAUAYAN", "TD1-TACLOBAN", "VD1-NORTH DAVAO", "VD2-COTABATO", "VD3-COTABATO II", "YD1-ESMO-CBL REGION", "YX1-ESMO-CRG REGION", "ZD1-OZAMIZ", "OSN-OFFICE SALES NAGA", "OSA-OFFICE SALES AGDAO", "OST-OFFICE SALES TORIL", "OSY-OFFICE SALES ESMO", "OSZ-OFFICE SALES OZAMIZ", "OSB-OFFICE SALES CEBU", "OSL-OFFICE SALES ILOILO", "OSO-OFFICE SALES BACOLOD", "OSE-OFFICE SALES HO", "OSD-OFFICE SALES STA. BARBARA", "OSP-OFFICE SALES PAMPANGA", "OSS-OFFICE SALES CAUAYAN");
+				$mktgarray = array("RTD", "FOOD", "NCB & CSD",  "POWDER", "DAIRY", "OTHER LINE");
+				$catarray = array("BIG-250 RTD","JR RTD","OK LAKI RTD","OK RTD","PLUS 200 RTD","PLUS BURST RTD","PLUS KING RTD","SUNGLO RTD","ZESTO FRESH PICK","ZESTO RTD","DUTCH MAID","YOGHURT 110ML","YOGHURT 200ML","ZESTO CHOCO REG 200ML","ZESTO CHOCO TBA 250ML","ZESTO CHOCO TWA 110ML","PURIFIED WATER","ZESTO CARBONATED 237ML","ZESTO CARBONATED 330ML","ZESTO CARBONATED PET 1.5L","ZESTO CARBONATED PET 500ML","ZESTO JUICE IN CAN","ZESTO SLICE 355ML","QUICK CHOW INSTANT","QUICK CHOW RICE NOODLES","QUICK CHOW CANTON","QUICK CHOW CUP NOODLES","TEKKI SHOMEN","TEKKI YAKIUDON","TITA FRITA","SUNGLO POWDER JUICE","ZESTO ICED TEA POWDER","EXTRA JOSS", "ZESTO ICED TEA RTD", "ZESTO KIDZ", "HAUS BLEND CAFE", "ZESTO MILKO FM 1L", "ONE TEA 355ML", "ONE TEA 500ML", "SUNBURST 250ML", "JUCU JUCU 200ML", "ZESTO MILKO FM 250ML", "ZESTO SLICE PET 1.25L", "ZESTO CARBONATED 250ML");
+				$uomarray = array("BX", "BX10", "BX11", "PC", "CS", "CS24", "PK04", "CS08", "PK05", "CS12", "CS6", "CS30", "CS06", "CS08", "CS72", "PK10", "PK08", "CS48", "CS60", "PK06", "CS4", "CS8");
+				// CHECKER
+				if (strlen(str_replace(' ', '', $data[0])) == 4 && is_numeric(str_replace(' ', '', $data[0]))) {
+					$YEARNUM = $data[0];
+					$YEARPREV = '';
+					array_push($yeararraypusher,$YEARNUM);
+					if ($YEARNUM <> $YEARPREV) { $yearcounter++; }
+					$YEARPREV = $data[0];
+				}
+				elseif (strlen(preg_replace('/\s+/', ' ', $data[0])) <= 2) {
+					$MONTHNUM = $data[0];
+					$MONTHPREV = '';
+					array_push($montharraypusher,$MONTHNUM);
+					if ($MONTHPREV <> $MONTHNUM) { $monthcounter++; }
+					$MONTHPREV = $data[0];
+				}
+				elseif (in_array(trim($data[0]), $areaarray)) {
+					$AREA = $data[0];
+					$AREAPREV = '';
+					array_push($areaarraypusher,$AREA);
+					if ($AREAPREV <> $AREA) { $areacounter++; }
+					$AREAPREV = $data[0];
+				}
+				elseif (in_array(trim($data[0]), $dsmarray)) { 
+					$DSM = $data[0];
+					$DSMPREV = '';
+					array_push($dsmarraypusher,$DSM);
+					if ($DSMPREV <> $DSM) { $dsmcounter++; }
+					$DSMPREV = $data[0];
+				}
+				elseif (in_array(trim($data[0]), $mktgarray)) { 
+					$MARKETING_CATEGORY = $data[0];
+					$MKTGPREV = '';
+					array_push($mktgarraypusher,$MARKETING_CATEGORY);
+					if ($MKTGPREV <> $MARKETING_CATEGORY) { $mktgcounter++; }
+					$MKTGPREV = $data[0];
+				}
+				elseif (in_array(trim($data[0]), $catarray)) { 
+					$ITEM_CATEGORY = $data[0];
+					$ITMPREV = '';
+					array_push($itmarraypusher,$ITEM_CATEGORY);
+					if ($ITMPREV <> $ITEM_CATEGORY) { $itmcounter++; }
+					$ITMPREV = $data[0];
+				}
+				elseif (in_array(str_replace(' ', '', $data[0]), $uomarray)) { 
+					$UOM = $data[0];
+					$UOMPREV = '';
+					array_push($uomarraypusher,$UOM);
+					if ($UOMPREV <> $UOM) { $uomcounter++; }
+					$UOMPREV = $data[0];
+				}
+				elseif (strlen(preg_replace('/\s+/', ' ', $data[0])) >= 20 && !in_array(trim($data[0]), $catarray)) {
+					$SKU = preg_replace( '/\s+/', ' ', $data[0]);
+					$VOL = $data[1];
+					$PV = $data[2];
+					$AREAa = $areaarraypusher[$areacounter];
+					$DSMa = $dsmarraypusher[$dsmcounter];
+					$MARKETING_CATEGORYa = $mktgarraypusher[$mktgcounter];
+					$ITEM_CATEGORYa = $itmarraypusher[$itmcounter];
+					$UOMa = $uomarraypusher[$uomcounter];
+					$MONTHNUMa = $montharraypusher[$monthcounter];
+					$YEARNUMa = $yeararraypusher[$yearcounter];
+					$sqlinsert = "INSERT INTO formatter (AREA, DSM, MARKETING_CATEGORY, ITEM_CATEGORY, UOM, SKU, VOL, PV, MONTHNUM, YEARNUM) VALUES ('$AREAa', '$DSMa', '$MARKETING_CATEGORYa', '$ITEM_CATEGORYa', '$UOMa', '$SKU', '$VOL', '$PV', '$MONTHNUMa', '$YEARNUMa')";
+					$stminsert = $con->prepare($sqlinsert);
+					$stminsert->execute();
+					$skurunner++;
+				}
+				$runner++;
+			}
+			echo "$skurunner(s) records inserted";
 		}
 		else {
 			// CLEANERS
@@ -61,7 +163,7 @@
 					if (isset($data[26])) { $INVOICE_DATE = $data[26]; }
 					else { $INVOICE_DATE = ''; }
 					// CHECKER
-					$sqlchecker = "SELECT ID, ORDER_NO, ITEM_NO FROM oelinhst WHERE DATABASE_NO = $DATABASE_NO AND ORDER_NO = '$ORDER_NO' AND ITEM_NO = '$ITEM_NO' AND UNIT_PRICE = '$UNIT_PRICE' AND INVOICE_DATE BETWEEN $start AND $end";
+					$sqlchecker = "SELECT ID, ORDER_NO, ITEM_NO FROM oelinhst WHERE DATABASE_NO = '$DATABASE_NO' AND ORDER_NO = '$ORDER_NO' AND ITEM_NO = '$ITEM_NO' AND UNIT_PRICE = '$UNIT_PRICE' AND INVOICE_DATE BETWEEN $start AND $end";
 					$stmchecker = $con->prepare($sqlchecker);
 					$stmchecker->execute();
 					if ($stmchecker->rowCount() > 0) { $DATABASE_NO = "D" . $DATABASE_NO; }
@@ -461,111 +563,111 @@
 					$datarunner = $runner + 1;
 					$data = explode(',', $rowdata[$datarunner]);
 					$dbno = preg_replace('/\s+/', ' ', $data[0]);
-					$Cus_No = preg_replace('/\s+/', ' ', $data[1]);
-					$Cus_Name = preg_replace('/\s+/', ' ', $data[2]);
-					$Addr_1 = preg_replace('/\s+/', ' ', $data[3]);
-					$Addr_2 = preg_replace('/\s+/', ' ', $data[4]);
-					$City = preg_replace('/\s+/', ' ', $data[5]);
-					$States = preg_replace('/\s+/', ' ', $data[6]);
-					$Zip = preg_replace('/\s+/', ' ', $data[7]);
-					$Country = preg_replace('/\s+/', ' ', $data[8]);
-					$Contact = preg_replace('/\s+/', ' ', $data[9]);
-					$Contact_2 = preg_replace('/\s+/', ' ', $data[10]);
-					$Phone_No = preg_replace('/\s+/', ' ', $data[11]);
-					$Phone_No_2 = preg_replace('/\s+/', ' ', $data[12]);
-					$Phone_Ext = preg_replace('/\s+/', ' ', $data[13]);
-					$Phone_Ext_2 = preg_replace('/\s+/', ' ', $data[14]);
-					$Fax_No = preg_replace('/\s+/', ' ', $data[15]);
-					$Start_Dt = preg_replace('/\s+/', ' ', $data[16]);
+					$CUS_NO = preg_replace('/\s+/', ' ', $data[1]);
+					$CUS_NAME = preg_replace('/\s+/', ' ', $data[2]);
+					$CUS_STREET1 = preg_replace('/\s+/', ' ', $data[3]);
+					$CUS_STREET2 = preg_replace('/\s+/', ' ', $data[4]);
+					$CUS_CITY = preg_replace('/\s+/', ' ', $data[5]);
+					$CUS_ST = preg_replace('/\s+/', ' ', $data[6]);
+					$CUS_ZIP = preg_replace('/\s+/', ' ', $data[7]);
+					$CUS_COUNTRY = preg_replace('/\s+/', ' ', $data[8]);
+					$CUS_CONTACT = preg_replace('/\s+/', ' ', $data[9]);
+					$CUS_CONTACT_2 = preg_replace('/\s+/', ' ', $data[10]);
+					$CUS_PHONE_NO = preg_replace('/\s+/', ' ', $data[11]);
+					$CUS_PHONE_NO_2 = preg_replace('/\s+/', ' ', $data[12]);
+					$CUS_PHONE_EXT = preg_replace('/\s+/', ' ', $data[13]);
+					$CUS_PHONE_EXT_2 = preg_replace('/\s+/', ' ', $data[14]);
+					$CUS_FAX_NO = preg_replace('/\s+/', ' ', $data[15]);
+					$CUS_START_DT = preg_replace('/\s+/', ' ', $data[16]);
 					$CUS_SLM_NO = preg_replace('/\s+/', ' ', $data[17]);
-					$Cus_Type_Cd = preg_replace('/\s+/', ' ', $data[18]);
-					$Bal_Meth = preg_replace('/\s+/', ' ', $data[19]);
-					$Stm_Freq = preg_replace('/\s+/', ' ', $data[20]);
-					$Cr_Lmt = preg_replace('/\s+/', ' ', $data[21]);
-					$Cr_Rating = preg_replace('/\s+/', ' ', $data[22]);
-					$Hold_Fg = preg_replace('/\s+/', ' ', $data[23]);
-					$Collector = preg_replace('/\s+/', ' ', $data[24]);
-					$Fin_Chg_Fg = preg_replace('/\s+/', ' ', $data[25]);
-					$Cus_Origin = preg_replace('/\s+/', ' ', $data[26]);
-					$Filler_0003 = preg_replace('/\s+/', ' ', $data[27]);
-					$Terr = preg_replace('/\s+/', ' ', $data[28]);
-					$Curr_Cd = preg_replace('/\s+/', ' ', $data[29]);
-					$Par_Cus_No = preg_replace('/\s+/', ' ', $data[30]);
-					$Par_Cus_Fg = preg_replace('/\s+/', ' ', $data[31]);
-					$Ship_Via_Cd = preg_replace('/\s+/', ' ', $data[32]);
-					$Ups_Zone = preg_replace('/\s+/', ' ', $data[33]);
-					$Ar_Terms_Cd = preg_replace('/\s+/', ' ', $data[34]);
-					$Dsc_Pct = preg_replace('/\s+/', ' ', $data[35]);
-					$Ytd_Dsc_Given = preg_replace('/\s+/', ' ', $data[36]);
-					$Txbl_Fg = preg_replace('/\s+/', ' ', $data[37]);
-					$Tax_Cd = preg_replace('/\s+/', ' ', $data[38]);
-					$Tax_Cd_2 = preg_replace('/\s+/', ' ', $data[39]);
-					$Tax_Cd_3 = preg_replace('/\s+/', ' ', $data[40]);
-					$Exempt_No = preg_replace('/\s+/', ' ', $data[41]);
-					$Sls_Ptd = preg_replace('/\s+/', ' ', $data[42]);
-					$Sls_Ytd = preg_replace('/\s+/', ' ', $data[43]);
-					$Sls_Last_Yr = preg_replace('/\s+/', ' ', $data[44]);
-					$Cost_Ptd = preg_replace('/\s+/', ' ', $data[45]);
-					$Cost_Ytd = preg_replace('/\s+/', ' ', $data[46]);
-					$Cost_Last_Yr = preg_replace('/\s+/', ' ', $data[47]);
-					$Balance = preg_replace('/\s+/', ' ', $data[48]);
-					$High_Balance = preg_replace('/\s+/', ' ', $data[49]);
-					$Last_Sale_Dt = preg_replace('/\s+/', ' ', $data[50]);
-					$Last_Sale_Amt = preg_replace('/\s+/', ' ', $data[51]);
-					$Inv_Ytd = preg_replace('/\s+/', ' ', $data[52]);
-					$Inv_Last_Yr = preg_replace('/\s+/', ' ', $data[53]);
-					$Paid_Inv_Ytd = preg_replace('/\s+/', ' ', $data[54]);
-					$Last_Pay_Dt = preg_replace('/\s+/', ' ', $data[55]);
-					$Last_Pay_Amt = preg_replace('/\s+/', ' ', $data[56]);
-					$Avg_Pay_Ytd = preg_replace('/\s+/', ' ', $data[57]);
-					$Avg_Pay_Last_Yr = preg_replace('/\s+/', ' ', $data[58]);
-					$Last_Stm_Age_Dt = preg_replace('/\s+/', ' ', $data[59]);
-					$Amt_Age_Prd_1 = preg_replace('/\s+/', ' ', $data[60]);
-					$Amt_Age_Prd_2 = preg_replace('/\s+/', ' ', $data[61]);
-					$Amt_Age_Prd_3 = preg_replace('/\s+/', ' ', $data[62]);
-					$Amt_Age_Prd_4 = preg_replace('/\s+/', ' ', $data[63]);
-					$Allow_Sb_Item = preg_replace('/\s+/', ' ', $data[64]);
-					$Allow_Bo = preg_replace('/\s+/', ' ', $data[65]);
-					$Allow_Part_Ship = preg_replace('/\s+/', ' ', $data[66]);
-					$Print_Dunn_Fg = preg_replace('/\s+/', ' ', $data[67]);
-					$Cmt_1 = preg_replace('/\s+/', ' ', $data[68]);
-					$Cmt_2 = preg_replace('/\s+/', ' ', $data[69]);
-					$Vend_No = preg_replace('/\s+/', ' ', $data[70]);
-					$Tax_Sched = preg_replace('/\s+/', ' ', $data[71]);
-					$Cr_Card_1_Desc = preg_replace('/\s+/', ' ', $data[72]);
-					$Cr_Card_1_Acct = preg_replace('/\s+/', ' ', $data[73]);
-					$Cr_Card_1_Exp_Dt = preg_replace('/\s+/', ' ', $data[74]);
-					$Cr_Card_2_Desc = preg_replace('/\s+/', ' ', $data[75]);
-					$Cr_Card_2_Acct = preg_replace('/\s+/', ' ', $data[76]);
-					$Cr_Card_2_Exp_Dt = preg_replace('/\s+/', ' ', $data[77]);
-					$User_Def_Fld_1 = preg_replace('/\s+/', ' ', $data[78]);
-					$User_Def_Fld_2 = preg_replace('/\s+/', ' ', $data[79]);
-					$User_Def_Fld_3 = preg_replace('/\s+/', ' ', $data[80]);
-					$User_Def_Fld_4 = preg_replace('/\s+/', ' ', $data[81]);
-					$User_Def_Fld_5 = preg_replace('/\s+/', ' ', $data[82]);
-					$Dflt_Inv_Form = preg_replace('/\s+/', ' ', $data[83]);
-					$Loc = preg_replace('/\s+/', ' ', $data[84]);
-					$Note_1 = preg_replace('/\s+/', ' ', $data[85]);
-					$Note_2 = preg_replace('/\s+/', ' ', $data[86]);
-					$Note_3 = preg_replace('/\s+/', ' ', $data[87]);
-					$Note_4 = preg_replace('/\s+/', ' ', $data[88]);
-					$Note_5 = preg_replace('/\s+/', ' ', $data[89]);
-					$User_Dt = preg_replace('/\s+/', ' ', $data[90]);
-					$User_Amount = preg_replace('/\s+/', ' ', $data[91]);
-					$Amt_Age_Oe_Term = preg_replace('/\s+/', ' ', $data[92]);
-					$Cus_Alt_Adr_Cd = preg_replace('/\s+/', ' ', $data[93]);
-					$Rfc_No = preg_replace('/\s+/', ' ', $data[94]);
-					$Email_Addr = preg_replace('/\s+/', ' ', $data[95]);
+					$CUS_TP = preg_replace('/\s+/', ' ', $data[18]);
+					$CUS_BAL_METH = preg_replace('/\s+/', ' ', $data[19]);
+					$CUS_STM_FREQ = preg_replace('/\s+/', ' ', $data[20]);
+					$CUS_CR_LIMIT = preg_replace('/\s+/', ' ', $data[21]);
+					$CUS_CR_RATING = preg_replace('/\s+/', ' ', $data[22]);
+					$CUS_CR_HOLD_FG = preg_replace('/\s+/', ' ', $data[23]);
+					$CUS_COLLECTOR = preg_replace('/\s+/', ' ', $data[24]);
+					$CUS_FIN_CHG_FG = preg_replace('/\s+/', ' ', $data[25]);
+					$CUS_ORIGIN = preg_replace('/\s+/', ' ', $data[26]);
+					$FILLER_0003 = preg_replace('/\s+/', ' ', $data[27]);
+					$CUS_TERR = preg_replace('/\s+/', ' ', $data[28]);
+					$CUS_CURR_CODE = preg_replace('/\s+/', ' ', $data[29]);
+					$CUS_PARENT_CUS_NO = preg_replace('/\s+/', ' ', $data[30]);
+					$CUS_PARENT_CUS_FLG = preg_replace('/\s+/', ' ', $data[31]);
+					$CUS_SHIP_VIA_CD = preg_replace('/\s+/', ' ', $data[32]);
+					$CUS_UPS_ZONE = preg_replace('/\s+/', ' ', $data[33]);
+					$CUS_TERMS_CD = preg_replace('/\s+/', ' ', $data[34]);
+					$CUS_DSC_PCT = preg_replace('/\s+/', ' ', $data[35]);
+					$CUS_YTD_DSC_GIVEN = preg_replace('/\s+/', ' ', $data[36]);
+					$CUS_TXBL_FG = preg_replace('/\s+/', ' ', $data[37]);
+					$CUS_TX_CD1 = preg_replace('/\s+/', ' ', $data[38]);
+					$CUS_TX_CD2 = preg_replace('/\s+/', ' ', $data[39]);
+					$CUS_TX_CD3 = preg_replace('/\s+/', ' ', $data[40]);
+					$CUS_EXEMPT_NO = preg_replace('/\s+/', ' ', $data[41]);
+					$CUS_SALES_PTD = preg_replace('/\s+/', ' ', $data[42]);
+					$CUS_SALES_YTD = preg_replace('/\s+/', ' ', $data[43]);
+					$CUS_SALES_LAST_YR = preg_replace('/\s+/', ' ', $data[44]);
+					$CUS_COST_PTD = preg_replace('/\s+/', ' ', $data[45]);
+					$CUS_COST_YTD = preg_replace('/\s+/', ' ', $data[46]);
+					$CUS_COST_LAST_YR = preg_replace('/\s+/', ' ', $data[47]);
+					$CUS_BALANCE = preg_replace('/\s+/', ' ', $data[48]);
+					$CUS_HIGH_BALANCE = preg_replace('/\s+/', ' ', $data[49]);
+					$CUS_LAST_SALE_DT = preg_replace('/\s+/', ' ', $data[50]);
+					$CUS_LAST_SALE_AMT = preg_replace('/\s+/', ' ', $data[51]);
+					$CUS_INV_YTD = preg_replace('/\s+/', ' ', $data[52]);
+					$CUS_INV_LAST_YR = preg_replace('/\s+/', ' ', $data[53]);
+					$CUS_PAID_INV_YTD = preg_replace('/\s+/', ' ', $data[54]);
+					$CUS_LAST_PAY_DT = preg_replace('/\s+/', ' ', $data[55]);
+					$CUS_LAST_PAY_AMT = preg_replace('/\s+/', ' ', $data[56]);
+					$CUS_AVG_PAY_YTD = preg_replace('/\s+/', ' ', $data[57]);
+					$CUS_AVG_PAY_LAST_YR = preg_replace('/\s+/', ' ', $data[58]);
+					$CUS_LAST_STM_AGE_DT = preg_replace('/\s+/', ' ', $data[59]);
+					$CUS_AMT_AGE_PD1 = preg_replace('/\s+/', ' ', $data[60]);
+					$CUS_AMT_AGE_PD2 = preg_replace('/\s+/', ' ', $data[61]);
+					$CUS_AMT_AGE_PD3 = preg_replace('/\s+/', ' ', $data[62]);
+					$CUS_AMT_AGE_PD4 = preg_replace('/\s+/', ' ', $data[63]);
+					$CUS_ALLOW_SUB_ITMS = preg_replace('/\s+/', ' ', $data[64]);
+					$CUS_ALLOW_BO = preg_replace('/\s+/', ' ', $data[65]);
+					$CUS_ALLOW_PART_SHIP = preg_replace('/\s+/', ' ', $data[66]);
+					$CUS_PRINT_DUNN_FG = preg_replace('/\s+/', ' ', $data[67]);
+					$CUS_COMMENT1 = preg_replace('/\s+/', ' ', $data[68]);
+					$CUS_COMMENT2 = preg_replace('/\s+/', ' ', $data[69]);
+					$CUS_AP_VENDOR = preg_replace('/\s+/', ' ', $data[70]);
+					$CUS_TAX_SCHED = preg_replace('/\s+/', ' ', $data[71]);
+					$CUS_CREDCRD1_DESC = preg_replace('/\s+/', ' ', $data[72]);
+					$CUS_CREDCRD1_ACCT = preg_replace('/\s+/', ' ', $data[73]);
+					$CUS_CREDCRD1_EXP_DT = preg_replace('/\s+/', ' ', $data[74]);
+					$CUS_CREDCRD2_DESC = preg_replace('/\s+/', ' ', $data[75]);
+					$CUS_CREDCRD2_ACCT = preg_replace('/\s+/', ' ', $data[76]);
+					$CUS_CREDCRD2_EXP_DT = preg_replace('/\s+/', ' ', $data[77]);
+					$CUS_USER_FLD1 = preg_replace('/\s+/', ' ', $data[78]);
+					$CUS_USER_FLD2 = preg_replace('/\s+/', ' ', $data[79]);
+					$CUS_USER_FLD3 = preg_replace('/\s+/', ' ', $data[80]);
+					$CUS_USER_FLD4 = preg_replace('/\s+/', ' ', $data[81]);
+					$CUS_USER_FLD5 = preg_replace('/\s+/', ' ', $data[82]);
+					$DEFAULT_INV_FORM = preg_replace('/\s+/', ' ', $data[83]);
+					$CUS_ORDER_LOC = preg_replace('/\s+/', ' ', $data[84]);
+					$CUS_NOTE_1 = preg_replace('/\s+/', ' ', $data[85]);
+					$CUS_NOTE_2 = preg_replace('/\s+/', ' ', $data[86]);
+					$CUS_NOTE_3 = preg_replace('/\s+/', ' ', $data[87]);
+					$CUS_NOTE_4 = preg_replace('/\s+/', ' ', $data[88]);
+					$CUS_NOTE_5 = preg_replace('/\s+/', ' ', $data[89]);
+					$CUS_USER_DATE = preg_replace('/\s+/', ' ', $data[90]);
+					$USER_AMOUNT = preg_replace('/\s+/', ' ', $data[91]);
+					$CUS_AMT_AGE_OE_TERM = preg_replace('/\s+/', ' ', $data[92]);
+					$CUS_ALT_ADDRESS = preg_replace('/\s+/', ' ', $data[93]);
+					$CUS_RFC_NUMBER = preg_replace('/\s+/', ' ', $data[94]);
+					$EMAIL_ADDR = preg_replace('/\s+/', ' ', $data[95]);
 					// checker
-					$sqlchecker = "SELECT id, DBNO FROM arcusfil_sql WHERE dbno = '$dbno' AND Cus_No = '$Cus_No'";
+					$sqlchecker = "SELECT id, DBNO FROM arcusfil_sql WHERE dbno = '$dbno' AND Cus_No = '$CUS_NO'";
 					$stmchecker = $con->prepare($sqlchecker);
 					$stmchecker->execute();
 					if ($stmchecker->rowCount() > 0) { $dbno = "DUPLI" . $dbno; }
-					$values .= "('$dbno','$Cus_No','$Cus_Name','$Addr_1','$Addr_2','$City','$States','$Zip','$Country','$Contact','$Contact_2','$Phone_No','$Phone_No_2','$Phone_Ext','$Phone_Ext_2','$Fax_No','$Start_Dt','$Cus_Type_Cd','$Bal_Meth','$Stm_Freq','$Cr_Lmt','$Cr_Rating','$Hold_Fg','$Collector','$Fin_Chg_Fg','$Cus_Origin','$Filler_0003','$Terr','$Curr_Cd','$Par_Cus_No','$Par_Cus_Fg','$Ship_Via_Cd','$Ups_Zone','$Ar_Terms_Cd','$Dsc_Pct','$Ytd_Dsc_Given','$Txbl_Fg','$Tax_Cd','$Tax_Cd_2','$Tax_Cd_3','$Exempt_No','$Sls_Ptd','$Sls_Ytd','$Sls_Last_Yr','$Cost_Ptd','$Cost_Ytd','$Cost_Last_Yr','$Balance','$High_Balance','$Last_Sale_Dt','$Last_Sale_Amt','$Inv_Ytd','$Inv_Last_Yr','$Paid_Inv_Ytd','$Last_Pay_Dt','$Last_Pay_Amt','$Avg_Pay_Ytd','$Avg_Pay_Last_Yr','$Last_Stm_Age_Dt','$Amt_Age_Prd_1','$Amt_Age_Prd_2','$Amt_Age_Prd_3','$Amt_Age_Prd_4','$Allow_Sb_Item','$Allow_Bo','$Allow_Part_Ship','$Print_Dunn_Fg','$Cmt_1','$Cmt_2','$Vend_No','$Tax_Sched','$Cr_Card_1_Desc','$Cr_Card_1_Acct','$Cr_Card_1_Exp_Dt','$Cr_Card_2_Desc','$Cr_Card_2_Acct','$Cr_Card_2_Exp_Dt','$User_Def_Fld_1','$User_Def_Fld_2','$User_Def_Fld_3','$User_Def_Fld_4','$User_Def_Fld_5','$Dflt_Inv_Form','$Loc','$Note_1','$Note_2','$Note_3','$Note_4','$Note_5','$User_Dt','$User_Amount','$Amt_Age_Oe_Term','$Cus_Alt_Adr_Cd','$Rfc_No','$Email_Addr'),";
+					$values .= "('$dbno','$CUS_NO','$CUS_NAME','$CUS_STREET1','$CUS_STREET2','$CUS_CITY','$CUS_ST','$CUS_ZIP','$CUS_COUNTRY','$CUS_CONTACT','$CUS_CONTACT_2','$CUS_PHONE_NO','$CUS_PHONE_NO_2','$CUS_PHONE_EXT','$CUS_PHONE_EXT_2','$CUS_FAX_NO','$CUS_START_DT','$CUS_SLM_NO','$CUS_TP','$CUS_BAL_METH','$CUS_STM_FREQ','$CUS_CR_LIMIT','$CUS_CR_RATING','$CUS_CR_HOLD_FG','$CUS_COLLECTOR','$CUS_FIN_CHG_FG','$CUS_ORIGIN','$FILLER_0003','$CUS_TERR','$CUS_CURR_CODE','$CUS_PARENT_CUS_NO','$CUS_PARENT_CUS_FLG','$CUS_SHIP_VIA_CD','$CUS_UPS_ZONE','$CUS_TERMS_CD','$CUS_DSC_PCT','$CUS_YTD_DSC_GIVEN','$CUS_TXBL_FG','$CUS_TX_CD1','$CUS_TX_CD2','$CUS_TX_CD3','$CUS_EXEMPT_NO','$CUS_SALES_PTD','$CUS_SALES_YTD','$CUS_SALES_LAST_YR','$CUS_COST_PTD','$CUS_COST_YTD','$CUS_COST_LAST_YR','$CUS_BALANCE','$CUS_HIGH_BALANCE','$CUS_LAST_SALE_DT','$CUS_LAST_SALE_AMT','$CUS_INV_YTD','$CUS_INV_LAST_YR','$CUS_PAID_INV_YTD','$CUS_LAST_PAY_DT','$CUS_LAST_PAY_AMT','$CUS_AVG_PAY_YTD','$CUS_AVG_PAY_LAST_YR','$CUS_LAST_STM_AGE_DT','$CUS_AMT_AGE_PD1','$CUS_AMT_AGE_PD2','$CUS_AMT_AGE_PD3','$CUS_AMT_AGE_PD4','$CUS_ALLOW_SUB_ITMS','$CUS_ALLOW_BO','$CUS_ALLOW_PART_SHIP','$CUS_PRINT_DUNN_FG','$CUS_COMMENT1','$CUS_COMMENT2','$CUS_AP_VENDOR','$CUS_TAX_SCHED','$CUS_CREDCRD1_DESC','$CUS_CREDCRD1_ACCT','$CUS_CREDCRD1_EXP_DT','$CUS_CREDCRD2_DESC','$CUS_CREDCRD2_ACCT','$CUS_CREDCRD2_EXP_DT','$CUS_USER_FLD1','$CUS_USER_FLD2','$CUS_USER_FLD3','$CUS_USER_FLD4','$CUS_USER_FLD5','$DEFAULT_INV_FORM','$CUS_ORDER_LOC','$CUS_NOTE_1','$CUS_NOTE_2','$CUS_NOTE_3','$CUS_NOTE_4','$CUS_NOTE_5','$CUS_USER_DATE','$USER_AMOUNT','$CUS_AMT_AGE_OE_TERM','$CUS_ALT_ADDRESS','$CUS_RFC_NUMBER','$EMAIL_ADDR'),";
 					$runner++;
 				}
 				$values = rtrim($values, ", ");
-				$sqlinsert = "INSERT INTO arcusfil_sql (dbno,Cus_No,Cus_Name,Addr_1,Addr_2,City,States,Zip,Country,Contact,Contact_2,Phone_No,Phone_No_2,Phone_Ext,Phone_Ext_2,Fax_No,Start_Dt,Cus_Type_Cd,Bal_Meth,Stm_Freq,Cr_Lmt,Cr_Rating,Hold_Fg,Collector,Fin_Chg_Fg,Cus_Origin,Filler_0003,Terr,Curr_Cd,Par_Cus_No,Par_Cus_Fg,Ship_Via_Cd,Ups_Zone,Ar_Terms_Cd,Dsc_Pct,Ytd_Dsc_Given,Txbl_Fg,Tax_Cd,Tax_Cd_2,Tax_Cd_3,Exempt_No,Sls_Ptd,Sls_Ytd,Sls_Last_Yr,Cost_Ptd,Cost_Ytd,Cost_Last_Yr,Balance,High_Balance,Last_Sale_Dt,Last_Sale_Amt,Inv_Ytd,Inv_Last_Yr,Paid_Inv_Ytd,Last_Pay_Dt,Last_Pay_Amt,Avg_Pay_Ytd,Avg_Pay_Last_Yr,Last_Stm_Age_Dt,Amt_Age_Prd_1,Amt_Age_Prd_2,Amt_Age_Prd_3,Amt_Age_Prd_4,Allow_Sb_Item,Allow_Bo,Allow_Part_Ship,Print_Dunn_Fg,Cmt_1,Cmt_2,Vend_No,Tax_Sched,Cr_Card_1_Desc,Cr_Card_1_Acct,Cr_Card_1_Exp_Dt,Cr_Card_2_Desc,Cr_Card_2_Acct,Cr_Card_2_Exp_Dt,User_Def_Fld_1,User_Def_Fld_2,User_Def_Fld_3,User_Def_Fld_4,User_Def_Fld_5,Dflt_Inv_Form,Loc,Note_1,Note_2,Note_3,Note_4,Note_5,User_Dt,User_Amount,Amt_Age_Oe_Term,Cus_Alt_Adr_Cd,Rfc_No,Email_Addr) VALUES " . $values;
+				$sqlinsert = "INSERT INTO arcusfil_sql (dbno,CUS_NO,CUS_NAME,CUS_STREET1,CUS_STREET2,CUS_CITY,CUS_ST,CUS_ZIP,CUS_COUNTRY,CUS_CONTACT,CUS_CONTACT_2,CUS_PHONE_NO,CUS_PHONE_NO_2,CUS_PHONE_EXT,CUS_PHONE_EXT_2,CUS_FAX_NO,CUS_START_DT,CUS_SLM_NO,CUS_TP,CUS_BAL_METH,CUS_STM_FREQ,CUS_CR_LIMIT,CUS_CR_RATING,CUS_CR_HOLD_FG,CUS_COLLECTOR,CUS_FIN_CHG_FG,CUS_ORIGIN,FILLER_0003,CUS_TERR,CUS_CURR_CODE,CUS_PARENT_CUS_NO,CUS_PARENT_CUS_FLG,CUS_SHIP_VIA_CD,CUS_UPS_ZONE,CUS_TERMS_CD,CUS_DSC_PCT,CUS_YTD_DSC_GIVEN,CUS_TXBL_FG,CUS_TX_CD1,CUS_TX_CD2,CUS_TX_CD3,CUS_EXEMPT_NO,CUS_SALES_PTD,CUS_SALES_YTD,CUS_SALES_LAST_YR,CUS_COST_PTD,CUS_COST_YTD,CUS_COST_LAST_YR,CUS_BALANCE,CUS_HIGH_BALANCE,CUS_LAST_SALE_DT,CUS_LAST_SALE_AMT,CUS_INV_YTD,CUS_INV_LAST_YR,CUS_PAID_INV_YTD,CUS_LAST_PAY_DT,CUS_LAST_PAY_AMT,CUS_AVG_PAY_YTD,CUS_AVG_PAY_LAST_YR,CUS_LAST_STM_AGE_DT,CUS_AMT_AGE_PD1,CUS_AMT_AGE_PD2,CUS_AMT_AGE_PD3,CUS_AMT_AGE_PD4,CUS_ALLOW_SUB_ITMS,CUS_ALLOW_BO,CUS_ALLOW_PART_SHIP,CUS_PRINT_DUNN_FG,CUS_COMMENT1,CUS_COMMENT2,CUS_AP_VENDOR,CUS_TAX_SCHED,CUS_CREDCRD1_DESC,CUS_CREDCRD1_ACCT,CUS_CREDCRD1_EXP_DT,CUS_CREDCRD2_DESC,CUS_CREDCRD2_ACCT,CUS_CREDCRD2_EXP_DT,CUS_USER_FLD1,CUS_USER_FLD2,CUS_USER_FLD3,CUS_USER_FLD4,CUS_USER_FLD5,DEFAULT_INV_FORM,CUS_ORDER_LOC,CUS_NOTE_1,CUS_NOTE_2,CUS_NOTE_3,CUS_NOTE_4,CUS_NOTE_5,CUS_USER_DATE,USER_AMOUNT,CUS_AMT_AGE_OE_TERM,CUS_ALT_ADDRESS,CUS_RFC_NUMBER,EMAIL_ADDR) VALUES " . $values;
 				//echo $sqlinsert;
 				$stminsert = $con->prepare($sqlinsert);
 				$stminsert->execute();
@@ -584,6 +686,7 @@
 			}
 			// NATIONAL SALES
 			elseif (strpos($rawdata, 'nationalsalesx') !== false) {
+				set_time_limit(3600);
 				$rowdata = explode('nationalsalesx', $rawdata);
 				$autodivide = substr_count($rawdata, "nationalsalesx");
 				$runner = 0;
@@ -618,8 +721,8 @@
 					$UF3 = preg_replace('/\s+/', ' ', $data[24]);
 					$UF4 = preg_replace('/\s+/', ' ', $data[25]);
 					$UF5 = preg_replace('/\s+/', ' ', $data[26]);
-					$CUSTOMER = preg_replace('/\s+/', ' ', substr($data[27], 0, 9));
-					$CUSTOMER = preg_replace("/[^0-9]/", "",$CUSTOMER);
+					$CUSTOMER = preg_replace('/\s+/', ' ', $data[27]);
+					$CUSTOMER = preg_replace("/[^A-Za-z0-9 -.]/", "", $CUSTOMER);
 					$PROVINCIAL = preg_replace('/\s+/', ' ', $data[28]);
 					$INVOICENO = preg_replace('/\s+/', ' ', $data[29]);
 					$INVOICEDATE = preg_replace('/\s+/', ' ', $data[30]);
@@ -650,6 +753,98 @@
 				echo "$runner(s) records inserted";
 				// DELETE DUPLICATE
 				$sqldupdelete = "DELETE FROM `sales` WHERE DBNO LIKE '%DUPLI%' ";
+				$stmdupdelete = $con->prepare($sqldupdelete);
+				$stmdupdelete->execute();
+			}
+			// ARCUS TO CUS INFO
+			elseif (strpos($rawdata, 'arcustocus') !== false) {
+				set_time_limit(3600);
+				$sql = "SELECT dbno, Cus_No, Cus_Name, Addr_1, Contact, Cr_Lmt, Cus_Type_Cd FROM arcusfil_sql";
+				$stm = $con->prepare($sql);
+				$stm->execute();
+				$results = $stm->fetchAll(PDO::FETCH_ASSOC);
+				if ($stm->rowCount() >= 1) {
+					$runner = 0;
+					$values = '';
+					foreach ($results as $row) {
+						$dbno = str_replace(' ', '', $row['dbno']);
+						$Cus_No = $row['Cus_No'];
+						$Cus_Name = $row['Cus_Name'];
+						$Addr_1 = $row['Addr_1'];
+						$Contact = $row['Contact'];
+						$Cr_Lmt = $row['Cr_Lmt'];
+						$Cus_Type_Cd = $row['Cus_Type_Cd'];
+						// CHECKER
+						$sqlchecker = "SELECT id, DBNO FROM v_customer_info WHERE TRIM(DBNO) = '$dbno' AND CUS_NO LIKE '%$Cus_No%'";
+						$stmchecker = $con->prepare($sqlchecker);
+						$stmchecker->execute();
+						if ($stmchecker->rowCount() > 0) { $dbno = "DUPLI" . $dbno; }
+						$values .= "('$dbno','$Cus_No','$Cus_Name','$Addr_1','$Contact','$Cr_Lmt', '$Cus_Type_Cd'),";
+						$runner++;
+					}
+					$values = rtrim($values, ", ");
+					$sqlinsert = "INSERT INTO v_customer_info (DBNO,CUS_NO ,CUSTOMER,ADDRESS,CONTACT_PERSON,CREDIT_LIMIT,ctype) VALUES " . $values;
+					// echo "$sqlinsert";
+					$stminsert = $con->prepare($sqlinsert);
+					$stminsert->execute();
+					// DUPLICATE CHECKER
+					$sqldupchecker = "SELECT DBNO FROM `v_customer_info` WHERE DBNO LIKE '%DUPLI%' ";
+					$stmdupchecker = $con->prepare($sqldupchecker);
+					$stmdupchecker->execute();
+					$duplicounter = $stmdupchecker->rowCount();
+					echo "$duplicounter duplicate entry. \n";
+					echo "$runner(s) records inserted";
+					// DELETE DUPLICATE
+					$sqldupdelete = "DELETE FROM `v_customer_info` WHERE DBNO LIKE '%DUPLI%' ";
+					$stmdupdelete = $con->prepare($sqldupdelete);
+					$stmdupdelete->execute();
+				}
+			}
+			// OEHDR
+			elseif (strpos($rawdata, 'oehdrcsi') !== false) {
+				$rowdata = explode('oehdrcsi', $rawdata);
+				$autodivide = substr_count($rawdata, "oehdrcsi");
+				$runner = 0;
+				$values = '';
+				while ($runner < $autodivide) {
+					$datarunner = $runner + 1;
+					$data = explode(',', $rowdata[$datarunner]);
+					$DATABASE_NO = str_replace(' ', '', $data[0]);
+					$ORDER_TYPE = str_replace(' ', '', $data[1]);
+					$ORDER_NO = str_replace(' ', '', $data[2]);
+					$ORDER_DATE_ENTERED = str_replace(' ', '', $data[3]);
+					$ORDER_DATE = str_replace(' ', '', $data[4]);
+					$ORDER_PUR_ORDER_NO = str_replace(' ', '', $data[5]);
+					$ORDER_CUSTOMER_NO = str_replace(' ', '', $data[6]);
+					$SHIPPING_DATE = str_replace(' ', '', $data[7]);
+					$SALESMAN_NO_1 = str_replace(' ', '', $data[8]);
+					$MFGING_LOCATION = str_replace(' ', '', $data[9]);
+					$S_SONO = str_replace(' ', '', $data[10]);
+					$GATEPASS_NO = str_replace(' ', '', $data[11]);
+					$STATUS = str_replace(' ', '', $data[12]);
+					// CHECKER
+					$sqlchecker = "SELECT ID, ORDER_NO, ORDER_DATE, ORDER_CUSTOMER_NO FROM oehdr WHERE DATABASE_NO = '$DATABASE_NO' AND ORDER_NO = '$ORDER_NO' AND ORDER_CUSTOMER_NO = '$ORDER_CUSTOMER_NO'";
+					$stmchecker = $con->prepare($sqlchecker);
+					$stmchecker->execute();
+					if ($stmchecker->rowCount() > 0) { $DATABASE_NO = "D" . $DATABASE_NO; }
+					$values .= "('$DATABASE_NO','$ORDER_TYPE','$ORDER_NO','$ORDER_DATE_ENTERED','$ORDER_DATE','$ORDER_PUR_ORDER_NO','$ORDER_CUSTOMER_NO','$SHIPPING_DATE','$SALESMAN_NO_1','$MFGING_LOCATION','$S_SONO','$GATEPASS_NO','$STATUS'),";
+					$runner++;
+				}
+				$values = rtrim($values, ", ");
+				$sqlinsert = "INSERT INTO oehdr (DATABASE_NO,ORDER_TYPE,ORDER_NO,ORDER_DATE_ENTERED,ORDER_DATE,ORDER_PUR_ORDER_NO,ORDER_CUSTOMER_NO,SHIPPING_DATE,SALESMAN_NO_1,MFGING_LOCATION,S_SONO,GATEPASS_NO,STATUS) VALUES " . $values;
+				//echo $sqlinsert;
+				$stminsert = $con->prepare($sqlinsert);
+				$stminsert->execute();
+				// DUPLICATE CHECKER
+				$sqldupchecker = "SELECT DATABASE_NO FROM `oehdr` WHERE DATABASE_NO LIKE '%D%' ";
+				$stmdupchecker = $con->prepare($sqldupchecker);
+				$stmdupchecker->execute();
+				$duplicounter = $stmdupchecker->rowCount();
+				echo "$duplicounter duplicate entry. \n";
+				//echo date('h:i A') . "\n";
+				echo "$runner(s) records inserted";
+				// DELETE DUPLICATE
+				$sqldupdelete = "DELETE FROM `oehdr` WHERE DATABASE_NO LIKE '%D%' ";
 				$stmdupdelete = $con->prepare($sqldupdelete);
 				$stmdupdelete->execute();
 			}

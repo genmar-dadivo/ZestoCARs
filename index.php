@@ -25,6 +25,9 @@
         	<section id="formHolder">
             	<div class="row">
 					<div class="col-sm-6 brand">
+						<div class="heading">
+							<img class="zesto-logo rounded center d-block" src="./assets/img/logo.png" style="max-width: 300px;" class="img-fluid">
+						 </div>
 					</div>
 					<div class="col-sm-6 form">
 						<div class="signupdiv form-piece switched">
